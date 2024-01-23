@@ -21,4 +21,4 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Làm cho vui nhà vui cửa
+## Use Theme Netflix
