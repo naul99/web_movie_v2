@@ -317,7 +317,7 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('Image', 'Image', []) !!}
+                            {!! Form::label('Image', 'Image_Poster', []) !!}
                             {!! Form::file('image', [
                                 'class' => 'form-control-file',
                                 'id' => 'fileChooser',
@@ -334,6 +334,27 @@
                                     <img width="20%"src="{{ $movie->movie_image->image }}">
                                 @else
                                     <img width="20%"src="{{ asset('uploads/movie/' . $movie->movie_image->image) }}">
+                                @endif
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            {!! Form::label('Image', 'Image_Thumbnail', []) !!}
+                            {!! Form::file('image_thumbnail', [
+                                'class' => 'form-control-file',
+                                'id' => 'fileChooser',
+                                'onchange' => 'return fileValidation(this)',
+                                // 'accept' => '.jpg, .png, .jpeg, .gif, .psd',
+                                isset($movie_thumbnail) ? '' : '',
+                            ]) !!}
+
+                            @if (isset($movie_thumbnail))
+                                @php
+                                    $image_check = substr($movie_thumbnail->movie_image->image, 0, 5);
+                                @endphp
+                                @if ($image_check == 'https')
+                                    <img width="20%"src="{{ $movie_thumbnail->movie_image->image }}">
+                                @else
+                                    <img width="20%"src="{{ asset('uploads/movie/' . $movie_thumbnail->movie_image->image) }}">
                                 @endif
                             @endif
                         </div>

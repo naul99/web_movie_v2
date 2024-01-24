@@ -337,6 +337,9 @@ class MovieController extends Controller
         $country = Country::where('status', 1)->pluck('title', 'id');
         $list = Movie::with('category', 'genre', 'country', 'movie_description', 'movie_trailer', 'movie_tags', 'movie_image')->orderBy('id', 'DESC')->get();
         $movie = Movie::find($id);
+        $movie_thumbnail = Movie::select('id')->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->find($id);
         $movie_genre = $movie->movie_genre;
         $movie_cast = $movie->movie_cast;
         $movie_directors = $movie->movie_directors;
@@ -346,7 +349,7 @@ class MovieController extends Controller
 
 
         //return json_encode($movie_rating);
-        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors'));
+        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors','movie_thumbnail'));
     }
 
     /**
@@ -453,6 +456,27 @@ class MovieController extends Controller
             // $get_image->move($path, $new_image);
             $movie_image->image = $new_image;
             $movie_image->save();
+        }
+
+       
+        $get_image_thumbnail = $request->file('image_thumbnail');
+        $path = 'uploads/movie/';
+        //dd($get_image_thumbnail);
+        if ($get_image_thumbnail) {
+            $movie_image_thumbnail = Movie_Image::where('movie_id', $movie->id)->where('is_thumbnail',1)->first();
+            if (file_exists($path . $movie_image_thumbnail->image)) {
+                unlink('uploads/movie/' . $movie_image_thumbnail->image);
+            }
+            $get_name_image_thumnail = $get_image_thumbnail->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image_thumnail));
+            $new_image_thumbnail = $name_image . rand(0, 9999) . '.' . $get_image_thumbnail->getClientOriginalExtension();
+            $img_thumbnail = Image::make($get_image_thumbnail->path());
+            $img_thumbnail->resize(1200, 600, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($path . '' . $new_image_thumbnail);
+           
+            $movie_image_thumbnail->image = $new_image_thumbnail;
+            $movie_image_thumbnail->save();
         }
 
         //return json_encode($movie);
@@ -783,6 +807,12 @@ class MovieController extends Controller
         $movie_image = new Movie_Image();
         $movie_image->image = $api_ophim['movie']['thumb_url'];
         $movie_image->movie_id = $movie->id;
+        $movie_image->save();
+        //save thumbnail
+        $movie_image = new Movie_Image();
+        $movie_image->image = $api_ophim['movie']['poster_url'];
+        $movie_image->movie_id = $movie->id;
+        $movie_image->is_thumbnail = 1;
         $movie_image->save();
 
         if (!is_null($movie)) {

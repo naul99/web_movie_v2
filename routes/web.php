@@ -175,7 +175,7 @@ Route::get('/site-map',function(){
 // Clear application cache:
 
 Route::get('/clear-cache', function() {
-     Artisan::call('cache:clear');
+     Artisan::call('optimize:clear');
      toastr()->success("Clear cache success.", 'Success');
      return redirect()->back();
 });

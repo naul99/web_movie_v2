@@ -81,14 +81,19 @@ class IndexController extends Controller
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         //qua ba
         $category_home = Category::with(['movie' => function ($m) {
-            $m->where('status', 1)->withCount(['episode' => function ($query) {
+            $m->where('status', 1)->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])->withCount(['episode' => function ($query) {
                 $query->select(DB::raw('count(distinct(episode))'));
             }]);
         }])->orderBy('position', 'ASC')->where('status', 1)->get();
+        //dd($category_home);
         //$hot = Movie::with()->get();
         $hot = Movie::withCount(['episode' => function ($query) {
             $query->select(DB::raw('count(distinct(episode))'));
-        }])->where('hot', 1)->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        }])->where('hot', 1)->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
 
         $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
         $startOfMonth = Carbon::now()->startOfMonth();
@@ -97,27 +102,24 @@ class IndexController extends Controller
 
         //dd($hot);
         $topview = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->where('status', 1)->orderBy('count_views', 'DESC')->paginate(1);
 
         $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
-            ->where('date_views', $day)->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
+            ->where('date_views', $day)->where('status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->paginate(1);
 
-        $topview_week = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
-            ->whereBetween('date_views', [$week, $day])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
-        //dd($topview_week);
-        $topview_month = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
-            ->whereBetween('date_views', [$startOfMonth, $endOfMonth])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
-        //dd($topview_month);
+        // $topview_week = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+        //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
+        //     ->whereBetween('date_views', [$week, $day])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
 
-        $movie_new = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
-            ->where('status', 1)->orderBy('created_at', 'DESC')->paginate(10)->unique();
+        // $topview_month = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+        //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
+        //     ->whereBetween('date_views', [$startOfMonth, $endOfMonth])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
 
-        // movie animation
-        //id genre animation = 13
+        // $movie_new = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+        //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
+        //     ->where('status', 1)->orderBy('created_at', 'DESC')->paginate(10)->unique();
+
         $gen_slug = Genre::where('title', 'LIKE', '%hoat hinh%')->first();
 
         $movie_genre = Movie_Genre::where('genre_id', $gen_slug->id)->get();
@@ -127,11 +129,13 @@ class IndexController extends Controller
         }
         $movie_animation = Movie::whereIn('id', $many_genre)->where('status', 1)->withCount(['episode' => function ($query) {
             $query->select(DB::raw('count(distinct(episode))'));
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
         // dd($movie_animation);
         //dd($topview);
-        
-        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'movie_new', 'topview_day', 'topview_week', 'topview_month', 'movie_animation', 'gen_slug'));
+
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug'));
     }
     public function category($slug)
     {
@@ -334,7 +338,7 @@ class IndexController extends Controller
         $link_imdb = ('https://www.imdb.com/title/' . $movie->imdb);
         // }
         //xu ly comments
-       // $comments = Movie::with('movie_comments.replies', 'movie_comments.user:id,name,avatar', 'movie_comments.replies.user:id,name,avatar', 'movie_comments.replies.replies.user:id,name,avatar')->where('slug', $slug)->first();
+        // $comments = Movie::with('movie_comments.replies', 'movie_comments.user:id,name,avatar', 'movie_comments.replies.user:id,name,avatar', 'movie_comments.replies.replies.user:id,name,avatar')->where('slug', $slug)->first();
 
 
         // $avatar_comment = Comment::join('customers','comments.user_id','=','customers.id')->where('movie_id', $movie->id)->orderBy('comments.id', 'DESC')->get();
@@ -496,54 +500,54 @@ class IndexController extends Controller
         //     }
         // } 
         // else {
-            // if (Auth::guard('customer')->check()) {
+        // if (Auth::guard('customer')->check()) {
 
-            //     $movies_id = Movie::where('slug', $slug)->first();
+        //     $movies_id = Movie::where('slug', $slug)->first();
 
-            //     $customer_id = Auth::guard('customer')->user()->id;
-            //     $history = Movie_History::where('movie_id', $movies_id->id)->where('user_id', $customer_id)->get();
-            //     //dd(count($history));
-            //     if (count($history) < 1) {
-            //         DB::table('movie_history')->insert(['movie_id' => $movies_id->id, 'user_id' => $customer_id, 'created_at' => now(), 'updated_at' => now()]);
-            //         // DB::table('movie_history')->where('user_id', $user_id)->where('movie_id', $movie_id)->update(['updated_at' => now()]);
-            //         //DB::table('movie_history')->insert(['movie_id' => $data['id'], 'created_at' => now(), 'updated_at' => now()]);
-            //     }
-            // }
-            //dd($tapphim);
+        //     $customer_id = Auth::guard('customer')->user()->id;
+        //     $history = Movie_History::where('movie_id', $movies_id->id)->where('user_id', $customer_id)->get();
+        //     //dd(count($history));
+        //     if (count($history) < 1) {
+        //         DB::table('movie_history')->insert(['movie_id' => $movies_id->id, 'user_id' => $customer_id, 'created_at' => now(), 'updated_at' => now()]);
+        //         // DB::table('movie_history')->where('user_id', $user_id)->where('movie_id', $movie_id)->update(['updated_at' => now()]);
+        //         //DB::table('movie_history')->insert(['movie_id' => $data['id'], 'created_at' => now(), 'updated_at' => now()]);
+        //     }
+        // }
+        //dd($tapphim);
 
-            if (!isset($movie)) {
-                return redirect()->back();
-            }
-            $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->withCount(['episode' => function ($query) {
-                $query->select(DB::raw('count(distinct(episode))'));
-            }])->get();
+        if (!isset($movie)) {
+            return redirect()->back();
+        }
+        $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->withCount(['episode' => function ($query) {
+            $query->select(DB::raw('count(distinct(episode))'));
+        }])->get();
 
-            $ser = substr($server_active, 7, 10);
+        $ser = substr($server_active, 7, 10);
 
-            try {
-                if (isset($tap)) {
-                    $tapphim = $tap;
-                    $tapphim = substr($tap, 4, 10);
-                    $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
-                    if (!isset($episode)) {
-                        return redirect()->back();
-                    }
-                } else {
-                    $tapphim = 1;
-                    $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
+        try {
+            if (isset($tap)) {
+                $tapphim = $tap;
+                $tapphim = substr($tap, 4, 10);
+                $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
+                if (!isset($episode)) {
+                    return redirect()->back();
                 }
-
-                $server = Server::orderby('id', 'DESC')->get();
-                $views = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-                    ->where('movies.id', $movie->id)->orderBy('count_views', 'DESC')->first();
-
-                $episode_movie = Episode::where('movie_id', $movie->id)->get()->unique('server_id');
-                $query = "CAST(episode AS SIGNED INTEGER) ASC";
-                $episode_list = Episode::where('movie_id', $movie->id)->orderByRaw($query)->get();
-                return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active'));
-            } catch (ModelNotFoundException $th) {
-                return redirect()->back();
+            } else {
+                $tapphim = 1;
+                $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
             }
+
+            $server = Server::orderby('id', 'DESC')->get();
+            $views = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+                ->where('movies.id', $movie->id)->orderBy('count_views', 'DESC')->first();
+
+            $episode_movie = Episode::where('movie_id', $movie->id)->get()->unique('server_id');
+            $query = "CAST(episode AS SIGNED INTEGER) ASC";
+            $episode_list = Episode::where('movie_id', $movie->id)->orderByRaw($query)->get();
+            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active'));
+        } catch (ModelNotFoundException $th) {
+            return redirect()->back();
+        }
         //}
 
         //return response()->json($movie);
@@ -641,20 +645,21 @@ class IndexController extends Controller
 
         return view('pages.movies_history', compact('movie', 'category', 'genre', 'country'));
     }
-   private function check_expiry(){
-     // kiem tra ngay het han
-     $check_order = Order::where('customer_id', Session::get('customer_id'))->where('expiry', 0)->get();
-     foreach ($check_order as $check) {
-         if ($check->date_end->isPast()) {
-             $check->expiry = "1";
-             $check->save();
-             // update account
-             $customer = Customer::find(Session::get('customer_id'));
-             $customer->status_registration = "0";
-             $customer->save();
-         }
-     }
-   }
+    private function check_expiry()
+    {
+        // kiem tra ngay het han
+        $check_order = Order::where('customer_id', Session::get('customer_id'))->where('expiry', 0)->get();
+        foreach ($check_order as $check) {
+            if ($check->date_end->isPast()) {
+                $check->expiry = "1";
+                $check->save();
+                // update account
+                $customer = Customer::find(Session::get('customer_id'));
+                $customer->status_registration = "0";
+                $customer->save();
+            }
+        }
+    }
     public function register_package()
     {
         // kiem tra ngay het han
@@ -711,8 +716,8 @@ class IndexController extends Controller
                     $package_id = Session::get('package_id');
                     $date = Session::get('package_time');
                     $price = Session::get('package_price');
-                    $total= Session::get('total_vnpay');
-                    $name_package= Session::get('package_name');
+                    $total = Session::get('total_vnpay');
+                    $name_package = Session::get('package_name');
 
                     $order = new Order;
                     $order->customer_id = $customer_id;
@@ -731,18 +736,18 @@ class IndexController extends Controller
                     $customer->save();
 
 
-                     //sent data email order
-                     $price_format=  number_format($price, 0, '', ',');
-                     $total_format=  number_format($total, 0, '', ',');
-                     $email=$customer->email;
-                     $orderId = $order->id;
-                     $payment="vnpay";
-                     //dd($email);
-                    
-                     return $this->sentEmail($email,$price_format,$name_package,$total_format,$date,$orderId,$payment);
-                     //end sent email
+                    //sent data email order
+                    $price_format =  number_format($price, 0, '', ',');
+                    $total_format =  number_format($total, 0, '', ',');
+                    $email = $customer->email;
+                    $orderId = $order->id;
+                    $payment = "vnpay";
+                    //dd($email);
 
-        
+                    return $this->sentEmail($email, $price_format, $name_package, $total_format, $date, $orderId, $payment);
+                    //end sent email
+
+
                     // return redirect()->route('register-package')->with('success', 'Thanh toán thành công. Cảm ơn bạn đã sử dụng dịch vụ.');
                 } else {
                     return redirect()->route('register-package')->with('error', $response['message'] ?? 'Đăng ký gói không thành công. Do bạn đã hủy giao dịch.');
@@ -782,12 +787,12 @@ class IndexController extends Controller
 
             if ($m2signature == $partnerSignature) {
                 if ($errorCode == '0') {
-                    try{
+                    try {
                         $customer_id = Session::get('customer_id');
                         $package_id = Session::get('package_id');
                         $date = Session::get('package_time');
                         $price = Session::get('package_price');
-                        $name_package= Session::get('package_name');
+                        $name_package = Session::get('package_name');
                         $order = new Order;
                         $order->customer_id = $customer_id;
                         $order->package_id = $package_id;
@@ -798,26 +803,25 @@ class IndexController extends Controller
                         $order->date_start = Carbon::now('Asia/Ho_Chi_Minh');
                         $order->date_end = Carbon::now('Asia/Ho_Chi_Minh')->addDays($date);
                         $order->save();
-    
+
                         //modify status register package movie
                         $customer = Customer::where('id', $customer_id)->first();
                         $customer->status_registration = '1';
                         $customer->save();
-                    }
-                    catch(ModelNotFoundException $exception){
+                    } catch (ModelNotFoundException $exception) {
                         return redirect()->route('register-package')->with('error', $response['message'] ?? 'Error 500!.');
                     }
-                  
+
                     //sent data email order
-                    $price_format=  number_format($price, 0, '', ',');
-                    $total_format=  number_format($amount, 0, '', ',');
-                    $email=$customer->email;
-                    $payment="momo";
+                    $price_format =  number_format($price, 0, '', ',');
+                    $total_format =  number_format($amount, 0, '', ',');
+                    $email = $customer->email;
+                    $payment = "momo";
                     //dd($email);
-                   
-                    return $this->sentEmail($email,$price_format,$name_package,$total_format,$date,$orderId,$payment);
+
+                    return $this->sentEmail($email, $price_format, $name_package, $total_format, $date, $orderId, $payment);
                     //end sent email
-            
+
                     // return redirect()->route('register-package')->with('success', 'Thanh toán thành công. Cảm ơn bạn đã sử dụng dịch vụ.');
                 } else {
                     return redirect()->route('register-package')->with('error', $response['message'] ?? 'Đăng ký gói không thành công. Do bạn đã hủy giao dịch.');
@@ -829,18 +833,20 @@ class IndexController extends Controller
 
         return view('pages.register_package', compact('category', 'genre', 'country', 'list_package'));
     }
-    private function sentEmail($email,$price_format,$name_package,$total_format,$date,$orderId,$payment)
+    private function sentEmail($email, $price_format, $name_package, $total_format, $date, $orderId, $payment)
     {
-       
+
         $to_name = "no-reply";
         $to_email = $email; //send to this email
 
-        $data = array("name" => "FULLHDPHIM", "price" => $price_format,"name_package"=>$name_package,
-        "total"=> $total_format,"date"=>$date,"orderId"=>$orderId,"payment"=>$payment);
+        $data = array(
+            "name" => "FULLHDPHIM", "price" => $price_format, "name_package" => $name_package,
+            "total" => $total_format, "date" => $date, "orderId" => $orderId, "payment" => $payment
+        );
 
-        Mail::send('pages.sent_email',$data,function($message)use($to_name,$to_email){
+        Mail::send('pages.sent_email', $data, function ($message) use ($to_name, $to_email) {
             $message->to($to_email)->subject('Hóa Đơn Thanh Toán Gói Phim');
-            $message->from($to_email,$to_name);//sent from this email
+            $message->from($to_email, $to_name); //sent from this email
         });
         Session::forget('package_id');
         Session::forget('package_time');
@@ -887,6 +893,6 @@ class IndexController extends Controller
     }
     public function policy()
     {
-       return view('pages.policy');
+        return view('pages.policy');
     }
 }
