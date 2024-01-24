@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
     <!-- CSS -->
-    <style>
+    {{-- <style>
         .ui-widget-header,
         .ui-state-default,
         ui-button {
@@ -11,7 +11,7 @@
             color: white;
             font-weight: bold;
         }
-    </style>
+    </style> --}}
 
 
     <div class="row container" id="wrapper">

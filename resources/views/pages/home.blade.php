@@ -67,11 +67,14 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
 
                         </div>
                         <div class="buttons-container m-t-20">
-                            <button class="play-button"><span>
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
-                                    </svg>
-                                </span> <a href="single.html">Play</a></button>
+                            @foreach ($h->episode->take(1) as $epi)
+                            <button class="play-button" onclick="location.href='{{ url('xem-phim/' . $h->slug . '/tap-' . $epi->episode . '/server-' . $epi->server_id) }}'"><span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
+                                </svg>
+                            </span> <a>Play</a></button>
+                            @endforeach
+                           
 
                             <button class="more-info-button m-t-20"><span>
                                     <svg viewBox="0 0 24 24">
@@ -113,11 +116,18 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                                 </video>
 
                                 <div class="video-description d-flex flex-end direction-column">
-                                    <div class="play-button">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M6 4l15 8-15 8z" fill="black"></path>
-                                        </svg>
-                                    </div>
+                                    @foreach ($mov->episode->take(1) as $ep)
+                                        <div class="play-button">
+                                            <button style="background: none; border:none"
+                                                onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M6 4l15 8-15 8z" fill="black">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    @endforeach
+
                                     <div>
                                         <h4 class="heading f-w-8 text-shadow">
                                             {{ $mov->title }}
@@ -188,7 +198,7 @@ $image_check = substr($mov->image, 0, 5); @endphp
                                 <p class="f-s-20">
                                     @php
 
-                                        $description = $h->movie_description->description;
+                                        $description = $mov->description;
 
                                         $trimmedDescription = substr($description, 0, 250);
 
@@ -198,11 +208,13 @@ $image_check = substr($mov->image, 0, 5); @endphp
                                 </p>
                             </div>
                             <div class="buttons-container m-t-20">
-                                <button class="play-button"><span>
+                                   
+                                    <button class="play-button" onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $mov->episode . '/server-' . $mov->server_id) }}'"><span>
                                         <svg viewBox="0 0 24 24">
                                             <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
                                         </svg>
-                                    </span> Play</button>
+                                    </span> <a>Play</a></button>
+                                    
 
                                 <button class="more-info-button m-t-20"><span>
                                         <svg viewBox="0 0 24 24">
@@ -257,18 +269,18 @@ $image_check = substr($mov->image, 0, 5); @endphp
                             <div class="synopsis m-t-20" style="max-width: 500px;">
                                 <p class="f-s-20">
                                     @php
-                                        $description = $h->movie_description->description;
+                                        $description = $mov->description;
                                         $trimmedDescription = substr($description, 0, 250);
                                         echo $trimmedDescription . '</p>';
                                     @endphp
                                 </p>
                             </div>
                             <div class="buttons-container m-t-20">
-                                <button class="play-button"><span>
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
-                                        </svg>
-                                    </span> Play</button>
+                                <button class="play-button" onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $mov->episode . '/server-' . $mov->server_id) }}'"><span>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
+                                    </svg>
+                                </span> <a>Play</a></button>
 
                                 <button class="more-info-button m-t-20"><span>
                                         <svg viewBox="0 0 24 24">
@@ -305,13 +317,17 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             </video>
 
                             <div class="video-description d-flex flex-end direction-column">
+                                @foreach ($mov->episode->take(1) as $ep)
                                 <div class="play-button">
-                                    <a href="../user_dashboard/movie_detail.html">
+                                    <button style="background: none; border:none"
+                                        onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
                                         <svg viewBox="0 0 24 24">
-                                            <path d="M6 4l15 8-15 8z" fill="black"></path>
+                                            <path d="M6 4l15 8-15 8z" fill="black">
+                                            </path>
                                         </svg>
-                                    </a>
+                                    </button>
                                 </div>
+                            @endforeach
                                 <div>
                                     <h4 class="heading f-w-8 text-shadow">
                                         {{ $mov->title }}

@@ -94,11 +94,10 @@
 
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/browse.css">
-
+    <link rel="stylesheet" href="/css/single.css">
     <!--main script file-->
     <script src="/lib/jquery 3.5.0.js"></script>
     <script src="/lib/owl.carousel.js"></script>
-
 
 </head>
 

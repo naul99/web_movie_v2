@@ -83,14 +83,19 @@ class IndexController extends Controller
         $category_home = Category::with(['movie' => function ($m) {
             $m->where('status', 1)->with(['movie_image' => function ($thumb) {
                 $thumb->where('is_thumbnail', 1);
-            }])->withCount(['episode' => function ($query) {
-                $query->select(DB::raw('count(distinct(episode))'));
+            }])->with(['episode' => function ($ep) {
+                $ep->orderBy('episode', 'ASC');
             }]);
         }])->orderBy('position', 'ASC')->where('status', 1)->get();
-        //dd($category_home);
+        // foreach($category_home as $mov){
+        //     foreach($mov->movie as $mo){
+        //         dd($mo);
+        //     }
+        // }
+        // dd($category_home);
         //$hot = Movie::with()->get();
-        $hot = Movie::withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
+        $hot = Movie::with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
         }])->where('hot', 1)->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
         }])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
@@ -101,13 +106,13 @@ class IndexController extends Controller
         $week = Carbon::today('Asia/Ho_Chi_Minh')->subDays(7)->startOfDay();
 
         //dd($hot);
-        $topview = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->where('status', 1)->orderBy('count_views', 'DESC')->paginate(1);
+        $topview = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id','description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id','description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
 
         $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
-            ->where('date_views', $day)->where('status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->paginate(1);
-
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
+            ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
+        
         // $topview_week = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
         //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
         //     ->whereBetween('date_views', [$week, $day])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
@@ -127,8 +132,8 @@ class IndexController extends Controller
         foreach ($movie_genre as $key => $movi) {
             $many_genre[] = $movi->movie_id;
         }
-        $movie_animation = Movie::whereIn('id', $many_genre)->where('status', 1)->withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
+        $movie_animation = Movie::whereIn('id', $many_genre)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
@@ -430,6 +435,13 @@ class IndexController extends Controller
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         $movie = Movie::with('category', 'genre', 'country', 'episode')->where('slug', $slug)->where('status', 1)->first();
+        $minutes = Movie::select('time')->where('slug', $slug)->first();
+        if (floor($minutes->time / 60) == 0) {
+            $times = ($minutes->time - floor($minutes->time / 60) * 60) . 'm';
+        } elseif (($minutes->time - floor($minutes->time / 60) * 60) == 0) {
+            $times = floor($minutes->time / 60) . 'h';
+        } else
+            $times = floor($minutes->time / 60) . 'h ' . ($minutes->time - floor($minutes->time / 60) * 60) . 'm';
         // if ($movie->paid_movie != 0) {
         //     // kiem tra ngay het han
         //     $check_order = Order::where('customer_id', Session::get('customer_id'))->where('expiry', 0)->get();
@@ -514,12 +526,30 @@ class IndexController extends Controller
         //     }
         // }
         //dd($tapphim);
+        //save views movie for day
+        $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
 
+
+        $count_view = Movie_Views::where('movie_id', $movie->id)->where('date_views', $day)->first();
+        if ($count_view) {
+            $count_views = $count_view->count_views + 1;
+            $count_view->count_views = $count_views;
+            //dd($count_view);
+            $count_view->save();
+        } else {
+            $count_view = new Movie_Views();
+            $count_view->count_views = '1';
+            $count_view->movie_id = $movie->id;
+            $count_view->date_views = Carbon::now('Asia/Ho_Chi_Minh')->format('Y:m:d');
+            $count_view->save();
+        }
         if (!isset($movie)) {
             return redirect()->back();
         }
-        $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
+        $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
         }])->get();
 
         $ser = substr($server_active, 7, 10);
@@ -544,7 +574,7 @@ class IndexController extends Controller
             $episode_movie = Episode::where('movie_id', $movie->id)->get()->unique('server_id');
             $query = "CAST(episode AS SIGNED INTEGER) ASC";
             $episode_list = Episode::where('movie_id', $movie->id)->orderByRaw($query)->get();
-            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active'));
+            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times'));
         } catch (ModelNotFoundException $th) {
             return redirect()->back();
         }
