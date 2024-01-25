@@ -11,11 +11,11 @@
         @endforeach
        
         
-        <a href="latest.html" class="nav-item latest">Latest</a>
-        <a href="mylist.html" class="nav-item">My List</a>
+        <a href="#" class="nav-item latest">Latest</a>
+        <a href="#" class="nav-item">My List</a>
     </div>
     <div class="righticons d-flex flex-end flex-middle">
-        <a href="search.html"><img src="../images/icons/search.svg" alt="search icon"></a>
+        <a href="#"><img src="../images/icons/search.svg" alt="search icon"></a>
         <div class="dropdown notification">
             <img src="../images/icons/notification.svg" alt="notificatio icon">
             <div class="dropdown-content">

@@ -243,4 +243,5 @@ $image_check = substr($rel->movie_image->image, 0, 5); @endphp
         }
         console.log(new DevToolsChecker());
     </script>
+
 @endsection
