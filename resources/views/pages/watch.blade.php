@@ -1,17 +1,31 @@
 @extends('layout')
 @section('content')
-    <!-- hero section video-->
+
     <style>
         .video {
-            width: 1280px;
-            height: 720px;
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        @media (max-width: 601px) {
+            .videocontainer {
+                max-width: 90%;
+                margin: auto !important;
+                height: 215px;
+            }
         }
     </style>
+    <!-- hero section video-->
     <div class="videocontainer">
         <iframe id="mainiframe" style="border-radius: 1.25rem;" class="video" src="{!! $episode->linkphim !!}" frameborder="0"
             allow="accelerometer; autoplay=0; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
     </div>
+
     <br>
     <div>
         @foreach ($server as $key => $ser)
@@ -143,22 +157,67 @@ $image_check = substr($movie->movie_image->image, 0, 5); @endphp
 
 
 
-    <!--Hollywood Action movies-->
-    <section id="similar" class="container p-t-40">
+    <!-- More LIke This movies-->
+    <section id="mylist" class="container">
+
         <h4 class="romantic-heading">
             More LIke This
         </h4>
-        <div class="romantic-container d-flex flex-start flex-middle">
-            @foreach ($related as $key => $rel)
-                <a href="#">
-                    <img src="  @php
+        <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+            @foreach ($related->take(20) as $key => $rel)
+                @foreach ($rel->episode->take(1) as $ep)
+                    <div class="video">
+                        <a href="javascript:void(0)"
+                            onclick="location.href='{{ url('xem-phim/' . $rel->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                                poster="
+                            @php
 $image_check = substr($rel->movie_image->image, 0, 5); @endphp
-                                                    @if ($image_check == 'https') {{ $rel->movie_image->image }}
-                                                    @else
-                                                       {{ asset('uploads/movie/' . $rel->movie_image->image) }} @endif"
-                        alt="" class="mylist-img p-r-10 p-t-10 image-size item"></a>
-            @endforeach
+                                                            @if ($image_check == 'https') {{ $rel->movie_image->image }}
+                                                            @else
+                                                               {{ asset('uploads/movie/' . $rel->movie_image->image) }} @endif
+                            ">
+                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
+                                type="video/mp4">
+                            Your browser does not support the video tag. --}}
+                            </video>
+                        </a>
+                        <div class="video-description d-flex flex-end direction-column">
+
+                            <div class="play-button">
+                                <button style="background: none; border:none"
+                                    onclick="location.href='{{ url('xem-phim/' . $rel->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M6 4l15 8-15 8z" fill="black">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                @endforeach
+                <div>
+                    <h4 class="heading f-w-8 text-shadow">
+                        {{ $rel->title }}
+                    </h4>
+                </div>
+                <div class="info d-flex flex-middle flex-no-wrap">
+                    <p class="rated text-shadow"><strong>13+</strong></p>
+                    <p class="season-count text-shadow"> {{ $rel->category->title }}</p>
+                </div>
+                <div class="genere d-flex flex-no-wrap text-shadow">
+
+                    @foreach ($rel->movie_genre->take(3) as $gen)
+                        <p>{{ $gen->title }}
+                            @if (!$loop->last)
+                                ,
+                            @endif
+                        </p>
+                    @endforeach
+                </div>
         </div>
+        </div>
+        @endforeach
+        </div>
+
     </section>
 
     <script>

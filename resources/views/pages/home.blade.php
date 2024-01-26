@@ -168,10 +168,72 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
     </div>
     </section>
     @endforeach
+    </section>
+    <!--Romantic Movies-->
+    <section id="mylist" class="container">
 
+        <h4 class="mylist-heading">
+            All New
+        </h4>
+        <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+            @foreach ($movie_new->take(20) as $key => $mov)
+                @foreach ($mov->episode->take(1) as $ep)
+                    <div class="video">
+                        <a href="javascript:void(0)"
+                            onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                                poster="
+                      @php
+$image_check = substr($mov->movie_image->image, 0, 5); @endphp
+                                                      @if ($image_check == 'https') {{ $mov->movie_image->image }}
+                                                      @else
+                                                         {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
+                      ">
+                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
+                          type="video/mp4">
+                      Your browser does not support the video tag. --}}
+                            </video>
+                        </a>
+                        <div class="video-description d-flex flex-end direction-column">
+
+                            <div class="play-button">
+                                <button style="background: none; border:none"
+                                    onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M6 4l15 8-15 8z" fill="black">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                @endforeach
+                <div>
+                    <h4 class="heading f-w-8 text-shadow">
+                        {{ $mov->title }}
+                    </h4>
+                </div>
+                <div class="info d-flex flex-middle flex-no-wrap">
+                    <p class="rated text-shadow"><strong>13+</strong></p>
+                    <p class="season-count text-shadow"> {{ $mov->category->title }}</p>
+                </div>
+                <div class="genere d-flex flex-no-wrap text-shadow">
+
+                    @foreach ($mov->movie_genre->take(3) as $gen)
+                        <p>{{ $gen->title }}
+                            @if (!$loop->last)
+                                ,
+                            @endif
+                        </p>
+                    @endforeach
+                </div>
+        </div>
+        </div>
+        @endforeach
+        </div>
+
+    </section>
     <!--big poster screen left poster right content-->
     @if (count($topview_day) > 0)
-        @foreach ($topview_day as $mov)
+        @foreach ($topview_day as $key=>$mov)
             <section class="big-section d-flex flex-start container">
                 <img src="@php
 $image_check = substr($mov->image, 0, 5); @endphp
@@ -206,7 +268,7 @@ $image_check = substr($mov->image, 0, 5); @endphp
                                 points="8.4639503 12.8342327 6.65837455 13.2666206 6.65837455 7.77862061 4.65323515 7.77862061 4.65323515 6.22012364 10.4690897 6.22012364 10.4690897 7.77862061 8.4639503 7.77862061">
                             </polygon>
                         </svg>
-                        <span class="p-l-10 f-s-24 f-w-8">#Top in Viet Nam Today</span>
+                        <span class="p-l-10 f-s-24 f-w-8">#Top {{ $key+1 }} in Viet Nam Today</span>
                     </div>
 
                     <div class="synopsis m-t-20" style="max-width: 500px;">
@@ -244,7 +306,7 @@ $image_check = substr($mov->image, 0, 5); @endphp
             </section>
         @endforeach
     @else
-        @foreach ($topview as $mov)
+        @foreach ($topview as $key=>$mov)
             <section class="big-section d-flex flex-start container">
                 <img src="@php
 $image_check = substr($mov->image, 0, 5); @endphp
@@ -279,7 +341,7 @@ $image_check = substr($mov->image, 0, 5); @endphp
                                 points="8.4639503 12.8342327 6.65837455 13.2666206 6.65837455 7.77862061 4.65323515 7.77862061 4.65323515 6.22012364 10.4690897 6.22012364 10.4690897 7.77862061 8.4639503 7.77862061">
                             </polygon>
                         </svg>
-                        <span class="p-l-10 f-s-24 f-w-8">#Top in Viet Nam Today</span>
+                        <span class="p-l-10 f-s-24 f-w-8">#Top {{ $key+1 }} in Viet Nam Today</span>
                     </div>
 
                     <div class="synopsis m-t-20" style="max-width: 500px;">
