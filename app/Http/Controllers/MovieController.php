@@ -647,8 +647,9 @@ class MovieController extends Controller
             return view('admincp.movie.api_ophim', compact('api_ophim'));
         }
         if (isset($_GET['search_ophim'])) {
-            $path_ophim = "https://ophim10.cc/_next/data/s4OlXy8jONoHVWAT5vg7b/tim-kiem.json?keyword=" . $_GET['search_ophim'];
-            $api_ophims = Http::get($path_ophim)->json();
+            
+            $path_ophim_search = "https://ophim11.cc/_next/data/s4OlXy8jONoHVWAT5vg7b/tim-kiem.json?keyword=" . $_GET['search_ophim'];
+            $api_ophims = Http::get($path_ophim_search)->json();
             $api_ophim = $api_ophims['pageProps']['data'];
             return view('admincp.movie.api_ophim', compact('api_ophim'));
         }

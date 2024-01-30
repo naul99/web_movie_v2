@@ -26,8 +26,9 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                     </div>
 
                     <div class="container text-container" style="z-index: 5;">
-                        <div class="contentlogo">
-                            <img src="" alt="content logo" class="show-logo" />
+                        <div class="contentlogo" style="font-size: 70px">
+                            {{-- <img src="" alt="content logo" class="show-logo" /> --}}
+                            {{ $h->title }}
                         </div>
                         <!--top 10 ranking badge svg-->
                         <div class="ranking d-flex m-t-20 flex-middle">

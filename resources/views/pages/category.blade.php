@@ -92,82 +92,85 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
 
         <!--paretn div with black bg after main hero section-->
         <div class="black-background">
+            <!-- Start Fillter movies-->
+            @include('pages.include.fillter_movie')
+            <!--End Fillter movies-->
             <!--continure watching-->
-           
-                <section id="continue-watching" class="container p-t-40">
-                    <h4 class="continue-watching-heading">
-                        {{ $cate_movie->title }}
-                    </h4>
 
-                    <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-                        @foreach ($category_page->sortBydesc('updated_at')->take(20) as $key => $mov)
-                            @foreach ($mov->episode->take(1) as $ep)
-                                <div class="video">
-                                    <a href="javascript:void(0)"
-                                        onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                        <video class="mylist-img p-r-10 p-t-10 video-item"
-                                            poster="
+            <section id="continue-watching" class="container p-t-40">
+                <h4 class="continue-watching-heading">
+                    {{ $cate_movie->title }}
+                </h4>
+
+                <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+                    @foreach ($category_page->sortBydesc('updated_at')->take(20) as $key => $mov)
+                        @foreach ($mov->episode->take(1) as $ep)
+                            <div class="video">
+                                <a href="javascript:void(0)"
+                                    onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                    <video class="mylist-img p-r-10 p-t-10 video-item"
+                                        poster="
                                     @php
 $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                                 @if ($image_check == 'https') {{ $mov->movie_image->image }}
                                 @else
                                    {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                                     ">
-                                            {{-- <source
+                                        {{-- <source
                                         src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
                                         type="video/mp4"> --}}
 
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </a>
-                                    <div class="video-description d-flex flex-end direction-column">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </a>
+                                <div class="video-description d-flex flex-end direction-column">
 
-                                        <div class="play-button">
-                                            <button style="background: none; border:none"
-                                                onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                                <svg viewBox="0 0 24 24">
-                                                    <path d="M6 4l15 8-15 8z" fill="black">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </div>
+                                    <div class="play-button">
+                                        <button style="background: none; border:none"
+                                            onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M6 4l15 8-15 8z" fill="black">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                        @endforeach
+
+                        <div>
+                            <h4 class="heading f-w-8 text-shadow">
+                                {{ $mov->title }}
+                            </h4>
+                        </div>
+                        <div class="info d-flex flex-middle flex-no-wrap">
+
+                            @if ($mov->season < 1)
+                                <p class="rated text-shadow"><strong>
+                                        13+
+                                    </strong></p>
+                            @else
+                                <p class="rated text-shadow"><strong>
+                                        Session {{ $mov->season }}
+                                    </strong></p>
+                            @endif
+
+                            <p class="season-count text-shadow">{{ $cate_movie->title }}</p>
+                        </div>
+                        <div class="genere d-flex flex-no-wrap text-shadow">
+
+                            @foreach ($mov->movie_genre->take(3) as $gen)
+                                <p> {{ $gen->title }}
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                </p>
                             @endforeach
-
-                            <div>
-                                <h4 class="heading f-w-8 text-shadow">
-                                    {{ $mov->title }}
-                                </h4>
-                            </div>
-                            <div class="info d-flex flex-middle flex-no-wrap">
-
-                                @if ($mov->season < 1)
-                                    <p class="rated text-shadow"><strong>
-                                            13+
-                                        </strong></p>
-                                @else
-                                    <p class="rated text-shadow"><strong>
-                                            Session {{ $mov->season }}
-                                        </strong></p>
-                                @endif
-
-                                <p class="season-count text-shadow">{{ $cate_movie->title }}</p>
-                            </div>
-                            <div class="genere d-flex flex-no-wrap text-shadow">
-
-                                @foreach ($mov->movie_genre->take(3) as $gen)
-                                    <p> {{ $gen->title }}
-                                        @if (!$loop->last)
-                                            ,
-                                        @endif
-                                    </p>
-                                @endforeach
-                            </div>
-                    </div>
+                        </div>
+                </div>
         </div>
         @endforeach
     </div>
     </section>
-   
+
 
     <!--Romantic Movies-->
     <section id="mylist" class="container">
@@ -293,8 +296,8 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
         </div>
 
     </section>
-      <!--Romantic Movies-->
-      <section id="mylist" class="container">
+    <!--Romantic Movies-->
+    <section id="mylist" class="container">
 
         <h4 class="mylist-heading">
             Only Netlix

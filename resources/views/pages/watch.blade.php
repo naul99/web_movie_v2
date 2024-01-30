@@ -13,7 +13,7 @@
 
         @media (max-width: 601px) {
             .videocontainer {
-                max-width: 90%;
+                max-width: 100%;
                 margin: auto !important;
                 height: 215px;
             }
@@ -27,21 +27,21 @@
     </div>
 
     <br>
-        <div>
-            @foreach ($server as $key => $ser)
-                @foreach ($episode_movie as $key => $ser_mov)
-                    @if ($ser_mov->server_id == $ser->id)
-                        <div class="title-block" id="halim-list-server">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active server">
-                                    <a href="javascrip:void(0);" aria-controls="servrole="tab" data-toggle="tooltip69"
-                                        title="Server {{ $ser->title }}"><i class="fa-solid fa-server"></i>
-                                        {{ $ser->title }}
+    <div>
+        @foreach ($server as $key => $ser)
+            @foreach ($episode_movie as $key => $ser_mov)
+                @if ($ser_mov->server_id == $ser->id)
+                    <div class="title-block" id="halim-list-server">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active server">
+                                <a href="javascrip:void(0);" aria-controls="servrole="tab" data-toggle="tooltip69"
+                                    title="Server {{ $ser->title }}"><i class="fa-solid fa-server"></i>
+                                    {{ $ser->title }}
 
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul>
                             <div class="tab-content">
 
                                 <style>
@@ -70,7 +70,37 @@
                                         user-select: none;
                                         -webkit-user-select: none;
                                         touch-action: manipulation;
-                                        width: 10%;
+                                        width: 15%;
+                                    }
+
+                                    @media (max-width: 601px) {
+                                        .server {
+                                            background-color: #222;
+                                            border-radius: 4px;
+                                            border-style: none;
+                                            box-sizing: border-box;
+                                            color: #fff;
+                                            cursor: pointer;
+                                            display: inline-block;
+                                            font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                                            font-size: 16px;
+                                            font-weight: 700;
+                                            line-height: 1.5;
+                                            margin: 2px;
+                                            max-width: none;
+                                            min-height: 44px;
+                                            min-width: 10px;
+                                            outline: none;
+                                            overflow: hidden;
+                                            padding: 9px 20px 8px;
+                                            position: relative;
+                                            text-align: center;
+                                            text-transform: none;
+                                            user-select: none;
+                                            -webkit-user-select: none;
+                                            touch-action: manipulation;
+                                            width: 50%;
+                                        }
                                     }
 
                                     .button-31 {
@@ -98,12 +128,14 @@
                                         user-select: none;
                                         -webkit-user-select: none;
                                         touch-action: manipulation;
-                                        
+
                                     }
+
                                     .button-31:hover {
                                         background-color: #fff;
                                         color: #222;
                                     }
+
                                     .active-ep {
                                         background-color: #fff;
                                         border-radius: 4px;
@@ -134,7 +166,8 @@
                                 @foreach ($episode_list as $key => $ep)
                                     @if ($ep->server_id == $ser->id)
                                         <button
-                                            class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} " {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
+                                            class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} "
+                                            {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
                                             onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
                                             EP
                                             [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
@@ -147,11 +180,11 @@
 
                             </div>
                         </ul>
-                        </div>
-                    @endif
-                @endforeach
+                    </div>
+                @endif
             @endforeach
-        </div>
+        @endforeach
+    </div>
     <section class="movieinformation container">
         <div class="" style="height: 400px;width:300px">
             <img style="height: 400px;width:300px"
@@ -167,7 +200,12 @@ $image_check = substr($movie->movie_image->image, 0, 5); @endphp
                 {{ $movie->year }}
             </span>
             <span class="rating">
-                PG-13
+                @if ($movie->type_movie == 1)
+                    {{ $episode_current_list_count }}/{{ $movie->sotap }} Tập
+                @else
+                    PG-13
+                @endif
+
             </span>
             <span class="timeduration">
                 {{ $times }}
@@ -177,6 +215,10 @@ $image_check = substr($movie->movie_image->image, 0, 5); @endphp
             {!! $movie->movie_description->description !!}
         </div>
         <div class="castinformation">
+            <p><span class="name">Imdb Rating: </span>
+                <a href="http://imdb.com/title/{{ $movie->imdb }}" target="_blank"
+                    rel="noopener noreferrer">{{ $values }}</a>
+            </p>
             <p><span class="name">Director:</span>
                 @if (count($movie->movie_directors) == 0)
                     N/A

@@ -12,7 +12,7 @@
             @foreach ($movie as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
                     <a onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                        <img height="400px" width="300px" src=" @php
+                        <img height="200px" width="150px" src=" @php
 $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                                                                                 @if ($image_check == 'https') {{ $mov->movie_image->image }}
                                                                                 @else

@@ -32,9 +32,10 @@ use Illuminate\Support\Facades\Mail;
 
 class IndexController extends Controller
 {
-    public function search(){
+    public function search()
+    {
         $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
-        return view('pages.search',compact('category'));
+        return view('pages.search', compact('category'));
     }
 
 
@@ -76,7 +77,7 @@ class IndexController extends Controller
             return view('pages.timkiem', compact('category', 'genre', 'country', 'search', 'movie'));
         } else {
             $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
-            return view('pages.search',compact('category'));
+            return view('pages.search', compact('category'));
         }
     }
     public function home()
@@ -112,11 +113,11 @@ class IndexController extends Controller
 
         //dd($hot);
         $topview = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(2);
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
 
         $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
-            ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(2);
+            ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
 
         // $topview_week = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
         //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
@@ -151,7 +152,7 @@ class IndexController extends Controller
         // dd($movie_animation);
         //dd($topview);
 
-        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug','movie_new'));
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_new'));
     }
     public function category($slug)
     {
@@ -216,7 +217,7 @@ class IndexController extends Controller
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
 
-        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie','movie_asia','movie_netlix'));
+        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix'));
     }
     public function year($year)
     {
@@ -502,93 +503,8 @@ class IndexController extends Controller
             $times = floor($minutes->time / 60) . 'h';
         } else
             $times = floor($minutes->time / 60) . 'h ' . ($minutes->time - floor($minutes->time / 60) * 60) . 'm';
-        // if ($movie->paid_movie != 0) {
-        //     // kiem tra ngay het han
-        //     $check_order = Order::where('customer_id', Session::get('customer_id'))->where('expiry', 0)->get();
-        //     foreach ($check_order as $check) {
-        //         // $date_now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y');
-        //         // //$datework = Carbon::createFromDate($date_now);
-        //         // $expiry_date = Carbon::createFromDate($check->date_end)->format('d-m-Y');;
-
-        //         if ($check->date_end->isPast()) {
-        //             $check->expiry = "1";
-        //             $check->save();
-        //             // update account
-        //             $customer = Customer::find(Session::get('customer_id'));
-        //             $customer->status_registration = "0";
-        //             $customer->save();
-        //         }
-        //     }
-        //     $user = Customer::find(Session::get('customer_id'));
-        //     if (isset($user) && $user->status_registration == 1) {
-        //         if (Auth::guard('customer')->check()) {
-
-        //             $movies_id = Movie::where('slug', $slug)->first();
-
-        //             //$customer_id = Auth::guard('customer')->user()->id;
-        //             $history = Movie_History::where('movie_id', $movies_id->id)->where('user_id', Session::get('customer_id'))->get();
-        //             //dd(count($history));
-        //             if (count($history) < 1) {
-        //                 DB::table('movie_history')->insert(['movie_id' => $movies_id->id, 'user_id' => Session::get('customer_id'), 'created_at' => now(), 'updated_at' => now()]);
-        //             }
-        //         }
-        //         //dd($tapphim);
-
-        //         if (!isset($movie)) {
-        //             return redirect()->back();
-        //         }
-        //         $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->withCount(['episode' => function ($query) {
-        //             $query->select(DB::raw('count(distinct(episode))'));
-        //         }])->get();
-
-        //         $ser = substr($server_active, 7, 10);
-
-        //         try {
-        //             if (isset($tap)) {
-        //                 $tapphim = $tap;
-        //                 $tapphim = substr($tap, 4, 10);
-        //                 $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
-        //                 if (!isset($episode)) {
-        //                     return redirect()->back();
-        //                 }
-        //             } else {
-        //                 $tapphim = 1;
-        //                 $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
-        //             }
-
-        //             $server = Server::orderby('id', 'DESC')->get();
-        //             $views = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-        //                 ->where('movies.id', $movie->id)->orderBy('count_views', 'DESC')->first();
-
-        //             $episode_movie = Episode::where('movie_id', $movie->id)->get()->unique('server_id');
-        //             $query = "CAST(episode AS SIGNED INTEGER) ASC";
-        //             $episode_list = Episode::where('movie_id', $movie->id)->orderByRaw($query)->get();
-        //             return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active'));
-        //         } catch (ModelNotFoundException $th) {
-        //             return redirect()->back();
-        //         }
-        //     } else {
-        //         return view('errors.400', compact('category', 'genre', 'country'));
-        //     }
-        // } 
-        // else {
-        // if (Auth::guard('customer')->check()) {
-
-        //     $movies_id = Movie::where('slug', $slug)->first();
-
-        //     $customer_id = Auth::guard('customer')->user()->id;
-        //     $history = Movie_History::where('movie_id', $movies_id->id)->where('user_id', $customer_id)->get();
-        //     //dd(count($history));
-        //     if (count($history) < 1) {
-        //         DB::table('movie_history')->insert(['movie_id' => $movies_id->id, 'user_id' => $customer_id, 'created_at' => now(), 'updated_at' => now()]);
-        //         // DB::table('movie_history')->where('user_id', $user_id)->where('movie_id', $movie_id)->update(['updated_at' => now()]);
-        //         //DB::table('movie_history')->insert(['movie_id' => $data['id'], 'created_at' => now(), 'updated_at' => now()]);
-        //     }
-        // }
-        //dd($tapphim);
         //save views movie for day
         $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
-
 
         $count_view = Movie_Views::where('movie_id', $movie->id)->where('date_views', $day)->first();
         if ($count_view) {
@@ -634,7 +550,21 @@ class IndexController extends Controller
             $episode_movie = Episode::where('movie_id', $movie->id)->get()->unique('server_id');
             $query = "CAST(episode AS SIGNED INTEGER) ASC";
             $episode_list = Episode::where('movie_id', $movie->id)->orderByRaw($query)->get();
-            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times'));
+
+            $api_imdb = Http::get('https://www.omdbapi.com/?i=' . $movie->imdb . '&apikey=6c2f1ca1');
+            if ($api_imdb->status() == 200) {
+                if ($api_imdb['Response'] == "True" && $api_imdb['imdbRating'] != "N/A") {
+                    $values = $api_imdb['imdbRating'] . ' /10';
+                } elseif ($api_imdb['Response'] == "False") {
+                    $values = "N/A";
+                } elseif ($api_imdb['Response'] == "True") {
+                    $values = $api_imdb['imdbRating'];
+                }
+            } else
+                return $values = "N/A";
+            $episode_current_list = Episode::with('movie')->where('movie_id', $movie->id)->get()->unique('episode');
+            $episode_current_list_count = $episode_current_list->count();
+            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values','episode_current_list_count'));
         } catch (ModelNotFoundException $th) {
             return redirect()->back();
         }
