@@ -32,7 +32,7 @@
             </div>
         </div>
         <button class="button service">Service Code</button>
-        <p class="copyright">@copyright 2020 Vanilacodes, Inc.</p>
+        <p class="copyright">@copyright 2001 Admin, Inc.</p>
     </div>
 
 

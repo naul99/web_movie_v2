@@ -32,6 +32,10 @@ use Illuminate\Support\Facades\Mail;
 
 class IndexController extends Controller
 {
+    public function search(){
+        $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
+        return view('pages.search',compact('category'));
+    }
 
 
     public function timkiem()
@@ -58,8 +62,8 @@ class IndexController extends Controller
 
                 $querys->where('title', 'LIKE', '%' . $search . '%')
                     ->orWhere('name_english', 'LIKE', '%' . $search . '%')->orWhereIn('id', $many_cast);
-            })->where('status', 1)->withCount(['episode' => function ($query) {
-                $query->select(DB::raw('count(distinct(episode))'));
+            })->where('status', 1)->with(['episode' => function ($ep) {
+                $ep->orderBy('episode', 'ASC');
             }])->paginate(20);
 
             //dd($movie);
@@ -71,7 +75,8 @@ class IndexController extends Controller
 
             return view('pages.timkiem', compact('category', 'genre', 'country', 'search', 'movie'));
         } else {
-            return redirect()->to('/');
+            $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
+            return view('pages.search',compact('category'));
         }
     }
     public function home()

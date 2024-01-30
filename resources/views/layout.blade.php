@@ -116,19 +116,19 @@
     </main>
 
     <div class="footer-navigation d-flex space-between">
-        <a href="browse.html" class="nav-item active">
+        <a href="/" class="nav-item active">
             <i class="fa fa-home" aria-hidden="true"></i> </br>
             Home
         </a>
-        <a href="search.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fa fa-search" aria-hidden="true"></i></br>
             Search
         </a>
-        <a href="latest.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fa fa-film" aria-hidden="true"></i></br>
             Latest
         </a>
-        <a href="user-profile/home.html" class="nav-item">
+        <a href="#" class="nav-item">
             <i class="fa fa-user" aria-hidden="true"></i></br>
             Account
         </a>

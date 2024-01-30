@@ -96,7 +96,7 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
             @foreach ($category_home as $key => $cate_home)
                 <section id="continue-watching" class="container p-t-40">
                     <h4 class="continue-watching-heading">
-                        {{ $cate_home->title }}
+                        {{ $cate_home->title }} Mới Cập Nhật
                     </h4>
 
                     <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">

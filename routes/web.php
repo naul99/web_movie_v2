@@ -99,6 +99,7 @@ Route::get('/checkout-package', function() {
 });
 Route::get('/my-history-order', [IndexController::class, 'history_order'])->name('history-order');
 Route::get('/policy', [IndexController::class, 'policy'])->name('policy');
+//Route::get('/search', [IndexController::class, 'search'])->name('search');
 
 //Auth::routes();
 

@@ -1,8 +1,8 @@
 <header class="d-flex space-between flex-center flex-middle">
     <div class="nav-links d-flex flex-center flex-middle">
         <a href="/">
-            <h2 class="logo logo-text red-color f-s-28 m-r-25">NETFLIX</h2>
-            <h2 class="second-logo-text red-color f-s-28">N</h2>
+            <h2 class="logo logo-text red-color f-s-28 m-r-25">LETFLIX</h2>
+            <h2 class="second-logo-text red-color f-s-28">L</h2>
         </a>
         <a href="/" class="nav-item home">Home</a>
 
@@ -15,8 +15,8 @@
         <a href="#" class="nav-item">My List</a>
     </div>
     <div class="righticons d-flex flex-end flex-middle">
-        <a href="#"><img src="../images/icons/search.svg" alt="search icon"></a>
-        <div class="dropdown notification">
+        <a href="{{ route('tim-kiem') }}"><img src="/images/icons/search.svg" alt="search icon"></a>
+        {{-- <div class="dropdown notification">
             <img src="../images/icons/notification.svg" alt="notificatio icon">
             <div class="dropdown-content">
                 <a href="#" class="profile-item d-flex flex-middle">
@@ -36,9 +36,9 @@
                     <span>You have new notification from <span>User 123</span></span>
                 </a>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="dropdown">
+        {{-- <div class="dropdown">
             <img src="../images/icons/user-image-green.png" alt="user profile icon" class="user-icon">
             <span class="profile-arrow"></span>
 
@@ -71,7 +71,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> --}}
 
     </div>
 </header>

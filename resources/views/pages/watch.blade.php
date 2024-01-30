@@ -27,44 +27,131 @@
     </div>
 
     <br>
-    <div>
-        @foreach ($server as $key => $ser)
-            @foreach ($episode_movie as $key => $ser_mov)
-                @if ($ser_mov->server_id == $ser->id)
-                    <div class="title-block" id="halim-list-server">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active server-1">
-                                <a href="javascrip:void(0);" aria-controls="servrole="tab" data-toggle="tooltip69"
-                                    title="Server {{ $ser->title }}"><i class="fa-solid fa-server"></i>
-                                    {{ $ser->title }}
+        <div>
+            @foreach ($server as $key => $ser)
+                @foreach ($episode_movie as $key => $ser_mov)
+                    @if ($ser_mov->server_id == $ser->id)
+                        <div class="title-block" id="halim-list-server">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active server">
+                                    <a href="javascrip:void(0);" aria-controls="servrole="tab" data-toggle="tooltip69"
+                                        title="Server {{ $ser->title }}"><i class="fa-solid fa-server"></i>
+                                        {{ $ser->title }}
 
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <ul class="halim-list-eps">
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul>
+                            <div class="tab-content">
+
+                                <style>
+                                    .server {
+                                        background-color: #222;
+                                        border-radius: 4px;
+                                        border-style: none;
+                                        box-sizing: border-box;
+                                        color: #fff;
+                                        cursor: pointer;
+                                        display: inline-block;
+                                        font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                                        font-size: 16px;
+                                        font-weight: 700;
+                                        line-height: 1.5;
+                                        margin: 2px;
+                                        max-width: none;
+                                        min-height: 44px;
+                                        min-width: 10px;
+                                        outline: none;
+                                        overflow: hidden;
+                                        padding: 9px 20px 8px;
+                                        position: relative;
+                                        text-align: center;
+                                        text-transform: none;
+                                        user-select: none;
+                                        -webkit-user-select: none;
+                                        touch-action: manipulation;
+                                        width: 10%;
+                                    }
+
+                                    .button-31 {
+                                        background-color: #222;
+                                        border-radius: 4px;
+                                        border-style: none;
+                                        box-sizing: border-box;
+                                        color: #fff;
+                                        cursor: pointer;
+                                        display: inline-block;
+                                        font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                                        font-size: 16px;
+                                        font-weight: 700;
+                                        line-height: 1.5;
+                                        margin: 2px;
+                                        max-width: none;
+                                        min-height: 44px;
+                                        min-width: 10px;
+                                        outline: none;
+                                        overflow: hidden;
+                                        padding: 9px 20px 8px;
+                                        position: relative;
+                                        text-align: center;
+                                        text-transform: none;
+                                        user-select: none;
+                                        -webkit-user-select: none;
+                                        touch-action: manipulation;
+                                        
+                                    }
+                                    .button-31:hover {
+                                        background-color: #fff;
+                                        color: #222;
+                                    }
+                                    .active-ep {
+                                        background-color: #fff;
+                                        border-radius: 4px;
+                                        border-style: none;
+                                        box-sizing: border-box;
+                                        color: #222;
+                                        cursor: pointer;
+                                        display: inline-block;
+                                        font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                                        font-size: 16px;
+                                        font-weight: 700;
+                                        line-height: 1.5;
+                                        margin: 2px;
+                                        max-width: none;
+                                        min-height: 44px;
+                                        min-width: 10px;
+                                        outline: none;
+                                        overflow: hidden;
+                                        padding: 9px 20px 8px;
+                                        position: relative;
+                                        text-align: center;
+                                        text-transform: none;
+                                        user-select: none;
+                                        -webkit-user-select: none;
+                                        touch-action: manipulation;
+                                    }
+                                </style>
                                 @foreach ($episode_list as $key => $ep)
                                     @if ($ep->server_id == $ser->id)
                                         <button
+                                            class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} " {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
                                             onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                            <li class="halim-episode"><span
-                                                    class="halim-btn halim-btn-2 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active' : '' }} halim-info-1-1 box-shadow"
-                                                    data-post-id="37976" data-server="1" data-episode="1"
-                                                    data-position="first" data-embed="0" data-title="" data-h1="">EP
-                                                    [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
-                                                        End
-                                                    @endif
-                                                </span></li>
+                                            EP
+                                            [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
+                                                End
+                                            @endif
+
                                         </button>
                                     @endif
                                 @endforeach
-                            </ul>
+
+                            </div>
+                        </ul>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                @endforeach
             @endforeach
-        @endforeach
-    </div>
+        </div>
     <section class="movieinformation container">
         <div class="" style="height: 400px;width:300px">
             <img style="height: 400px;width:300px"

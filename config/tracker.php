@@ -76,7 +76,7 @@ return [
      *    - Error log
      *    - URL queries (including values)
      */
-    'log_enabled' => true,
+    'log_enabled' => false,
 
     /*
      * Log artisan commands?
@@ -88,7 +88,7 @@ return [
      *
      * Log must be enabled for this option to work.
      */
-    'log_sql_queries' => true,
+    'log_sql_queries' => false,
 
     /*
      * If you prefer to store Tracker data on a different database or connection,
@@ -131,12 +131,12 @@ return [
      *
      * Log must be enabled for this option to work.
      */
-    'log_sql_queries_bindings' => true,
+    'log_sql_queries_bindings' => false,
 
     /*
      * Log events?
      */
-    'log_events' => true,
+    'log_events' => false,
 
     /*
      * Which events do you want to log exactly?
