@@ -29,15 +29,15 @@
 
 
         <select class="stylish_filter" name="order" id="exampleFormControlSelec">
-            <option class="btn-option" value="">--Sort--</option>
-            <option class="btn-option" value="created_at">Ngay dang</option>
-            <option class="btn-option" value="title">Ten phim A-Z</option>
-            <option class="btn-option" value="count_views">Luot xem</option>
+            <option class="btn-option" value="">--Sắp xếp--</option>
+            <option class="btn-option" value="created_at">Đăng mới nhất</option>
+            <option class="btn-option" value="title">Tên A-Z</option>
+            <option class="btn-option" value="count_views">Xem nhiều</option>
         </select>
 
 
         <select class="stylish_filter" name="category" id="exampleFormControlSelect1">
-            <option class="btn-option" value="">--Danh muc--</option>
+            <option class="btn-option" value="">--Danh mục--</option>
             @foreach ($category as $key => $cate)
                 <option class="btn-option" {{ isset($_GET['category']) && $_GET['category'] == $cate->id ? 'selected' : '' }}
                     value="{{ $cate->id }}">{{ $cate->title }}</option>
@@ -47,7 +47,7 @@
 
 
         <select class="stylish_filter" name="genre" id="exampleFormControlSelect1">
-            <option class="btn-option" value="">--The loai--</option>
+            <option class="btn-option" value="">--Thể loại--</option>
             @foreach ($genre as $key => $gen)
                 <option class="btn-option" {{ isset($_GET['genre']) && $_GET['genre'] == $gen->id ? 'selected' : '' }}
                     value="{{ $gen->id }}">{{ $gen->title }}</option>
@@ -59,7 +59,7 @@
 
 
         <select class="stylish_filter" name="country" id="exampleFormControlSelect1">
-            <option class="btn-option" value="">--Quoc gia--</option>
+            <option class="btn-option" value="">--Quốc gia--</option>
             @foreach ($country as $key => $count)
                 <option class="btn-option" {{ isset($_GET['country']) && $_GET['country'] == $count->id ? 'selected' : '' }}
                     value="{{ $count->id }}">{{ $count->title }}</option>
@@ -69,7 +69,7 @@
 
 
         <select class="stylish_filter" name="year" id="exampleFormControlSelect">
-            <option class="btn-option" value="">--Nam--</option>
+            <option class="btn-option" value="">--Năm--</option>
             @for ($year = 2000; $year <= now()->year; $year++)
                 <option class="btn-option">{{ $year }}</option>
             @endfor

@@ -107,14 +107,15 @@ class IndexController extends Controller
         }])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
 
         $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-        $week = Carbon::today('Asia/Ho_Chi_Minh')->subDays(7)->startOfDay();
+        // $startOfMonth = Carbon::now()->startOfMonth();
+        // $endOfMonth = Carbon::now()->endOfMonth();
+        // $week = Carbon::today('Asia/Ho_Chi_Minh')->subDays(7)->startOfDay();
 
         //dd($hot);
         $topview = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
-
+        $topview_tvseries = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.type_movie',1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
         $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
             ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
@@ -149,10 +150,69 @@ class IndexController extends Controller
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('created_at', 'DESC')->get();
-        // dd($movie_animation);
-        //dd($topview);
 
-        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_new'));
+        //movie us
+        $list_country = ['Au My', 'Phap', 'Anh', 'Y', 'Duc'];
+        $many_country = [];
+        foreach ($list_country as $countr) {
+            $country_slug = Country::where('title', 'LIKE', '%' . $countr . '%')->get();
+            foreach ($country_slug as $coun) {
+                $many_country[] = $coun->id;
+            }
+        }
+
+        $movie_us = Movie::whereIn('country_id', $many_country)->where('type_movie', 0)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->get();
+
+        //movie viet nam
+        $list_country = ['Viet Nam'];
+        $many_country = [];
+        foreach ($list_country as $countr) {
+            $country_slug = Country::where('title', 'LIKE', '%' . $countr . '%')->get();
+            foreach ($country_slug as $coun) {
+                $many_country[] = $coun->id;
+            }
+        }
+
+        $movie_vietnam = Movie::whereIn('country_id', $many_country)->where('type_movie', 0)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->get();
+
+        //tv series thailan
+        $list_country = ['Thai Lan'];
+        $many_country = [];
+        foreach ($list_country as $countr) {
+            $country_slug = Country::where('title', 'LIKE', '%' . $countr . '%')->get();
+            foreach ($country_slug as $coun) {
+                $many_country[] = $coun->id;
+            }
+        }
+
+        $tv_thailan = Movie::whereIn('country_id', $many_country)->where('type_movie', 1)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->get();
+
+        $gen_horror_slug = Genre::where('title', 'LIKE', '%kinh di%')->first();
+
+        $movie_genre = Movie_Genre::where('genre_id', $gen_horror_slug->id)->get();
+        $many_genre = [];
+        foreach ($movie_genre as $key => $movi) {
+            $many_genre[] = $movi->movie_id;
+        }
+        $movie_horror = Movie::whereIn('id', $many_genre)->where('type_movie', 0)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->get();
+
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_new', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries'));
     }
     public function category($slug)
     {
@@ -202,6 +262,8 @@ class IndexController extends Controller
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
+
+
 
         //only netflix
         $gen_slug_netflix = Genre::where('title', 'LIKE', '%netflix%')->first();
@@ -564,7 +626,7 @@ class IndexController extends Controller
                 return $values = "N/A";
             $episode_current_list = Episode::with('movie')->where('movie_id', $movie->id)->get()->unique('episode');
             $episode_current_list_count = $episode_current_list->count();
-            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values','episode_current_list_count'));
+            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count'));
         } catch (ModelNotFoundException $th) {
             return redirect()->back();
         }

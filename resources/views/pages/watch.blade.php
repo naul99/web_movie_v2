@@ -27,163 +27,191 @@
     </div>
 
     <br>
-    <div>
+    <div style="padding-left: 2%">
+        <style>
+            .server {
+                background-color: #222;
+                border-radius: 4px;
+                border-style: none;
+                box-sizing: border-box;
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 1.5;
+                margin: 2px;
+                max-width: none;
+                min-height: 44px;
+                min-width: 10px;
+                outline: none;
+                overflow: hidden;
+                padding: 9px 20px 8px;
+                position: relative;
+                text-align: center;
+                text-transform: none;
+                user-select: none;
+                -webkit-user-select: none;
+                touch-action: manipulation;
+                width: 15%;
+            }
+
+            .server-active {
+                background-color: #fff;
+                color: #222;
+            }
+
+            @media (max-width: 601px) {
+                .server {
+                    background-color: #222;
+                    border-radius: 4px;
+                    border-style: none;
+                    box-sizing: border-box;
+                    color: #fff;
+                    cursor: pointer;
+                    display: inline-block;
+                    font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                    font-size: 16px;
+                    font-weight: 700;
+                    line-height: 1.5;
+                    margin: 2px;
+                    max-width: none;
+                    min-height: 44px;
+                    min-width: 10px;
+                    outline: none;
+                    overflow: hidden;
+                    padding: 9px 20px 8px;
+                    position: relative;
+                    text-align: center;
+                    text-transform: none;
+                    user-select: none;
+                    -webkit-user-select: none;
+                    touch-action: manipulation;
+                    width: 50%;
+                }
+
+                .server-active {
+                    background-color: #fff;
+                    color: #222;
+                }
+            }
+
+            .button-31 {
+                background-color: #222;
+                border-radius: 4px;
+                border-style: none;
+                box-sizing: border-box;
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 1.5;
+                margin: 2px;
+                max-width: none;
+                min-height: 44px;
+                min-width: 10px;
+                outline: none;
+                overflow: hidden;
+                padding: 9px 20px 8px;
+                position: relative;
+                text-align: center;
+                text-transform: none;
+                user-select: none;
+                -webkit-user-select: none;
+                touch-action: manipulation;
+
+            }
+
+            .button-31:hover {
+                background-color: #fff;
+                color: #222;
+            }
+
+            .active-ep {
+                background-color: #fff;
+                border-radius: 4px;
+                border-style: none;
+                box-sizing: border-box;
+                color: #222;
+                cursor: pointer;
+                display: inline-block;
+                font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 1.5;
+                margin: 2px;
+                max-width: none;
+                min-height: 44px;
+                min-width: 10px;
+                outline: none;
+                overflow: hidden;
+                padding: 9px 20px 8px;
+                position: relative;
+                text-align: center;
+                text-transform: none;
+                user-select: none;
+                -webkit-user-select: none;
+                touch-action: manipulation;
+            }
+
+            .episode-list {
+                display: none;
+            }
+        </style>
         @foreach ($server as $key => $ser)
             @foreach ($episode_movie as $key => $ser_mov)
                 @if ($ser_mov->server_id == $ser->id)
-                    <div class="title-block" id="halim-list-server">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active server">
-                                <a href="javascrip:void(0);" aria-controls="servrole="tab" data-toggle="tooltip69"
-                                    title="Server {{ $ser->title }}"><i class="fa-solid fa-server"></i>
-                                    {{ $ser->title }}
-
-                                </a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <div class="tab-content">
-
-                                <style>
-                                    .server {
-                                        background-color: #222;
-                                        border-radius: 4px;
-                                        border-style: none;
-                                        box-sizing: border-box;
-                                        color: #fff;
-                                        cursor: pointer;
-                                        display: inline-block;
-                                        font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-                                        font-size: 16px;
-                                        font-weight: 700;
-                                        line-height: 1.5;
-                                        margin: 2px;
-                                        max-width: none;
-                                        min-height: 44px;
-                                        min-width: 10px;
-                                        outline: none;
-                                        overflow: hidden;
-                                        padding: 9px 20px 8px;
-                                        position: relative;
-                                        text-align: center;
-                                        text-transform: none;
-                                        user-select: none;
-                                        -webkit-user-select: none;
-                                        touch-action: manipulation;
-                                        width: 15%;
-                                    }
-
-                                    @media (max-width: 601px) {
-                                        .server {
-                                            background-color: #222;
-                                            border-radius: 4px;
-                                            border-style: none;
-                                            box-sizing: border-box;
-                                            color: #fff;
-                                            cursor: pointer;
-                                            display: inline-block;
-                                            font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-                                            font-size: 16px;
-                                            font-weight: 700;
-                                            line-height: 1.5;
-                                            margin: 2px;
-                                            max-width: none;
-                                            min-height: 44px;
-                                            min-width: 10px;
-                                            outline: none;
-                                            overflow: hidden;
-                                            padding: 9px 20px 8px;
-                                            position: relative;
-                                            text-align: center;
-                                            text-transform: none;
-                                            user-select: none;
-                                            -webkit-user-select: none;
-                                            touch-action: manipulation;
-                                            width: 50%;
-                                        }
-                                    }
-
-                                    .button-31 {
-                                        background-color: #222;
-                                        border-radius: 4px;
-                                        border-style: none;
-                                        box-sizing: border-box;
-                                        color: #fff;
-                                        cursor: pointer;
-                                        display: inline-block;
-                                        font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-                                        font-size: 16px;
-                                        font-weight: 700;
-                                        line-height: 1.5;
-                                        margin: 2px;
-                                        max-width: none;
-                                        min-height: 44px;
-                                        min-width: 10px;
-                                        outline: none;
-                                        overflow: hidden;
-                                        padding: 9px 20px 8px;
-                                        position: relative;
-                                        text-align: center;
-                                        text-transform: none;
-                                        user-select: none;
-                                        -webkit-user-select: none;
-                                        touch-action: manipulation;
-
-                                    }
-
-                                    .button-31:hover {
-                                        background-color: #fff;
-                                        color: #222;
-                                    }
-
-                                    .active-ep {
-                                        background-color: #fff;
-                                        border-radius: 4px;
-                                        border-style: none;
-                                        box-sizing: border-box;
-                                        color: #222;
-                                        cursor: pointer;
-                                        display: inline-block;
-                                        font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-                                        font-size: 16px;
-                                        font-weight: 700;
-                                        line-height: 1.5;
-                                        margin: 2px;
-                                        max-width: none;
-                                        min-height: 44px;
-                                        min-width: 10px;
-                                        outline: none;
-                                        overflow: hidden;
-                                        padding: 9px 20px 8px;
-                                        position: relative;
-                                        text-align: center;
-                                        text-transform: none;
-                                        user-select: none;
-                                        -webkit-user-select: none;
-                                        touch-action: manipulation;
-                                    }
-                                </style>
-                                @foreach ($episode_list as $key => $ep)
-                                    @if ($ep->server_id == $ser->id)
-                                        <button
-                                            class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} "
-                                            {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
-                                            onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                            EP
-                                            [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
-                                                End
-                                            @endif
-
-                                        </button>
-                                    @endif
-                                @endforeach
-
-                            </div>
-                        </ul>
-                    </div>
+                    <div id="server-{{ $ser->id }}"
+                        class="server{{ $server_active == 'server-' . $ser->id ? ' server-active' : '' }}"
+                        onclick="showEpisodes('server{{ $ser->id }}')">
+                        {{ $ser->title }}</div>
                 @endif
             @endforeach
         @endforeach
+
+        @foreach ($server as $key => $ser)
+            @foreach ($episode_movie as $key => $ser_mov)
+                @if ($ser_mov->server_id == $ser->id)
+                    <div id="episodeList{{ $ser->id }}" class="episode-list"
+                        style="padding-left: 2%;padding-bottom: 1%">
+                        @foreach ($episode_list as $key => $ep)
+                            @if ($ep->server_id == $ser->id)
+                                <button
+                                    class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} "
+                                    {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
+                                    onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                    EP
+                                    [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
+                                        End
+                                    @endif
+
+                                </button>
+                            @endif
+                        @endforeach
+                @endif
+    </div>
+    @endforeach
+    @endforeach
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var server_active = "{{ $server_active }}";
+            document.getElementById(server_active).click();
+
+        });
+
+        function showEpisodes(server) {
+            // Ẩn tất cả danh sách tập phim
+            document.querySelectorAll('.episode-list').forEach(function(el) {
+                el.style.display = 'none';
+            });
+
+            // Hiển thị danh sách tập phim của server được chọn
+            document.getElementById('episodeList' + server.charAt(server.length - 1)).style.display = 'block';
+        }
+    </script>
     </div>
     <section class="movieinformation container">
         <div class="" style="height: 400px;width:300px">
@@ -276,10 +304,20 @@ $image_check = substr($movie->movie_image->image, 0, 5); @endphp
                 <i class="fa fa-share"></i></br>
                 Share
             </a>
-            <a href="#" class="link-item">
-                <i class="fa fa-download"></i></br>
-                Download
-            </a>
+            @foreach ($movie->episode->take(1) as $ep)
+                @if (isset($ep->linkdownload))
+                    <a href={!! $ep->linkdownload !!} target="_blank" class="link-item">
+                        <i class="fa fa-download"></i></br>
+                        Download
+                    </a>
+                @elseif (isset($ep->linkdownload) == '')
+                    <a href="javascription:voi(0);" class="link-item">
+                        <i class="fa fa-download"></i></br>
+                        Download
+                    </a>
+                @endif
+            @endforeach
+
         </div>
     </section>
 
@@ -384,12 +422,12 @@ $image_check = substr($rel->movie_image->image, 0, 5); @endphp
             }
         }
         // Thay đổi URL hiện tại bằng URL mới
-        var newUrl = '/movie/{{ $movie->slug }}';
+        //var newUrl = '/movie/{{ $movie->slug }}';
         //history.replaceState({}, null, newUrl);
 
         // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
 
-        // history.pushState({}, null, '/movie/{{ $movie->slug }}');
+        //history.pushState({}, null, '/movie/{{ $movie->slug }}');
 
         function onDevToolsOpen() {
 

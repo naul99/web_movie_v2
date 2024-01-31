@@ -238,7 +238,7 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
     <section id="mylist" class="container">
 
         <h4 class="mylist-heading">
-            Movie Asia
+            {{ $cate_movie->title }} Asia
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
             @foreach ($movie_asia->take(20) as $key => $mov)
