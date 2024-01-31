@@ -336,7 +336,7 @@ $image_check = substr($movie->movie_image->image, 0, 5); @endphp
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $rel->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
 $image_check = substr($rel->movie_image->image, 0, 5); @endphp
@@ -363,7 +363,14 @@ $image_check = substr($rel->movie_image->image, 0, 5); @endphp
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                        {{ $rel->title }}
+                        <?php
+                        $originalTitle = $rel->title;
+                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                            $shortenedTitle .= '...';
+                        }
+                        echo $shortenedTitle;
+                        ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -379,6 +386,8 @@ $image_check = substr($rel->movie_image->image, 0, 5); @endphp
                             @endif
                         </p>
                     @endforeach
+                    <a class="button" href="{{ route('movie', $rel->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
+                        style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>

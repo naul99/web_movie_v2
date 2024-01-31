@@ -145,11 +145,6 @@ class IndexController extends Controller
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
 
-        $movie_new = Movie::where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('created_at', 'DESC')->get();
 
         //movie us
         $list_country = ['Au My', 'Phap', 'Anh', 'Y', 'Duc'];
@@ -212,7 +207,7 @@ class IndexController extends Controller
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
 
-        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_new', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries'));
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries'));
     }
     public function category($slug)
     {
@@ -279,7 +274,18 @@ class IndexController extends Controller
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
 
-        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix'));
+         //movie asia
+         
+        
+        $country__korea_slug = Country::where('title', 'LIKE', '%han quoc%')->first();
+ 
+         $movie_korea = Movie::where('country_id', $country__korea_slug->id)->where('category_id', $cate_movie->id)->where('status', 1)->with(['episode' => function ($query) {
+             $query->orderBy('episode', 'ASC');
+         }])->with(['movie_image' => function ($thumb) {
+             $thumb->where('is_thumbnail', 1);
+         }])->orderBy('updated_at', 'DESC')->get();
+
+        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix','movie_korea'));
     }
     public function year($year)
     {
@@ -416,6 +422,9 @@ class IndexController extends Controller
         $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
+        $movie_thumbnail = Movie::select('id')->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->where('slug', $slug)->where('status', 1)->first();
         $movie = Movie::with('category', 'genre', 'country', 'movie_genre', 'movie_cast', 'movie_directors', 'movie_tags', 'movie_views')->where('slug', $slug)->where('status', 1)->first();
         if (!isset($movie)) {
             return redirect()->back();
@@ -428,10 +437,12 @@ class IndexController extends Controller
         } else
             $times = floor($minutes->time / 60) . 'h ' . ($minutes->time - floor($minutes->time / 60) * 60) . 'm';
 
+        $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->get();
 
-        $related = Movie::with('category', 'genre', 'country')->where('status', 1)->where('category_id', $movie->category->id)->withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
-        }])->orderby(DB::raw('RAND()'))->whereNotIn('slug', [$slug])->get();
         $episode_first = Episode::with('movie')->where('movie_id', $movie->id)->orderBy('episode', 'ASC')->take(1)->first();
         //lay tap phim
         $query = "CAST(episode AS SIGNED INTEGER) DESC";
@@ -516,7 +527,7 @@ class IndexController extends Controller
 
 
 
-        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'episode_first', 'episode_current_list_count', 'times', 'values', 'link_imdb', 'count_total', 'rating'));
+        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'episode_first', 'episode_current_list_count', 'times', 'values', 'link_imdb', 'count_total', 'rating','movie_thumbnail'));
     }
     public function add_rating(Request $request)
     {

@@ -26,8 +26,9 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                     </div>
 
                     <div class="container text-container" style="z-index: 5;">
-                        <div class="contentlogo">
-                            <img src="" alt="content logo" class="show-logo" />
+                        <div class="contentlogo" style="font-size: 70px">
+                            {{-- <img src="" alt="content logo" class="show-logo" /> --}}
+                            {{ $h->title }}
                         </div>
                         <!--top 10 ranking badge svg-->
                         <div class="ranking d-flex m-t-20 flex-middle">
@@ -108,7 +109,8 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                             <div class="video">
                                 <a href="javascript:void(0)"
                                     onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                    <video class="mylist-img p-r-10 p-t-10 video-item"
+                                   
+                                    <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                         poster="
                                     @php
 $image_check = substr($mov->movie_image->image, 0, 5); @endphp
@@ -116,11 +118,8 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                                 @else
                                    {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                                     ">
-                                        {{-- <source
-                                        src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
-                                        type="video/mp4"> --}}
-
-                                        Your browser does not support the video tag.
+                                    {{-- <source src="https://live-par-2-cdn-alt.livepush.io/live/bigbuckbunnyclip/index.m3u8" type="application/x-mpegURL">
+                                        Your browser does not support the video tag. --}}
                                     </video>
                                 </a>
                                 <div class="video-description d-flex flex-end direction-column">
@@ -138,7 +137,14 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
 
                         <div>
                             <h4 class="heading f-w-8 text-shadow">
-                                {{ $mov->title }}
+                                 <?php
+                                    $originalTitle = $mov->title;
+                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                        $shortenedTitle .= '...';
+                                    }
+                                    echo $shortenedTitle;
+                                    ?>
                             </h4>
                         </div>
                         <div class="info d-flex flex-middle flex-no-wrap">
@@ -164,6 +170,8 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                                     @endif
                                 </p>
                             @endforeach
+                            <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                                style="color: #ffffff;"></i></i></a>
                         </div>
                 </div>
         </div>
@@ -184,7 +192,7 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5); @endphp
@@ -211,7 +219,14 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                        {{ $mov->title }}
+                         <?php
+                                    $originalTitle = $mov->title;
+                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                        $shortenedTitle .= '...';
+                                    }
+                                    echo $shortenedTitle;
+                                    ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -227,6 +242,8 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             @endif
                         </p>
                     @endforeach
+                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                        style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>
@@ -246,7 +263,7 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5); @endphp
@@ -273,7 +290,14 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                        {{ $mov->title }}
+                         <?php
+                                    $originalTitle = $mov->title;
+                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                        $shortenedTitle .= '...';
+                                    }
+                                    echo $shortenedTitle;
+                                    ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -289,6 +313,8 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             @endif
                         </p>
                     @endforeach
+                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                        style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>
@@ -308,7 +334,7 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item"
+                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5); @endphp
@@ -335,7 +361,14 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                        {{ $mov->title }}
+                         <?php
+                                    $originalTitle = $mov->title;
+                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                        $shortenedTitle .= '...';
+                                    }
+                                    echo $shortenedTitle;
+                                    ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -351,6 +384,79 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             @endif
                         </p>
                     @endforeach
+                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                        style="color: #ffffff;"></i></i></a>
+                </div>
+        </div>
+        </div>
+        @endforeach
+        </div>
+
+    </section>
+    <!--Movies Korea-->
+    <section id="mylist" class="container">
+
+        <h4 class="mylist-heading">
+            {{ $cate_movie->title }} Hàn Quốc
+        </h4>
+        <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
+            @foreach ($movie_korea->take(20) as $key => $mov)
+                @foreach ($mov->episode->take(1) as $ep)
+                    <div class="video">
+                        <a href="javascript:void(0)"
+                            onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                poster="
+                            @php
+$image_check = substr($mov->movie_image->image, 0, 5); @endphp
+                                                            @if ($image_check == 'https') {{ $mov->movie_image->image }}
+                                                            @else
+                                                               {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
+                            ">
+                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
+                                type="video/mp4">
+                            Your browser does not support the video tag. --}}
+                            </video>
+                        </a>
+                        <div class="video-description d-flex flex-end direction-column">
+
+                            <div class="play-button">
+                                <button style="background: none; border:none"
+                                    onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M6 4l15 8-15 8z" fill="black">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                @endforeach
+                <div>
+                    <h4 class="heading f-w-8 text-shadow">
+                         <?php
+                                    $originalTitle = $mov->title;
+                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                        $shortenedTitle .= '...';
+                                    }
+                                    echo $shortenedTitle;
+                                    ?>
+                    </h4>
+                </div>
+                <div class="info d-flex flex-middle flex-no-wrap">
+                    <p class="rated text-shadow"><strong>13+</strong></p>
+                    <p class="season-count text-shadow"> {{ $mov->category->title }}</p>
+                </div>
+                <div class="genere d-flex flex-no-wrap text-shadow">
+
+                    @foreach ($mov->movie_genre->take(3) as $gen)
+                        <p>{{ $gen->title }}
+                            @if (!$loop->last)
+                                ,
+                            @endif
+                        </p>
+                    @endforeach
+                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                        style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>

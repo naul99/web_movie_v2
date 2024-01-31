@@ -88,10 +88,11 @@
     {{-- @yield('css') --}}
     <link rel='dns-prefetch' href='//s.w.org' />
     <link rel="stylesheet" href="/lib/owl.carousel.css" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"
-        integrity="sha256-t2kyTgkh+fZJYRET5l9Sjrrl4UDain5jxdbqe8ejO8A=" crossorigin="anonymous" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"
+        integrity="sha256-t2kyTgkh+fZJYRET5l9Sjrrl4UDain5jxdbqe8ejO8A=" crossorigin="anonymous" /> --}}
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/browse.css">
     <link rel="stylesheet" href="/css/single.css">
@@ -99,14 +100,42 @@
     <!--main script file-->
     <script src="/lib/jquery 3.5.0.js"></script>
     <script src="/lib/owl.carousel.js"></script>
+    <style>
+        .thumbnail-respone {
+            object-fit: cover;
+            height: 160px;
 
+        }
+
+        .button {
+            margin-left: auto;
+            background: none;
+            border: 0;
+        }
+
+        @media (max-width: 601px) {
+            .thumbnail-respone {
+                object-fit: cover;
+                height: 100px;
+            }
+
+            .black-background {
+                margin-top: 0px;
+                width: 100%;
+                background-color: black;
+                -webkit-box-shadow: 20px -40px 50px black;
+                -moz-box-shadow: 20px -40px 50px black;
+                box-shadow: 0px -40px 50px 15px black;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <main id="mainContainer" class="p-b-40">
 
         @include('nav')
-        
+
         @yield('content')
 
         @include('footer')
@@ -120,7 +149,7 @@
             <i class="fa fa-home" aria-hidden="true"></i> </br>
             Home
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('tim-kiem') }}" class="nav-item">
             <i class="fa fa-search" aria-hidden="true"></i></br>
             Search
         </a>
