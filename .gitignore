@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /public/json/
-/public/uploads/movie
+/public/uploads/movie/*
 /public/assets/
 #/public/uploads/logo/
 /storage/*.key
