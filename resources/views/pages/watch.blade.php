@@ -62,41 +62,6 @@
                 color: #222;
             }
 
-            @media (max-width: 601px) {
-                .server {
-                    background-color: #222;
-                    border-radius: 4px;
-                    border-style: none;
-                    box-sizing: border-box;
-                    color: #fff;
-                    cursor: pointer;
-                    display: inline-block;
-                    font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-                    font-size: 16px;
-                    font-weight: 700;
-                    line-height: 1.5;
-                    margin: 2px;
-                    max-width: none;
-                    min-height: 44px;
-                    min-width: 10px;
-                    outline: none;
-                    overflow: hidden;
-                    padding: 9px 20px 8px;
-                    position: relative;
-                    text-align: center;
-                    text-transform: none;
-                    user-select: none;
-                    -webkit-user-select: none;
-                    touch-action: manipulation;
-                    width: 50%;
-                }
-
-                .server-active {
-                    background-color: #fff;
-                    color: #222;
-                }
-            }
-
             .button-31 {
                 background-color: #222;
                 border-radius: 4px;
@@ -125,6 +90,59 @@
 
             }
 
+            .img-mobile {
+                height: 400px;
+                width: 300px
+            }
+
+
+            @media (max-width: 601px) {
+                .server {
+                    background-color: #222;
+                    border-radius: 4px;
+                    border-style: none;
+                    box-sizing: border-box;
+                    color: #fff;
+                    cursor: pointer;
+                    display: inline-block;
+                    font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+                    font-size: 12px;
+                    font-weight: 700;
+                    line-height: 1.5;
+                    margin: 2px;
+                    max-width: none;
+                    min-height: 35px;
+                    min-width: 10px;
+                    outline: none;
+                    overflow: hidden;
+                    padding: 9px 20px 8px;
+                    position: relative;
+                    text-align: center;
+                    text-transform: none;
+                    user-select: none;
+                    -webkit-user-select: none;
+                    touch-action: manipulation;
+                    width: 40%;
+                }
+
+                .server-active {
+                    background-color: #fff;
+                    color: #222;
+                }
+
+                .button-31 {
+                    font-size: 10px;
+                    min-height: 35px;
+                }
+
+                .img-mobile {
+                    height: 290px;
+                    width: 200px
+                }
+
+            }
+
+
             .button-31:hover {
                 background-color: #fff;
                 color: #222;
@@ -132,29 +150,7 @@
 
             .active-ep {
                 background-color: #fff;
-                border-radius: 4px;
-                border-style: none;
-                box-sizing: border-box;
                 color: #222;
-                cursor: pointer;
-                display: inline-block;
-                font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
-                font-size: 16px;
-                font-weight: 700;
-                line-height: 1.5;
-                margin: 2px;
-                max-width: none;
-                min-height: 44px;
-                min-width: 10px;
-                outline: none;
-                overflow: hidden;
-                padding: 9px 20px 8px;
-                position: relative;
-                text-align: center;
-                text-transform: none;
-                user-select: none;
-                -webkit-user-select: none;
-                touch-action: manipulation;
             }
 
             .episode-list {
@@ -214,8 +210,9 @@
     </script>
     </div>
     <section class="movieinformation container">
-        <div class="" style="height: 400px;width:300px">
-            <img style="height: 400px;width:300px"
+        <div class="">
+
+            <img class="img-mobile"
                 src="  @php
 $image_check = substr($movie->movie_image->image, 0, 5); @endphp
                                             @if ($image_check == 'https') {{ $movie->movie_image->image }}
@@ -387,7 +384,7 @@ $image_check = substr($rel->movie_image->image, 0, 5); @endphp
                         </p>
                     @endforeach
                     <a class="button" href="{{ route('movie', $rel->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
-                        style="color: #ffffff;"></i></i></a>
+                            style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>

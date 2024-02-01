@@ -116,7 +116,7 @@
         @media (max-width: 601px) {
             .thumbnail-respone {
                 object-fit: cover;
-                height: 100px;
+                height: 127px;
             }
 
             .black-background {
@@ -127,6 +127,7 @@
                 -moz-box-shadow: 20px -40px 50px black;
                 box-shadow: 0px -40px 50px 15px black;
             }
+           
         }
     </style>
 </head>
