@@ -361,7 +361,7 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                             </div>
                             <div class="image-container">
                                
-                                    <section id="browse-dashboard" class=" d-flex direction-column flex-start middle-align">
+                                    <section id="browse-dashboard" class="d-flex direction-column flex-start middle-align">
                                         <div>
 
                                             <video class="hero-background-image" id="hero-video"
@@ -380,7 +380,7 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                                             <div class="shadow-layer"></div>
                                         </div>
 
-                                        <div class="container text-container" style="z-index: 5;">
+                                        <div style="padding-left: 90px;" class="container text-container" style="z-index: 5;">
                                             <div class="contentlogo" style="font-size: 70px">
 
                                                 {{ $h->title }}
@@ -476,7 +476,7 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                                             <div class="shadow-layer"></div>
                                         </div>
 
-                                        <div class="container text-container" style="z-index: 5;">
+                                        <div style="padding-left: 90px;" class="container text-container" style="z-index: 5;">
                                             <div class="contentlogo" style="font-size: 70px">
 
                                                 {{ $h->title }}

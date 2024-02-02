@@ -217,6 +217,28 @@ class MovieController extends Controller
                 $movie_image->save();
             }
 
+            $get_image_thumbnail = $request->file('image_thumbnail');
+            
+            //dd($get_image_thumbnail);
+            if ($get_image_thumbnail) {
+                $get_name_image_thumnail = $get_image_thumbnail->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image_thumnail));
+                $new_image_thumbnail = $name_image . rand(0, 9999) . '.' . $get_image_thumbnail->getClientOriginalExtension();
+                $get_image_thumbnail->move($path, $new_image_thumbnail);
+
+                // $img_thumbnail = Image::make($get_image_thumbnail->path());
+                // $img_thumbnail->resize(1200, 600, function ($constraint) {
+                //     $constraint->aspectRatio();
+                // })->save($path . '' . $new_image_thumbnail);
+               
+                $movie_image_thumbnail = new Movie_Image();
+                $movie_image_thumbnail->movie_id = $movie->id;
+                $movie_image_thumbnail->image = $new_image_thumbnail;
+                $movie_image_thumbnail->is_thumbnail = 1;
+                $movie_image_thumbnail->save();
+            }
+    
+
             // if (!is_null($movie)) {
             //     try {
             //         $path_omdb='http://www.omdbapi.com/?t=';
