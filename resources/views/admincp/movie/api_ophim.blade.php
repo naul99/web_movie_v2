@@ -43,7 +43,7 @@
                                 <tr>
                                     <td>{{ $key }}</td>
                                     <td><img width="90%"
-                                            data-original="https://img.ophim10.cc/uploads/movies/{{ $mov['thumb_url'] }}">
+                                            data-original="{{ $link_image }}{{ $mov['thumb_url'] }}">
                                     </td>
                                     <td>{{ $mov['name'] }}</td>
                                     <td>{{ $mov['origin_name'] }}</td>

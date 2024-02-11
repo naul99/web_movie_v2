@@ -206,8 +206,9 @@ class IndexController extends Controller
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
-        
-        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries'));
+        $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
+        $url_update = $api_ophim['pathImage'];
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries','url_update'));
     }
     public function category($slug)
     {

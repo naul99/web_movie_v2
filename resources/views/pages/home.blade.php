@@ -90,60 +90,60 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
         </div> --}}
         <style>
             /* .btn {
-                        display: inline-block;
-                        padding: 13px 20px;
-                        color: #fff;
-                        text-decoration: none;
-                        position: relative;
-                        background: transparent;
-                        border: 1px solid #e1e1e1;
-                        font: 12px/1.2 "Oswald", sans-serif;
-                        letter-spacing: 0.4em;
-                        text-align: center;
-                        text-indent: 2px;
-                        text-transform: uppercase;
-                        transition: color 0.1s linear 0.05s;
-
-                        &::before {
-                            content: "";
-                            display: block;
-                            position: absolute;
-                            top: 50%;
-                            left: 0;
-                            width: 100%;
-                            height: 1px;
-                            background: #e1e1e1;
-                            z-index: 1;
-                            opacity: 0;
-                            transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0.2s;
-                        }
-
-                        &::after {
-                            transition: border 0.1s linear 0.05s;
-                        }
-
-                        .btn-inner {
+                            display: inline-block;
+                            padding: 13px 20px;
+                            color: #fff;
+                            text-decoration: none;
                             position: relative;
-                            z-index: 2;
-                        }
-
-                        &:hover {
-                            color: #373737;
-                            transition: color 0.1s linear 0s;
+                            background: transparent;
+                            border: 1px solid #e1e1e1;
+                            font: 12px/1.2 "Oswald", sans-serif;
+                            letter-spacing: 0.4em;
+                            text-align: center;
+                            text-indent: 2px;
+                            text-transform: uppercase;
+                            transition: color 0.1s linear 0.05s;
 
                             &::before {
-                                top: 0;
-                                height: 100%;
-                                opacity: 1;
-                                transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0s;
+                                content: "";
+                                display: block;
+                                position: absolute;
+                                top: 50%;
+                                left: 0;
+                                width: 100%;
+                                height: 1px;
+                                background: #e1e1e1;
+                                z-index: 1;
+                                opacity: 0;
+                                transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0.2s;
                             }
 
                             &::after {
-                                border-color: #373737;
-                                transition: border 0.1s linear 0s;
+                                transition: border 0.1s linear 0.05s;
                             }
-                        }
-                    } */
+
+                            .btn-inner {
+                                position: relative;
+                                z-index: 2;
+                            }
+
+                            &:hover {
+                                color: #373737;
+                                transition: color 0.1s linear 0s;
+
+                                &::before {
+                                    top: 0;
+                                    height: 100%;
+                                    opacity: 1;
+                                    transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0s;
+                                }
+
+                                &::after {
+                                    border-color: #373737;
+                                    transition: border 0.1s linear 0s;
+                                }
+                            }
+                        } */
 
             .slideshow {
                 overflow: hidden;
@@ -465,10 +465,9 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                                                 poster="
                         @php
 $image_check = substr($h->movie_image->image, 0, 5);
-$url_update='https://img.ophim11.cc/uploads/movies/';
 $startPos = strpos($h->movie_image->image, 'movies/');
-$substring = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
-                                @if ($image_check == 'https') {{ $url_update . $substring }}
+$image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $h->movie_image->image) }} @endif
                         ">
@@ -608,10 +607,9 @@ $substring = substr($h->movie_image->image, $startPos + strlen('movies/')); @end
                                             poster="
                                     @php
 $image_check = substr($mov->movie_image->image, 0, 5);
-$url_update='https://img.ophim11.cc/uploads/movies/';
 $startPos = strpos($mov->movie_image->image, 'movies/');
-$substring = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
-                                @if ($image_check == 'https') {{ $url_update . $substring }}
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                                     ">
@@ -691,8 +689,10 @@ $substring = substr($mov->movie_image->image, $startPos + strlen('movies/')); @e
         @foreach ($topview_day as $key => $mov)
             <section class="big-section d-flex flex-start container">
                 <img src="@php
-$image_check = substr($mov->image, 0, 5); @endphp
-                                                        @if ($image_check == 'https') {{ $mov->image }}
+$image_check = substr($mov->image, 0, 5);
+$startPos = strpos($mov->image, 'movies/');
+$image = substr($mov->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                         @else
                                                            {{ asset('uploads/movie/' . $mov->image) }} @endif"
                     alt="">
@@ -765,8 +765,10 @@ $image_check = substr($mov->image, 0, 5); @endphp
         @foreach ($topview as $key => $mov)
             <section class="big-section d-flex flex-start container">
                 <img src="@php
-$image_check = substr($mov->image, 0, 5); @endphp
-                                                                                @if ($image_check == 'https') {{ $mov->image }}
+$image_check = substr($mov->image, 0, 5);
+$startPos = strpos($mov->image, 'movies/');
+$image = substr($mov->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                                                 @else
                                                                                    {{ asset('uploads/movie/' . $mov->image) }} @endif"
                     alt="">
@@ -845,8 +847,10 @@ $image_check = substr($mov->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                            @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+$startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                             ">
@@ -916,8 +920,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                       @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                      @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+$startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                       @else
                                                          {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                       ">
@@ -988,8 +994,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                       @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                      @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+$startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                       @else
                                                          {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                       ">
@@ -1047,8 +1055,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
     @foreach ($topview_tvseries as $key => $mov)
         <section class="big-section d-flex flex-start container">
             <img src="@php
-$image_check = substr($mov->image, 0, 5); @endphp
-                                                                            @if ($image_check == 'https') {{ $mov->image }}
+$image_check = substr($mov->image, 0, 5);
+ $startPos = strpos($mov->image, 'movies/');
+$image = substr($mov->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                                             @else
                                                                                {{ asset('uploads/movie/' . $mov->image) }} @endif"
                 alt="">
@@ -1126,8 +1136,10 @@ $image_check = substr($mov->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                   @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                  @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+ $startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                   @else
                                                      {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                   ">
@@ -1197,8 +1209,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                   @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                  @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+$startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                   @else
                                                      {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                   ">
