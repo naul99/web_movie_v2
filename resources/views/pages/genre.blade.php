@@ -15,9 +15,11 @@
                 <a>
                     @php
                         $image_check = substr($mov->movie_image->image, 0, 5);
+                        $startPos = strpos($mov->movie_image->image, 'movies/');
+                        $image = substr($mov->movie_image->image, $startPos + strlen('movies/'));
                     @endphp
                     @if ($image_check == 'https')
-                        <img class="lazy img-responsive" src="{{ $mov->movie_image->image }}" alt="{{ $mov->title }}"
+                        <img class="lazy img-responsive" src="{{ $url_update . $image }}" alt="{{ $mov->title }}"
                             title="{{ $mov->title }}">
                     @else
                         <img class="lazy img-responsive" src="{{ asset('uploads/movie/' . $mov->movie_image->image) }}"

@@ -17,8 +17,10 @@
                         <video class="hero-background-image" id="hero-video"
                             poster="
                         @php
-$image_check = substr($h->movie_image->image, 0, 5); @endphp
-                                @if ($image_check == 'https') {{ $h->movie_image->image }}
+$image_check = substr($h->movie_image->image, 0, 5);
+ $startPos = strpos($h->movie_image->image, 'movies/');
+$image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $h->movie_image->image) }} @endif
                         ">
@@ -120,8 +122,10 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                                     <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                         poster="
                                     @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+ $startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                                     ">
@@ -202,8 +206,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                            @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+ $startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                             ">
@@ -273,8 +279,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                            @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+ $startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                             ">
@@ -344,8 +352,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                            @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+$startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                             ">
@@ -415,8 +425,10 @@ $image_check = substr($mov->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
-$image_check = substr($mov->movie_image->image, 0, 5); @endphp
-                                                            @if ($image_check == 'https') {{ $mov->movie_image->image }}
+$image_check = substr($mov->movie_image->image, 0, 5);
+$startPos = strpos($mov->movie_image->image, 'movies/');
+$image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
                             ">

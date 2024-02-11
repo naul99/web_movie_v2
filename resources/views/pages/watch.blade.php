@@ -214,8 +214,9 @@
 
             <img class="img-mobile"
                 src="  @php
-$image_check = substr($movie->movie_image->image, 0, 5); @endphp
-                                            @if ($image_check == 'https') {{ $movie->movie_image->image }}
+$image_check = substr($movie->movie_image->image, 0, 5); $startPos = strpos($movie->movie_image->image, 'movies/');
+$image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                             @else
                                                {{ asset('uploads/movie/' . $movie->movie_image->image) }} @endif"
                 alt="">
@@ -336,8 +337,10 @@ $image_check = substr($movie->movie_image->image, 0, 5); @endphp
                             <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
                                 poster="
                             @php
-$image_check = substr($rel->movie_image->image, 0, 5); @endphp
-                                                            @if ($image_check == 'https') {{ $rel->movie_image->image }}
+$image_check = substr($rel->movie_image->image, 0, 5);
+ $startPos = strpos($rel->movie_image->image, 'movies/');
+$image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endphp
+                                @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $rel->movie_image->image) }} @endif
                             ">
