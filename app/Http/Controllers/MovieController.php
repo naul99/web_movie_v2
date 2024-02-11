@@ -218,7 +218,7 @@ class MovieController extends Controller
             }
 
             $get_image_thumbnail = $request->file('image_thumbnail');
-            
+
             //dd($get_image_thumbnail);
             if ($get_image_thumbnail) {
                 $get_name_image_thumnail = $get_image_thumbnail->getClientOriginalName();
@@ -230,14 +230,14 @@ class MovieController extends Controller
                 // $img_thumbnail->resize(1200, 600, function ($constraint) {
                 //     $constraint->aspectRatio();
                 // })->save($path . '' . $new_image_thumbnail);
-               
+
                 $movie_image_thumbnail = new Movie_Image();
                 $movie_image_thumbnail->movie_id = $movie->id;
                 $movie_image_thumbnail->image = $new_image_thumbnail;
                 $movie_image_thumbnail->is_thumbnail = 1;
                 $movie_image_thumbnail->save();
             }
-    
+
 
             // if (!is_null($movie)) {
             //     try {
@@ -371,7 +371,7 @@ class MovieController extends Controller
 
 
         //return json_encode($movie_rating);
-        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors','movie_thumbnail'));
+        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail'));
     }
 
     /**
@@ -480,12 +480,12 @@ class MovieController extends Controller
             $movie_image->save();
         }
 
-       
+
         $get_image_thumbnail = $request->file('image_thumbnail');
         $path = 'uploads/movie/';
         //dd($get_image_thumbnail);
         if ($get_image_thumbnail) {
-            $movie_image_thumbnail = Movie_Image::where('movie_id', $movie->id)->where('is_thumbnail',1)->first();
+            $movie_image_thumbnail = Movie_Image::where('movie_id', $movie->id)->where('is_thumbnail', 1)->first();
             if (file_exists($path . $movie_image_thumbnail->image)) {
                 unlink('uploads/movie/' . $movie_image_thumbnail->image);
             }
@@ -496,7 +496,7 @@ class MovieController extends Controller
             $img_thumbnail->resize(1200, 600, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($path . '' . $new_image_thumbnail);
-           
+
             $movie_image_thumbnail->image = $new_image_thumbnail;
             $movie_image_thumbnail->save();
         }
@@ -669,7 +669,7 @@ class MovieController extends Controller
             return view('admincp.movie.api_ophim', compact('api_ophim'));
         }
         if (isset($_GET['search_ophim'])) {
-            
+
             $path_ophim_search = "https://ophim11.cc/_next/data/s4OlXy8jONoHVWAT5vg7b/tim-kiem.json?keyword=" . $_GET['search_ophim'];
             $api_ophims = Http::get($path_ophim_search)->json();
             $api_ophim = $api_ophims['pageProps']['data'];
@@ -695,7 +695,7 @@ class MovieController extends Controller
         $path_ophim = "https://ophim1.com/phim/" . $data['slug'];
         $api_ophim = Http::get($path_ophim)->json();
         //dd(count($api_ophim['episodes']['0']['server_data']));
-        
+
         if (preg_match('/(\d+)/', $api_ophim['movie']['time'], $matches)) {
             $time = $matches[0];
         }
@@ -917,27 +917,29 @@ class MovieController extends Controller
                 }
             }
         }
-        foreach($api_ophim['episodes']['0']['server_data'] as $episode){
-            $ep = new Episode();
-            $ep->movie_id = $movie->id;
-            $ep->linkphim = "/api/embed_vip?link=".$episode['link_m3u8'];
-            $ep->episode = $episode['name'];
-            $check_server = Server::where('title', 'LIKE', '%' . $api_ophim['episodes']['0']['server_name'] . '%')->first();
-            if (!isset($check_server)) {
-                $server = new Server();
-                $server->title = $api_ophim['episodes']['0']['server_name'];
-                $server->description = $api_ophim['episodes']['0']['server_name'];
-                $server->status = 1;
-                $server->save();
-                $ep->server_id = $server->id;
-            } else {
-                $ep->server_id = $check_server->id;
+        foreach ($api_ophim['episodes'] as $episodes) {
+            foreach ($episodes['server_data'] as $episode) {
+                $ep = new Episode();
+                $ep->movie_id = $movie->id;
+                $ep->linkphim = "/api/embed_vip?link=" . $episode['link_m3u8'];
+                $ep->episode = $episode['name'];
+                $check_server = Server::where('title', 'LIKE', '%' . $episodes['server_name'] . '%')->first();
+                if (!isset($check_server)) {
+                    $server = new Server();
+                    $server->title = $episodes['server_name'];
+                    $server->description = $episodes['server_name'];
+                    $server->status = 1;
+                    $server->save();
+                    $ep->server_id = $server->id;
+                } else {
+                    $ep->server_id = $check_server->id;
+                }
+                $ep->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $ep->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $ep->save();
             }
-            $ep->created_at = Carbon::now('Asia/Ho_Chi_Minh');
-            $ep->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-            $ep->save();
         }
-       
+
         toastr()->success('Movie "' . $movie->title . '" created successfully!', 'Create');
         return redirect()->route('movie.index');
     }

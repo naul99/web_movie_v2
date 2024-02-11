@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Str;
 class IndexController extends Controller
 {
     public function search()
@@ -206,7 +206,7 @@ class IndexController extends Controller
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
-
+        
         return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries'));
     }
     public function category($slug)
