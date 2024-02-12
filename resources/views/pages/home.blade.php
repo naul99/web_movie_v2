@@ -896,7 +896,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                             @endif
                         </p>
                     @endforeach
-                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                    <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
                             style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
@@ -969,7 +969,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                             @endif
                         </p>
                     @endforeach
-                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                    <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
                             style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
@@ -1043,7 +1043,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                             @endif
                         </p>
                     @endforeach
-                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                    <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
                             style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
@@ -1185,7 +1185,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                             @endif
                         </p>
                     @endforeach
-                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                    <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
                             style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
@@ -1258,7 +1258,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                             @endif
                         </p>
                     @endforeach
-                    <a class="button" href="#"><i class="fa-solid fa-chevron-down fa-xl"
+                    <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
                             style="color: #ffffff;"></i></i></a>
                 </div>
         </div>

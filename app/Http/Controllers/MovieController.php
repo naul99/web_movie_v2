@@ -368,10 +368,11 @@ class MovieController extends Controller
         $movie_description = $movie->movie_description;
         $movie_trailer = $movie->movie_trailer;
         $movie_tags = $movie->movie_tags;
-
+        $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
+        $url_update = $api_ophim['pathImage'];
 
         //return json_encode($movie_rating);
-        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail'));
+        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail','url_update'));
     }
 
     /**

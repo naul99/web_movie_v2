@@ -296,14 +296,18 @@ class IndexController extends Controller
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         if ($year == 'more') {
-            $movie = Movie::where('status', 1)->where('year', '<', 2000)->withCount(['episode' => function ($query) {
-                $query->select(DB::raw('count(distinct(episode))'));
-            }])->orderBy('updated_at', 'DESC')->paginate(32);
+            $movie = Movie::where('status', 1)->where('year', '<', 2000)->with(['episode' => function ($query) {
+                $query->orderBy('episode', 'ASC');
+            }])->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])->orderBy('updated_at', 'DESC')->paginate(40);
         } else {
 
-            $movie = Movie::where('status', 1)->where('year', $year)->withCount(['episode' => function ($query) {
-                $query->select(DB::raw('count(distinct(episode))'));
-            }])->orderBy('updated_at', 'DESC')->paginate(32);
+            $movie = Movie::where('status', 1)->where('year', $year)->with(['episode' => function ($query) {
+                $query->orderBy('episode', 'ASC');
+            }])->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])->orderBy('updated_at', 'DESC')->paginate(40);
         }
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
@@ -317,9 +321,11 @@ class IndexController extends Controller
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         $tag = $tag;
-        $movie = Movie::join('movie_tags', 'movies.id', '=', 'movie_tags.movie_id')->where('tags', 'LIKE', '%' . $tag . '%')->where('status', 1)->withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
-        }])->orderBy('updated_at', 'DESC')->paginate(32);
+        $movie = Movie::join('movie_tags', 'movies.id', '=', 'movie_tags.movie_id')->where('tags', 'LIKE', '%' . $tag . '%')->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+            }])->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])->orderBy('updated_at', 'DESC')->paginate(40);
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         //dd($movie);
@@ -339,8 +345,10 @@ class IndexController extends Controller
         foreach ($movie_genre as $key => $movi) {
             $many_genre[] = $movi->movie_id;
         }
-        $movie = Movie::whereIn('id', $many_genre)->where('status', 1)->withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
+        $movie = Movie::whereIn('id', $many_genre)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->paginate(40);
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
@@ -423,14 +431,14 @@ class IndexController extends Controller
     public function movie(Request $request, $slug)
     {
         //check internet
-        $connected = @fsockopen("www.omdbapi.com", 80);
-        //website, port  (try 80 or 443)
-        if ($connected) {
-            $is_conn = true; //action when connected
-            fclose($connected);
-        } else {
-            $is_conn = false; //action in connection failure
-        }
+        // $connected = @fsockopen("www.omdbapi.com", 80);
+        // //website, port  (try 80 or 443)
+        // if ($connected) {
+        //     $is_conn = true; //action when connected
+        //     fclose($connected);
+        // } else {
+        //     $is_conn = false; //action in connection failure
+        // }
 
 
         $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
@@ -471,7 +479,7 @@ class IndexController extends Controller
 
         // foreach ($data->movie_rating as $value) {
 
-        if ($is_conn == true) {
+        // if ($is_conn == true) {
             $api_imdb = Http::get('https://www.omdbapi.com/?i=' . $movie->imdb . '&apikey=6c2f1ca1');
 
 
@@ -485,8 +493,8 @@ class IndexController extends Controller
                 }
             } else
                 return $values = "N/A";
-        } else
-            return $values = "Connection false!";
+        // } else
+        //     return $values = "Connection false!";
 
         $link_imdb = ('https://www.imdb.com/title/' . $movie->imdb);
         // }
@@ -539,9 +547,10 @@ class IndexController extends Controller
             $count_view->save();
         }
 
+        $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
+        $url_update = $api_ophim['pathImage'];
 
-
-        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'episode_first', 'episode_current_list_count', 'times', 'values', 'link_imdb', 'count_total', 'rating','movie_thumbnail'));
+        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'episode_first', 'episode_current_list_count', 'times', 'values', 'link_imdb', 'count_total', 'rating','movie_thumbnail','url_update'));
     }
     public function add_rating(Request $request)
     {

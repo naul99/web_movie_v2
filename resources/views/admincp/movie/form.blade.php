@@ -329,9 +329,10 @@
                             @if (isset($movie))
                                 @php
                                     $image_check = substr($movie->movie_image->image, 0, 5);
-                                @endphp
+                                    $startPos = strpos($movie->movie_image->image, 'movies/');
+                                    $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @endphp
                                 @if ($image_check == 'https')
-                                    <img width="20%"src="{{ $movie->movie_image->image }}">
+                                    <img width="20%"src="{{ $url_update . $image }}">
                                 @else
                                     <img width="20%"src="{{ asset('uploads/movie/' . $movie->movie_image->image) }}">
                                 @endif
@@ -350,11 +351,13 @@
                             @if (isset($movie_thumbnail))
                                 @php
                                     $image_check = substr($movie_thumbnail->movie_image->image, 0, 5);
-                                @endphp
+                                    $startPos = strpos($movie_thumbnail->movie_image->image, 'movies/');
+                                $image = substr($movie_thumbnail->movie_image->image, $startPos + strlen('movies/')); @endphp
                                 @if ($image_check == 'https')
-                                    <img width="20%"src="{{ $movie_thumbnail->movie_image->image }}">
+                                    <img width="20%"src="{{ $url_update . $image }}">
                                 @else
-                                    <img width="20%"src="{{ asset('uploads/movie/' . $movie_thumbnail->movie_image->image) }}">
+                                    <img
+                                        width="20%"src="{{ asset('uploads/movie/' . $movie_thumbnail->movie_image->image) }}">
                                 @endif
                             @endif
                         </div>
