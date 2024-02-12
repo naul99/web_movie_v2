@@ -309,7 +309,7 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                         Download
                     </a>
                 @elseif (isset($ep->linkdownload) == '')
-                    <a href="javascription:voi(0);" class="link-item">
+                    <a href="https://4share.vn/search?search_string={{ $movie->name_english }}" target="_blank" class="link-item">
                         <i class="fa fa-download"></i></br>
                         Download
                     </a>
