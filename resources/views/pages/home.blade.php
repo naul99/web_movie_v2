@@ -90,60 +90,60 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
         </div> --}}
         <style>
             /* .btn {
-                            display: inline-block;
-                            padding: 13px 20px;
-                            color: #fff;
-                            text-decoration: none;
-                            position: relative;
-                            background: transparent;
-                            border: 1px solid #e1e1e1;
-                            font: 12px/1.2 "Oswald", sans-serif;
-                            letter-spacing: 0.4em;
-                            text-align: center;
-                            text-indent: 2px;
-                            text-transform: uppercase;
-                            transition: color 0.1s linear 0.05s;
+                                                        display: inline-block;
+                                                        padding: 13px 20px;
+                                                        color: #fff;
+                                                        text-decoration: none;
+                                                        position: relative;
+                                                        background: transparent;
+                                                        border: 1px solid #e1e1e1;
+                                                        font: 12px/1.2 "Oswald", sans-serif;
+                                                        letter-spacing: 0.4em;
+                                                        text-align: center;
+                                                        text-indent: 2px;
+                                                        text-transform: uppercase;
+                                                        transition: color 0.1s linear 0.05s;
 
-                            &::before {
-                                content: "";
-                                display: block;
-                                position: absolute;
-                                top: 50%;
-                                left: 0;
-                                width: 100%;
-                                height: 1px;
-                                background: #e1e1e1;
-                                z-index: 1;
-                                opacity: 0;
-                                transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0.2s;
-                            }
+                                                        &::before {
+                                                            content: "";
+                                                            display: block;
+                                                            position: absolute;
+                                                            top: 50%;
+                                                            left: 0;
+                                                            width: 100%;
+                                                            height: 1px;
+                                                            background: #e1e1e1;
+                                                            z-index: 1;
+                                                            opacity: 0;
+                                                            transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0.2s;
+                                                        }
 
-                            &::after {
-                                transition: border 0.1s linear 0.05s;
-                            }
+                                                        &::after {
+                                                            transition: border 0.1s linear 0.05s;
+                                                        }
 
-                            .btn-inner {
-                                position: relative;
-                                z-index: 2;
-                            }
+                                                        .btn-inner {
+                                                            position: relative;
+                                                            z-index: 2;
+                                                        }
 
-                            &:hover {
-                                color: #373737;
-                                transition: color 0.1s linear 0s;
+                                                        &:hover {
+                                                            color: #373737;
+                                                            transition: color 0.1s linear 0s;
 
-                                &::before {
-                                    top: 0;
-                                    height: 100%;
-                                    opacity: 1;
-                                    transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0s;
-                                }
+                                                            &::before {
+                                                                top: 0;
+                                                                height: 100%;
+                                                                opacity: 1;
+                                                                transition: height 0.2s ease, top 0.2s ease, opacity 0s linear 0s;
+                                                            }
 
-                                &::after {
-                                    border-color: #373737;
-                                    transition: border 0.1s linear 0s;
-                                }
-                            }
-                        } */
+                                                            &::after {
+                                                                border-color: #373737;
+                                                                transition: border 0.1s linear 0s;
+                                                            }
+                                                        }
+                                                    } */
 
             .slideshow {
                 overflow: hidden;
@@ -346,6 +346,7 @@ $image_check = substr($h->movie_image->image, 0, 5); @endphp
                         transition: left 0.2s ease;
                     }
                 }
+
             }
         </style>
         <main class="main-content">
@@ -589,7 +590,7 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
         </main>
 
         <!--paretn div with black bg after main hero section-->
-        <div class="black-background">
+        <div class="black-background" style="margin-top: 0;">
             <!--continure watching-->
             @foreach ($category_home as $key => $cate_home)
                 <section id="continue-watching" class="container p-t-40">
@@ -598,7 +599,7 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                     </h4>
 
                     <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-                        @foreach ($cate_home->movie->sortBydesc('updated_at')->take(20) as $key => $mov)
+                        @foreach ($cate_home->movie->sortBydesc('updated_at')->take(40) as $key => $mov)
                             @foreach ($mov->episode->take(1) as $ep)
                                 <div class="video">
                                     <a href="javascript:void(0)"
@@ -618,7 +619,31 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                         type="video/mp4"> --}}
 
                                             Your browser does not support the video tag.
+
                                         </video>
+                                        <style>
+                                            @media (max-width: 601px) {
+                                                h3 {
+                                                    position: absolute;
+                                                    bottom: -10px;
+                                                    left: 0;
+                                                    right: 0;
+                                                    background: rgba(0, 0, 0, .6);
+                                                    color: #fff;
+                                                    padding: 10px;
+                                                    line-height: 1.3em;
+                                                    text-overflow: ellipsis;
+                                                    white-space: nowrap;
+                                                    overflow: hidden;
+                                                    font-size: 15px;
+                                                    z-index: 5;
+                                                }
+                                            }
+                                            h3 {
+                                                position: absolute;
+                                            }
+                                        </style>
+                                        <h3>{{ $mov->title }}</h3>
                                     </a>
                                     <div class="video-description d-flex flex-end direction-column">
 
@@ -839,7 +864,7 @@ $image = substr($mov->image, $startPos + strlen('movies/')); @endphp
             {{ $gen_slug->title }}
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-            @foreach ($movie_animation->take(20) as $key => $mov)
+            @foreach ($movie_animation->take(40) as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
                     <div class="video">
                         <a href="javascript:void(0)"
@@ -858,6 +883,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 type="video/mp4">
                             Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -912,7 +938,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
             Movies US
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-            @foreach ($movie_us->take(20) as $key => $mov)
+            @foreach ($movie_us->take(40) as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
                     <div class="video">
                         <a href="javascript:void(0)"
@@ -931,6 +957,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                           type="video/mp4">
                       Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -986,7 +1013,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
             Phim Viet Nam
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-            @foreach ($movie_vietnam->take(20) as $key => $mov)
+            @foreach ($movie_vietnam->take(40) as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
                     <div class="video">
                         <a href="javascript:void(0)"
@@ -1005,6 +1032,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                           type="video/mp4">
                       Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -1128,7 +1156,7 @@ $image = substr($mov->image, $startPos + strlen('movies/')); @endphp
             Tv Series ThaiLan
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-            @foreach ($tv_thailan->take(20) as $key => $mov)
+            @foreach ($tv_thailan->take(40) as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
                     <div class="video">
                         <a href="javascript:void(0)"
@@ -1147,6 +1175,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                       type="video/mp4">
                   Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -1201,7 +1230,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
             Phim Kinh Dị
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-            @foreach ($movie_horror->take(20) as $key => $mov)
+            @foreach ($movie_horror->take(40) as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
                     <div class="video">
                         <a href="javascript:void(0)"
@@ -1220,6 +1249,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                       type="video/mp4">
                   Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
