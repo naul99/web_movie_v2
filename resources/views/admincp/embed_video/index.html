@@ -41,7 +41,8 @@
         var sub = getSub('sub');
 
         var tag;
-        //alert(link);
+
+
         if (sub != '') {
             var playerInstance = jwplayer('jwplayer');
             function setupVideo() {
@@ -103,32 +104,44 @@
                         }
                     ],
                     playbackRateControls: true,
-                    playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
-                    mute: true,
+                    playbackRates: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2],
+                    mute: false,
                     startparam: 'start',
                     primary: 'html5',
                     preload: 'auto',
-                    autostart: false,
+                    autostart: true,
                     volume: 100,
-
-                    captions: {
-                        color: '#fff',
-                        fontSize: 18,
-                        backgroundOpacity: 0,
-                        fontfamily: 'Helvetica',
-                        edgeStyle: 'raised'
-                    },
 
                 });
                 setUpVideoEvent();
 
             }
         }
+
         this.setUpVideoEvent = function () {
             playerInstance.on("ready", function () {
+
+                playerInstance.on('time', function (event) {
+                    var startTimeToRemove = 596; // Đơn vị: giây
+                    var endTimeToRemove = 622;   // Đơn vị: giây
+                    var currentTime = event.position;
+                    // Nếu đang trong khoảng thời gian cần loại bỏ, dừng video và bỏ qua khoảng đó
+                    if (currentTime >= startTimeToRemove && currentTime <= endTimeToRemove) {
+                        playerInstance.seek(endTimeToRemove + 1); // Chuyển đến thời điểm sau khoảng cần loại bỏ
+                    }
+
+                    var startTimeToRemoves = 4847; // Đơn vị: giây
+                    var endTimeToRemoves = 4870;   // Đơn vị: giây
+                    // Nếu đang trong khoảng thời gian cần loại bỏ, dừng video và bỏ qua khoảng đó
+                    if (currentTime >= startTimeToRemoves && currentTime <= endTimeToRemoves) {
+                        playerInstance.seek(endTimeToRemoves + 1); // Chuyển đến thời điểm sau khoảng cần loại bỏ
+                    }
+                });
+
                 if (seekTimeOut != null) {
                     clearTimeout(seekTimeOut);
                 }
+
 
                 if (timeToSeek > 8) seekTimeOut = setTimeout(function () {
                     playerInstance.seek(timeToSeek);
