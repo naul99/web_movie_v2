@@ -170,6 +170,7 @@ Route::post('/edit-comment',[CommentsController::class,'edit'])->name('edit-comm
 Route::post('/update-imdb',[MovieController::class,'update_imdb'])->name('update-imdb');
 Route::get('/api/embed_vip',[EmbedController::class,'embed_vip']);
 Route::get('/api/embed_ads',[EmbedController::class,'embed_ads']);
+Route::get('/api/embed_m3u8',[EmbedController::class,'embed_m3u8']);
 Route::get('/site-map',function(){
     return Artisan::call('sitemap:create');
 });

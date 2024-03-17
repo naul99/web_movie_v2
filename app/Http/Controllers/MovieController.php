@@ -372,7 +372,7 @@ class MovieController extends Controller
         $url_update = $api_ophim['pathImage'];
 
         //return json_encode($movie_rating);
-        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail','url_update'));
+        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail', 'url_update'));
     }
 
     /**
@@ -385,198 +385,203 @@ class MovieController extends Controller
     public function update(Request $request, $id)
     {
 
-        // try {
-        $movie = Movie::find($id);
-        $validator = Validator::make($data = $request->all(), [
-            'title' => Rule::unique('movies')->ignore($movie->id),
-            // 'name_english' => Rule::unique('movies')->ignore($movie->id),
-            'slug' => Rule::unique('movies')->ignore($movie->id),
-        ]);
-        if ($validator->fails()) {
-            toastr()->warning('Movie is "' . $data['title'] . '" existing!', 'Warning');
-            return redirect()->back();
-        }
-        //$data = $request->all();
-
-        $movie->title = $data['title'];
-        $movie->name_english = $data['name_english'];
-        $movie->slug = $data['slug'];
-        $movie->year = $data['year'];
-        $movie->time = $data['time'];
-        $movie->type_movie = $data['thuocphim'];
-        $movie->quality = $data['quality'];
-        $movie->language = $data['language'];
-        $movie->imdb = $data['imdb'];
-        $movie->paid_movie = $data['paid_movie'];
-        $movie->hot = $data['hot'];
-        $movie->status = $data['status'];
-        $movie->sotap = $data['sotap'];
-        $movie->category_id = $data['category_id'];
-        $movie->country_id = $data['country_id'];
-
-        $movie->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        $episodes_count = Movie::withCount(['episode' => function ($query) {
-            $query->select(DB::raw('count(distinct(episode))'));
-        }])->find($id);
-
-        if ($data['sotap'] < $episodes_count->episode_count) {
-            toastr()->warning('Tổng tập phim không được nhỏ hơn số tập phim đã có! Vui lòng xem lại!', 'Warning');
-            return redirect()->back();
-        }
-        if (!isset($data['genre'])) {
-            toastr()->warning('Genre not empty!', 'Warning!');
-            return redirect()->back();
-        } else {
-            foreach ($data['genre'] as $key => $gen) {
-                $movie->genre_id = $gen['0'];
+        try {
+            $movie = Movie::find($id);
+            $validator = Validator::make($data = $request->all(), [
+                'title' => Rule::unique('movies')->ignore($movie->id),
+                // 'name_english' => Rule::unique('movies')->ignore($movie->id),
+                'slug' => Rule::unique('movies')->ignore($movie->id),
+            ]);
+            if ($validator->fails()) {
+                toastr()->warning('Movie is "' . $data['title'] . '" existing!', 'Warning');
+                return redirect()->back();
             }
-        }
-        // try {
-        //     $path_omdb = 'http://www.omdbapi.com/?t=';
-        //     //0 = movie
-        //     if ($data['thuocphim'] == 0) {
-        //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&y=' . $data['year'] . '&type=movie&apikey=6c2f1ca1');
-        //     }
-        //     //1 = series
-        //     else {
-        //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&y=' . $data['year'] . '&type=series&apikey=6c2f1ca1');
-        //     }
-        //     if ($api_omdb['Response'] != 'True' && $data['thuocphim'] == 1) {
-        //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&type=series&apikey=6c2f1ca1');
-        //     } elseif ($api_omdb['Response'] != 'True') {
-        //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&apikey=6c2f1ca1');
-        //     }
+            //$data = $request->all();
 
-        //     // $imdb = new Movie_Rating();
-        //     $movie->imdb = $api_omdb['imdbID'];
-        //     // $imdb->movie_id = $movie->id;
-        //     $movie->save();
-        // } catch (Exception $e) {
-        //     //$imdb = new Movie_Rating();
-        //     $movie->imdb  = "0";
-        //     //$imdb->movie_id = $movie->id;
-        //     $movie->save();
-        //     toastr()->warning('Vui lòng cập nhật Id Imdb thủ công cho phim.', 'Warning', ['timeOut' => 10000]);
-        // }
-        $movie->save();
-        $movie_image = Movie_Image::where('movie_id', $movie->id)->first();
-        $get_image = $request->file('image');
+            $movie->title = $data['title'];
+            $movie->name_english = $data['name_english'];
+            $movie->slug = $data['slug'];
+            $movie->year = $data['year'];
+            $movie->time = $data['time'];
+            $movie->type_movie = $data['thuocphim'];
+            $movie->quality = $data['quality'];
+            $movie->language = $data['language'];
+            $movie->imdb = $data['imdb'];
+            $movie->paid_movie = $data['paid_movie'];
+            $movie->hot = $data['hot'];
+            $movie->status = $data['status'];
+            $movie->sotap = $data['sotap'];
+            $movie->category_id = $data['category_id'];
+            $movie->country_id = $data['country_id'];
 
-        $path = 'uploads/movie/';
+            $movie->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $episodes_count = Movie::withCount(['episode' => function ($query) {
+                $query->select(DB::raw('count(distinct(episode))'));
+            }])->find($id);
 
-        if ($get_image) {
-            if (file_exists($path . $movie_image->image)) {
-                unlink('uploads/movie/' . $movie_image->image);
+            if ($data['sotap'] < $episodes_count->episode_count) {
+                toastr()->warning('Tổng tập phim không được nhỏ hơn số tập phim đã có! Vui lòng xem lại!', 'Warning');
+                return redirect()->back();
             }
-            $get_name_image = $get_image->getClientOriginalName();
-            $name_image = current(explode('.', $get_name_image));
-            $new_image = $name_image . rand(0, 9999) . '.' . $get_image->extension();
-            $img = Image::make($get_image->path());
-            $img->resize(300, 400, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path . '' . $new_image);
-
-            // $get_image->move($path, $new_image);
-            $movie_image->image = $new_image;
-            $movie_image->save();
-        }
-
-
-        $get_image_thumbnail = $request->file('image_thumbnail');
-        $path = 'uploads/movie/';
-        //dd($get_image_thumbnail);
-        if ($get_image_thumbnail) {
-            $movie_image_thumbnail = Movie_Image::where('movie_id', $movie->id)->where('is_thumbnail', 1)->first();
-            if (file_exists($path . $movie_image_thumbnail->image)) {
-                unlink('uploads/movie/' . $movie_image_thumbnail->image);
+            if (!isset($data['genre'])) {
+                toastr()->warning('Genre not empty!', 'Warning!');
+                return redirect()->back();
+            } else {
+                foreach ($data['genre'] as $key => $gen) {
+                    $movie->genre_id = $gen['0'];
+                }
             }
-            $get_name_image_thumnail = $get_image_thumbnail->getClientOriginalName();
-            $name_image = current(explode('.', $get_name_image_thumnail));
-            $new_image_thumbnail = $name_image . rand(0, 9999) . '.' . $get_image_thumbnail->getClientOriginalExtension();
-            $img_thumbnail = Image::make($get_image_thumbnail->path());
-            $img_thumbnail->resize(1200, 600, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($path . '' . $new_image_thumbnail);
+            // try {
+            //     $path_omdb = 'http://www.omdbapi.com/?t=';
+            //     //0 = movie
+            //     if ($data['thuocphim'] == 0) {
+            //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&y=' . $data['year'] . '&type=movie&apikey=6c2f1ca1');
+            //     }
+            //     //1 = series
+            //     else {
+            //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&y=' . $data['year'] . '&type=series&apikey=6c2f1ca1');
+            //     }
+            //     if ($api_omdb['Response'] != 'True' && $data['thuocphim'] == 1) {
+            //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&type=series&apikey=6c2f1ca1');
+            //     } elseif ($api_omdb['Response'] != 'True') {
+            //         $api_omdb = Http::get($path_omdb . $data['name_english'] . '&apikey=6c2f1ca1');
+            //     }
 
-            $movie_image_thumbnail->image = $new_image_thumbnail;
-            $movie_image_thumbnail->save();
+            //     // $imdb = new Movie_Rating();
+            //     $movie->imdb = $api_omdb['imdbID'];
+            //     // $imdb->movie_id = $movie->id;
+            //     $movie->save();
+            // } catch (Exception $e) {
+            //     //$imdb = new Movie_Rating();
+            //     $movie->imdb  = "0";
+            //     //$imdb->movie_id = $movie->id;
+            //     $movie->save();
+            //     toastr()->warning('Vui lòng cập nhật Id Imdb thủ công cho phim.', 'Warning', ['timeOut' => 10000]);
+            // }
+            $movie->save();
+            $movie_image = Movie_Image::where('movie_id', $movie->id)->first();
+            $get_image = $request->file('image');
+
+            $path = 'uploads/movie/';
+
+            if ($get_image) {
+                if (file_exists($path . $movie_image->image)) {
+                    unlink('uploads/movie/' . $movie_image->image);
+                }
+                $get_name_image = $get_image->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image));
+                $new_image = $name_image . rand(0, 9999) . '.' . $get_image->extension();
+                $img = Image::make($get_image->path());
+                $img->resize(300, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path . '' . $new_image);
+
+                // $get_image->move($path, $new_image);
+                $movie_image->image = $new_image;
+                $movie_image->save();
+            }
+
+
+            $get_image_thumbnail = $request->file('image_thumbnail');
+            $path = 'uploads/movie/';
+            //dd($get_image_thumbnail);
+            if ($get_image_thumbnail) {
+                $movie_image_thumbnail = Movie_Image::where('movie_id', $movie->id)->where('is_thumbnail', 1)->first();
+                if (file_exists($path . $movie_image_thumbnail->image) && $movie_image_thumbnail->image != '') {
+                    unlink('uploads/movie/' . $movie_image_thumbnail->image);
+                }
+                $get_name_image_thumnail = $get_image_thumbnail->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image_thumnail));
+                $new_image_thumbnail = $name_image . rand(0, 9999) . '.' . $get_image_thumbnail->getClientOriginalExtension();
+                $img_thumbnail = Image::make($get_image_thumbnail->path());
+                $img_thumbnail->resize(1200, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path . '' . $new_image_thumbnail);
+
+                $movie_image_thumbnail->image = $new_image_thumbnail;
+                $movie_image_thumbnail->save();
+            }
+
+            //return json_encode($movie);
+
+            // $movie->save();
+
+            // $imdb = Movie_Rating::where('movie_id', $movie->id)->first();
+
+            // if (!$imdb) {
+            //     $imdb = new Movie_Rating();
+            //     $imdb->movie_id = $movie->id;
+            // }
+            // $imdb->imdb = $request->imdb;
+            // $imdb->save();
+
+            $description = Movie_Description::where('movie_id', $movie->id)->first();
+
+            if (!$description) {
+                $description = new Movie_Description();
+                $description->movie_id = $movie->id;
+            }
+            $description->description = $request->description;
+            $description->save();
+
+            $trailer = Movie_Trailer::where('movie_id', $movie->id)->first();
+
+            if (!$trailer) {
+                $trailer = new Movie_Trailer();
+                $trailer->movie_id = $movie->id;
+            }
+            $trailer->trailer = $request->trailer;
+            $trailer->save();
+
+            // $hot = Movie_Hot::where('movie_id', $movie->id)->first();
+
+            // if (!$hot) {
+            //     $hot = new Movie_Hot();
+            //     $hot->movie_id = $movie->id;
+            // }
+            // $hot->hot = $request->hot;
+            // $hot->save();
+
+            $tags = Movie_Tags::where('movie_id', $movie->id)->first();
+
+            if (!$tags) {
+                $tags = new Movie_Tags();
+                $tags->movie_id = $movie->id;
+            }
+            $tags->tags = $request->tags;
+            $tags->save();
+
+
+            $movie->movie_genre()->sync($data['genre']);
+            if (!isset($data['cast'])) {
+                toastr()->warning('Cast empty! But updated changes', 'Warning!');
+                Movie_Cast::whereIn('movie_id', [$movie->id])->delete();
+                // return redirect()->back();
+            } else {
+                $movie->movie_cast()->sync($data['cast']);
+            }
+
+            if (!isset($data['directors'])) {
+                toastr()->warning('Directors empty! But updated changes', 'Warning!');
+                Movie_Directors::whereIn('movie_id', [$movie->id])->delete();
+                // return redirect()->back();
+            } else {
+                $movie->movie_directors()->sync($data['directors']);
+            }
+            // return redirect()->back()->with('message_update', 'Update film successfully !');
+
+            toastr()->success('Movie "' . $movie->title . '" updated successfully!', 'Update');
+            return redirect()->back();
+            // } 
+            // catch (\Throwable $th) {
+            //     toastr()->error('Movie update error!', 'Error');
+            // }
+        } catch (\Throwable $th) {
+            toastr()->error('Movie update error!', 'Error');
         }
-
-        //return json_encode($movie);
-
-        // $movie->save();
-
-        // $imdb = Movie_Rating::where('movie_id', $movie->id)->first();
-
-        // if (!$imdb) {
-        //     $imdb = new Movie_Rating();
-        //     $imdb->movie_id = $movie->id;
-        // }
-        // $imdb->imdb = $request->imdb;
-        // $imdb->save();
-
-        $description = Movie_Description::where('movie_id', $movie->id)->first();
-
-        if (!$description) {
-            $description = new Movie_Description();
-            $description->movie_id = $movie->id;
-        }
-        $description->description = $request->description;
-        $description->save();
-
-        $trailer = Movie_Trailer::where('movie_id', $movie->id)->first();
-
-        if (!$trailer) {
-            $trailer = new Movie_Trailer();
-            $trailer->movie_id = $movie->id;
-        }
-        $trailer->trailer = $request->trailer;
-        $trailer->save();
-
-        // $hot = Movie_Hot::where('movie_id', $movie->id)->first();
-
-        // if (!$hot) {
-        //     $hot = new Movie_Hot();
-        //     $hot->movie_id = $movie->id;
-        // }
-        // $hot->hot = $request->hot;
-        // $hot->save();
-
-        $tags = Movie_Tags::where('movie_id', $movie->id)->first();
-
-        if (!$tags) {
-            $tags = new Movie_Tags();
-            $tags->movie_id = $movie->id;
-        }
-        $tags->tags = $request->tags;
-        $tags->save();
-
-
-        $movie->movie_genre()->sync($data['genre']);
-        if (!isset($data['cast'])) {
-            toastr()->warning('Cast empty! But updated changes', 'Warning!');
-            Movie_Cast::whereIn('movie_id', [$movie->id])->delete();
-            // return redirect()->back();
-        } else {
-            $movie->movie_cast()->sync($data['cast']);
-        }
-
-        if (!isset($data['directors'])) {
-            toastr()->warning('Directors empty! But updated changes', 'Warning!');
-            Movie_Directors::whereIn('movie_id', [$movie->id])->delete();
-            // return redirect()->back();
-        } else {
-            $movie->movie_directors()->sync($data['directors']);
-        }
-        // return redirect()->back()->with('message_update', 'Update film successfully !');
-
-        toastr()->success('Movie "' . $movie->title . '" updated successfully!', 'Update');
-        return redirect()->back();
-        // } 
-        // catch (\Throwable $th) {
-        //     toastr()->error('Movie update error!', 'Error');
-        // }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -670,17 +675,17 @@ class MovieController extends Controller
         if (isset($_GET['next_page'])) {
             $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
             $api_ophim = Http::get($path_ophim)->json();
-            return view('admincp.movie.api_ophim', compact('api_ophim','link_image'));
+            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
         }
         if (isset($_GET['search_ophim'])) {
 
             $path_ophim_search = "https://ophim11.cc/_next/data/s4OlXy8jONoHVWAT5vg7b/tim-kiem.json?keyword=" . $_GET['search_ophim'];
             $api_ophims = Http::get($path_ophim_search)->json();
             $api_ophim = $api_ophims['pageProps']['data'];
-            return view('admincp.movie.api_ophim', compact('api_ophim','link_image'));
+            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
         }
-       
-        return view('admincp.movie.api_ophim', compact('api_ophim','link_image'));
+
+        return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
     }
     public function auto_create(Request $request)
     {

@@ -15,4 +15,8 @@ class EmbedController extends Controller
     {
         return view('admincp.embed_video.embed');
     }
+    public function embed_m3u8()
+    {
+        return view('admincp.embed_video.m3u8');
+    }
 }
