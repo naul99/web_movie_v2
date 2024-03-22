@@ -298,10 +298,13 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                 <i class="fa fa-thumbs-up"></i></br>
                 Like
             </a>
-            <a href="#" class="link-item">
-                <i class="fa fa-share"></i></br>
-                Share
-            </a>
+            @foreach ($movie->episode->take(1) as $ep)
+                <a href="javacript:void(0)"
+                    class="copy-url link-item" data-url='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'>
+                    <i class="fa fa-share"></i></br>
+                    Share
+                </a>
+            @endforeach
             @foreach ($movie->episode->take(1) as $ep)
                 @if (isset($ep->linkdownload))
                     <a href={!! $ep->linkdownload !!} target="_blank" class="link-item">
@@ -309,7 +312,8 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                         Download
                     </a>
                 @elseif (isset($ep->linkdownload) == '')
-                    <a href="https://4share.vn/search?search_string={{ $movie->name_english }}" target="_blank" class="link-item">
+                    <a href="https://4share.vn/search?search_string={{ $movie->name_english }}" target="_blank"
+                        class="link-item">
                         <i class="fa fa-download"></i></br>
                         Download
                     </a>
@@ -395,70 +399,47 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         </div>
 
     </section>
-
     <script>
-        document.onkeydown = function(event) {
-            event = (event || window.event);
-            //alert(event.keyCode);   return false;
+        document.addEventListener('DOMContentLoaded', function() {
+            var copyUrlLinks = document.querySelectorAll('.copy-url');
 
-            if (event.ctrlKey && event.keyCode === 85) {
+            copyUrlLinks.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
 
-                // return false;
+                    var dataUrl = this.getAttribute('data-url'); // Get the data-url attribute value
+                    copyTextToClipboard(dataUrl); // Copy the data-url value to the clipboard
 
+                    // You can add additional feedback here, like showing a message that the data-url has been copied.
+                    console.log('data-url copied:', dataUrl);
+                });
+            });
+
+            function copyTextToClipboard(text) {
+                var textarea = document.createElement("textarea");
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
             }
-            if (event.keyCode === 123) {
-
-                return false;
-            }
-        }
+        });
     </script>
     <script>
-        // Lấy URL hiện tại
-        var currentUrl = window.location.href;
-        document.onkeydown = function(event) {
-            event = (event || window.event);
-            //alert(event.keyCode);   return false;
-            if (event.keyCode == 116 || (event.ctrlKey && event.keyCode === 116) || (event.ctrlKey && event.keyCode ===
-                    82)) {
-                window.location.href = currentUrl;
-                //alert(currentUrl);
-                //return false;
-            }
-            if (event.ctrlKey && event.keyCode === 85) {
-
-                // return false;
-
-            }
-        }
         // Thay đổi URL hiện tại bằng URL mới
-        //var newUrl = '/movie/{{ $movie->slug }}';
-        //history.replaceState({}, null, newUrl);
+        var newUrl = '/movie/{{ $movie->slug }}';
+        history.replaceState({}, null, newUrl);
 
         // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
 
-        //history.pushState({}, null, '/movie/{{ $movie->slug }}');
+        history.pushState({}, null, '/watch/{{ $movie->slug }}');
 
         function onDevToolsOpen() {
 
             // Lấy đối tượng div bằng cách sử dụng id
             var divElement = document.getElementById("mainiframe");
-            divElement.src = "https://hdbo.opstream5.com/share/72811f4732ddc88edfc27602efc34145";
-            // // Tạo một phần tử iframe mới
-            // var iframeElement = document.createElement("iframe");
+            divElement.src = "";
 
-            // // Thiết lập các thuộc tính của iframe
-
-            // iframeElement.width = "100%";
-            // iframeElement.height = "100%";
-            // iframeElement.frameBorder = "0";
-            // iframeElement.allowTransparency = "true";
-            // iframeElement.allowFullscreen = "true";
-            // iframeElement.scrolling = "no";
-            // iframeElement.src =
-            //     "https://hdbo.opstream5.com/share/72811f4732ddc88edfc27602efc34145"; 
-
-            // // Thay thế div bằng iframe
-            // //divElement.parentNode.replaceChild(iframeElement, divElement);
             setTimeout(console.clear.bind(console))
             setTimeout(() => {
                 console.log(

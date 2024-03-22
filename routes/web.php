@@ -48,26 +48,26 @@ use PhpParser\Node\Expr\Assign;
 Route::middleware('web')->get('/auth/login', [AuthSocialLoginController::class, 'index'])->name('user-login');
 
 
-Route::get('/auth/github/redirect', [AuthSocialLoginController::class, 'githubredirect'])->name('social-github-login');
-Route::get('/auth/github/callback', [AuthSocialLoginController::class, 'githubcallback']);
-Route::get('/auth/google/redirect', [AuthSocialLoginController::class, 'googleredirect'])->name('social-google-login');
-Route::get('/auth/google/callback', [AuthSocialLoginController::class, 'googlecallback']);
-Route::get('/auth/facebook/redirect',[AuthSocialLoginController::class,'facebookredirect'])->name('social-facebook-login');
-Route::get('/auth/facebook/callback',[AuthSocialLoginController::class,'facebookcallback']);
+// Route::get('/auth/github/redirect', [AuthSocialLoginController::class, 'githubredirect'])->name('social-github-login');
+// Route::get('/auth/github/callback', [AuthSocialLoginController::class, 'githubcallback']);
+// Route::get('/auth/google/redirect', [AuthSocialLoginController::class, 'googleredirect'])->name('social-google-login');
+// Route::get('/auth/google/callback', [AuthSocialLoginController::class, 'googlecallback']);
+// Route::get('/auth/facebook/redirect',[AuthSocialLoginController::class,'facebookredirect'])->name('social-facebook-login');
+// Route::get('/auth/facebook/callback',[AuthSocialLoginController::class,'facebookcallback']);
 
 //paypal
-Route::get('/process-transaction', [PayPalPaymentController::class,'processTransaction'])->name('processTransaction');
-Route::get('/success-transaction', [PayPalPaymentController::class,'successTransaction'])->name('successTransaction');
-Route::get('/cancel-transaction', [PayPalPaymentController::class,'cancelTransaction'])->name('cancelTransaction');
+// Route::get('/process-transaction', [PayPalPaymentController::class,'processTransaction'])->name('processTransaction');
+// Route::get('/success-transaction', [PayPalPaymentController::class,'successTransaction'])->name('successTransaction');
+// Route::get('/cancel-transaction', [PayPalPaymentController::class,'cancelTransaction'])->name('cancelTransaction');
 
 //vnpay
-Route::post('/payment-vnpay', [PayPalPaymentController::class,'paymentVnpay'])->name('paymentVnpay');
+//Route::post('/payment-vnpay', [PayPalPaymentController::class,'paymentVnpay'])->name('paymentVnpay');
 //momo
-Route::post('/payment-momo', [PayPalPaymentController::class,'paymentMomo'])->name('paymentMomo');
+//Route::post('/payment-momo', [PayPalPaymentController::class,'paymentMomo'])->name('paymentMomo');
 
-Route::get('/sociallogout', [AuthSocialLoginController::class, 'sociallogout'])->name('sociallogout');
+//Route::get('/sociallogout', [AuthSocialLoginController::class, 'sociallogout'])->name('sociallogout');
 //test sent email
-Route::get('/sent-email', [SentEmailController::class, 'sentemail'])->name('sentemail');
+//Route::get('/sent-email', [SentEmailController::class, 'sentemail'])->name('sentemail');
 
 
 
@@ -174,6 +174,7 @@ Route::get('/api/embed_m3u8',[EmbedController::class,'embed_m3u8']);
 Route::get('/site-map',function(){
     return Artisan::call('sitemap:create');
 });
+Route::get('/watch/{slug}', [IndexController::class, 'watches']);
 // Clear application cache:
 
 Route::get('/clear-cache', function() {
@@ -181,3 +182,4 @@ Route::get('/clear-cache', function() {
      toastr()->success("Clear cache success.", 'Success');
      return redirect()->back();
 });
+

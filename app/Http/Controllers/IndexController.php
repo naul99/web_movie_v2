@@ -1014,4 +1014,8 @@ class IndexController extends Controller
     {
         return view('pages.policy');
     }
+    public function watches($slug)
+    {
+        return redirect()->back();
+    }
 }
