@@ -290,7 +290,7 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
             </p>
         </div>
         <div class="actions d-flex flex-start flex-middle">
-           
+
             <a href="#" class="link-item">
                 <i class="fa fa-plus"></i></br>
                 My List
@@ -299,13 +299,10 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                 <i class="fa fa-thumbs-up"></i></br>
                 Like
             </a>
-            @foreach ($movie->episode->take(1) as $ep)
-                <a href="javacript:void(0)" class="copy-url link-item"
-                    data-url='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'>
-                    <i class="fa fa-share"></i></br>
-                    Share
-                </a>
-            @endforeach
+            <a href="javacript:void(0)" class="copy-url link-item" data-url='{{ url('movie/' . $movie->slug) }}'>
+                <i class="fa fa-share"></i></br>
+                Share
+            </a>
             @foreach ($movie->episode->take(1) as $ep)
                 @if (isset($ep->linkdownload))
                     <a href={!! $ep->linkdownload !!} target="_blank" class="link-item">
