@@ -127,12 +127,48 @@
                 -moz-box-shadow: 20px -40px 50px black;
                 box-shadow: 0px -40px 50px 15px black;
             }
-           
+
+        }
+    </style>
+    <style>
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            z-index: 11;
+        }
+
+        #notification.show {
+            opacity: 1;
+        }
+
+        #notification.hide {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            #notification {
+                width: 90%;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 60px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div id="notification" class="hide">
+        Copy link successfully.
+    </div>
     <main id="mainContainer" class="p-b-40">
 
         @include('nav')

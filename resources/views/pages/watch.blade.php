@@ -290,6 +290,7 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
             </p>
         </div>
         <div class="actions d-flex flex-start flex-middle">
+           
             <a href="#" class="link-item">
                 <i class="fa fa-plus"></i></br>
                 My List
@@ -299,8 +300,8 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                 Like
             </a>
             @foreach ($movie->episode->take(1) as $ep)
-                <a href="javacript:void(0)"
-                    class="copy-url link-item" data-url='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'>
+                <a href="javacript:void(0)" class="copy-url link-item"
+                    data-url='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'>
                     <i class="fa fa-share"></i></br>
                     Share
                 </a>
@@ -400,6 +401,17 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
 
     </section>
     <script>
+        function showNotification() {
+            var notification = document.getElementById('notification');
+            notification.classList.remove('hide');
+            notification.classList.add('show');
+            setTimeout(function() {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+            }, 4000); // Hide the notification after 3 seconds
+        }
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var copyUrlLinks = document.querySelectorAll('.copy-url');
 
@@ -411,6 +423,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     copyTextToClipboard(dataUrl); // Copy the data-url value to the clipboard
 
                     // You can add additional feedback here, like showing a message that the data-url has been copied.
+                    showNotification();
                     console.log('data-url copied:', dataUrl);
                 });
             });
