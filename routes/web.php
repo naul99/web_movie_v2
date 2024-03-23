@@ -60,11 +60,11 @@ Route::get('/tim-kiem', [IndexController::class, 'timkiem'])->name('tim-kiem');
 Route::get('/nam/{year}', [IndexController::class, 'year']);
 Route::get('/tag/{tag}', [IndexController::class, 'tag']);
 Route::get('/loc-phim', [IndexController::class, 'locphim'])->name('locphim');
-Route::get('/my-list', [IndexController::class, 'history'])->name('my_list');
+Route::get('/my-list', [IndexController::class, 'my_list'])->name('my_list');
+Route::get('/my-recent', [IndexController::class, 'recent'])->name('my_recent');
 Route::post('/add-rating', [IndexController::class, 'add_rating'])->name('add-rating');
 Route::get('/all-movies', [IndexController::class, 'all_movies'])->name('all-movies');
 
-Route::get('/my-history-order', [IndexController::class, 'history_order'])->name('history-order');
 Route::get('/policy', [IndexController::class, 'policy'])->name('policy');
 //Route::get('/search', [IndexController::class, 'search'])->name('search');
 

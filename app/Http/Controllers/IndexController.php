@@ -739,7 +739,7 @@ class IndexController extends Controller
             return view('pages.locphim', compact('category', 'genre', 'country', 'movie','url_update'));
         }
     }
-    public function history()
+    public function my_list()
     {
         $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
         // $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
@@ -747,6 +747,15 @@ class IndexController extends Controller
 
 
         return view('pages.my_list', compact('category'));
+    }
+    public function recent()
+    {
+        $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
+        // $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
+        // $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
+
+
+        return view('pages.my_recent', compact('category'));
     }
    
     public function policy()

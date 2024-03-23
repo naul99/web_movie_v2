@@ -11,7 +11,7 @@
     <meta content="VN" name="geo.region" />
     <meta name="DC.language" scheme="utf-8" content="vi" />
     <meta name="language" content="Việt Nam, English">
-    <link rel="shortcut icon" href="{{ asset('uploads/logo/Old-Video-Cam-icon.ico') }}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('uploads/logo/icons.ico') }}" type="image/x-icon" />
     <meta name="revisit-after" content="1 days" />
     <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
     <!-- CSRF Token -->
@@ -163,6 +163,28 @@
             }
         }
     </style>
+    <style>
+        @media (max-width: 601px) {
+            h3 {
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, .6);
+                color: #fff;
+                padding: 10px;
+                line-height: 1.3em;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                font-size: 15px;
+                z-index: 5;
+            }
+        }
+        h3 {
+            position: absolute;
+        }
+    </style>
 </head>
 
 <body>
@@ -217,24 +239,6 @@
                 notification.classList.add('hide');
             }, 4000); // Hide the notification after 4 seconds
         }
-    </script>
-    <script>
-        function view() {
-            if (localStorage.getItem('data') != null) {
-                var data = JSON.parse(localStorage.getItem('data'));
-
-                for (var i = data.length - 1; i >= 0; i--) {
-                    var name = data[i].name;
-                    var slug = data[i].slug;
-                    var img = data[i].img;
-                    $("#row_wishlist").append('<a href="/movie/' + slug + '" ><img height="200px" width="150px" src="' +
-                        img + '" class="mylist-img p-r-10 p-t-10 image-size item"></a></a>');
-
-                }
-            }
-
-        }
-        view();
     </script>
 </body>
 

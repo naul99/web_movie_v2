@@ -132,6 +132,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                     {{-- <source src="https://live-par-2-cdn-alt.livepush.io/live/bigbuckbunnyclip/index.m3u8" type="application/x-mpegURL">
                                         Your browser does not support the video tag. --}}
                                     </video>
+                                    <h3>{{ $mov->title }}</h3>
                                 </a>
                                 <div class="video-description d-flex flex-end direction-column">
 
@@ -217,6 +218,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 type="video/mp4">
                             Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -290,6 +292,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 type="video/mp4">
                             Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -363,6 +366,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 type="video/mp4">
                             Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -436,6 +440,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 type="video/mp4">
                             Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 

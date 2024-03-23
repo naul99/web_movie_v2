@@ -349,6 +349,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                                 type="video/mp4">
                             Your browser does not support the video tag. --}}
                             </video>
+                            <h3>{{ $rel->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -454,6 +455,34 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
             showNotification("Add Wishlist Successfully.");
 
         }
+
+        function add_recent() {
+            var id = {{ $movie->id }};
+          
+            var newItems = {
+                'id': id,
+                'name': name,
+                'slug': slug,
+                'img': img
+            }
+            if (localStorage.getItem('data_recent') == null) {
+                localStorage.setItem('data_recent', '[]');
+            }
+            var old_datas = JSON.parse(localStorage.getItem('data_recent'));
+
+            var matchess = $.grep(old_datas, function(obj) {
+                return obj.id == id;
+
+            })
+            if (matchess.length) {
+                return false;
+            } else {
+                old_datas.push(newItems);
+            }
+            localStorage.setItem('data_recent', JSON.stringify(old_datas));
+
+        }
+        add_recent();
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -484,12 +513,12 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
     </script>
     <script>
         // Thay đổi URL hiện tại bằng URL mới
-        var newUrl = '/movie/{{ $movie->slug }}';
-        history.replaceState({}, null, newUrl);
+        // var newUrl = '/movie/{{ $movie->slug }}';
+        // history.replaceState({}, null, newUrl);
 
         // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
 
-        history.pushState({}, null, '/watch/{{ $movie->slug }}');
+        //history.pushState({}, null, '/watch/{{ $movie->slug }}');
 
         function onDevToolsOpen() {
 

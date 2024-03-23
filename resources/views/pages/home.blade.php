@@ -621,28 +621,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                             Your browser does not support the video tag.
 
                                         </video>
-                                        <style>
-                                            @media (max-width: 601px) {
-                                                h3 {
-                                                    position: absolute;
-                                                    bottom: -10px;
-                                                    left: 0;
-                                                    right: 0;
-                                                    background: rgba(0, 0, 0, .6);
-                                                    color: #fff;
-                                                    padding: 10px;
-                                                    line-height: 1.3em;
-                                                    text-overflow: ellipsis;
-                                                    white-space: nowrap;
-                                                    overflow: hidden;
-                                                    font-size: 15px;
-                                                    z-index: 5;
-                                                }
-                                            }
-                                            h3 {
-                                                position: absolute;
-                                            }
-                                        </style>
+                                        
                                         <h3>{{ $mov->title }}</h3>
                                     </a>
                                     <div class="video-description d-flex flex-end direction-column">

@@ -87,11 +87,9 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                 @endforeach
             @endif
         </h1>
-        <h1 class="ml-2 mt-5   text-2xl font-bold text-slate-300 md:mb-5 md:ml-20 md:mt-8  md:text-3xl">Trailer
-        </h1>
-        <h1 class="mx-2 mt-1 text-sm md:ml-20 md:w-[50rem] md:text-lg"><iframe height="360px" width="80%"
-                src="https://www.youtube.com/embed/{{ $movie->movie_trailer->trailer }}?rel=0&amp;autoplay=1&mute=1"
-                frameborder="0" allowfullscreen></iframe></h1>
+        <a href="https://www.youtube.com/embed/{{ $movie->movie_trailer->trailer }}?autoplay=1&cc_load_policy=1" target="_blank">
+        <h1 class="ml-2 mt-5   text-2xl font-bold text-slate-300 md:mb-5 md:ml-20 md:mt-8  md:text-3xl">Click to Watch Trailer
+        </h1></a>
         <section id="mylist" class="container">
 
             <h4 class="romantic-heading">
@@ -117,6 +115,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                                         type="video/mp4">
                                     Your browser does not support the video tag. --}}
                                 </video>
+                                <h3>{{ $rel->title }}</h3>
                             </a>
                             <div class="video-description d-flex flex-end direction-column">
 
