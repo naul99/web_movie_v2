@@ -28,8 +28,6 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ManageCommentController;
-use App\Http\Controllers\PayPalPaymentController;
-use App\Http\Controllers\SentEmailController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Expr\Assign;
@@ -47,30 +45,6 @@ use PhpParser\Node\Expr\Assign;
 
 Route::middleware('web')->get('/auth/login', [AuthSocialLoginController::class, 'index'])->name('user-login');
 
-
-// Route::get('/auth/github/redirect', [AuthSocialLoginController::class, 'githubredirect'])->name('social-github-login');
-// Route::get('/auth/github/callback', [AuthSocialLoginController::class, 'githubcallback']);
-// Route::get('/auth/google/redirect', [AuthSocialLoginController::class, 'googleredirect'])->name('social-google-login');
-// Route::get('/auth/google/callback', [AuthSocialLoginController::class, 'googlecallback']);
-// Route::get('/auth/facebook/redirect',[AuthSocialLoginController::class,'facebookredirect'])->name('social-facebook-login');
-// Route::get('/auth/facebook/callback',[AuthSocialLoginController::class,'facebookcallback']);
-
-//paypal
-// Route::get('/process-transaction', [PayPalPaymentController::class,'processTransaction'])->name('processTransaction');
-// Route::get('/success-transaction', [PayPalPaymentController::class,'successTransaction'])->name('successTransaction');
-// Route::get('/cancel-transaction', [PayPalPaymentController::class,'cancelTransaction'])->name('cancelTransaction');
-
-//vnpay
-//Route::post('/payment-vnpay', [PayPalPaymentController::class,'paymentVnpay'])->name('paymentVnpay');
-//momo
-//Route::post('/payment-momo', [PayPalPaymentController::class,'paymentMomo'])->name('paymentMomo');
-
-//Route::get('/sociallogout', [AuthSocialLoginController::class, 'sociallogout'])->name('sociallogout');
-//test sent email
-//Route::get('/sent-email', [SentEmailController::class, 'sentemail'])->name('sentemail');
-
-
-
 //******************* */
 Route::get('/', [IndexController::class, 'home'])->name('homepage');
 Route::get('/category/{slug}', [IndexController::class, 'category'])->name('category');
@@ -85,17 +59,11 @@ Route::get('/episode', [IndexController::class, 'episode'])->name('episode');
 Route::get('/tim-kiem', [IndexController::class, 'timkiem'])->name('tim-kiem');
 Route::get('/nam/{year}', [IndexController::class, 'year']);
 Route::get('/tag/{tag}', [IndexController::class, 'tag']);
-Route::post('/add_comment/{id}', [CommentsController::class, 'add_comment'])->name('add_comment');
-Route::post('/add_reply/{id}', [CommentsController::class, 'add_reply'])->name('add_reply');
 Route::get('/loc-phim', [IndexController::class, 'locphim'])->name('locphim');
 Route::get('/my-list', [IndexController::class, 'history'])->name('my_list');
 Route::post('/add-rating', [IndexController::class, 'add_rating'])->name('add-rating');
 Route::get('/all-movies', [IndexController::class, 'all_movies'])->name('all-movies');
-Route::get('/register-package', [IndexController::class, 'register_package'])->name('register-package');
-Route::post('/checkout-package', [IndexController::class, 'checkout'])->name('checkout');
-Route::get('/checkout-package', function() {
-    return redirect()->route('register-package');
-});
+
 Route::get('/my-history-order', [IndexController::class, 'history_order'])->name('history-order');
 Route::get('/policy', [IndexController::class, 'policy'])->name('policy');
 //Route::get('/search', [IndexController::class, 'search'])->name('search');

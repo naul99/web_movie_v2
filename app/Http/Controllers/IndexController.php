@@ -11,7 +11,6 @@ use App\Models\Customer;
 use App\Models\Movie;
 use App\Models\Episode;
 use App\Models\Movie_Genre;
-use App\Models\Movie_History;
 use App\Models\Movie_Views;
 use App\Models\Rating;
 use App\Models\Cast;
@@ -21,14 +20,12 @@ use App\Models\Movie_Cast;
 use App\Models\Info;
 use App\Models\Server;
 use App\Models\Movie_Package;
-use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 class IndexController extends Controller
 {
@@ -751,247 +748,7 @@ class IndexController extends Controller
 
         return view('pages.my_list', compact('category'));
     }
-    // private function check_expiry()
-    // {
-    //     // kiem tra ngay het han
-    //     $check_order = Order::where('customer_id', Session::get('customer_id'))->where('expiry', 0)->get();
-    //     foreach ($check_order as $check) {
-    //         if ($check->date_end->isPast()) {
-    //             $check->expiry = "1";
-    //             $check->save();
-    //             // update account
-    //             $customer = Customer::find(Session::get('customer_id'));
-    //             $customer->status_registration = "0";
-    //             $customer->save();
-    //         }
-    //     }
-    // }
-    // public function register_package()
-    // {
-    //     // kiem tra ngay het han
-    //     $check_order = Order::where('customer_id', Session::get('customer_id'))->where('expiry', 0)->get();
-    //     foreach ($check_order as $check) {
-    //         // $date_now = Carbon::now('Asia/Ho_Chi_Minh')->format('d-m-Y');
-    //         // $datework = Carbon::createFromDate($check->date_start);
-    //         // $expiry_date = Carbon::createFromDate($check->date_end)->format('d-m-Y');
-    //         // //$expiry_date = $check->date_end;
-    //         // $check_date = $datework->diffInDays($expiry_date);
-    //         if ($check->date_end->isPast()) {
-    //             $check->expiry = "1";
-    //             $check->save();
-    //             // update account
-    //             $customer = Customer::find(Session::get('customer_id'));
-    //             $customer->status_registration = "0";
-    //             $customer->save();
-    //         }
-    //     }
-
-    //     $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
-    //     $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
-    //     $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
-    //     $list_package = Movie_Package::where('status', 1)->orderBy('price')->get();
-
-    //     // check status payment vnpay
-    //     if (isset($_GET['vnp_SecureHash'])) {
-    //         $vnp_HashSecret = env('VNP_HASHSECRET', '');
-    //         $vnp_SecureHash = $_GET['vnp_SecureHash'];
-    //         $inputData = array();
-    //         foreach ($_GET as $key => $value) {
-    //             if (substr($key, 0, 4) == "vnp_") {
-    //                 $inputData[$key] = $value;
-    //             }
-    //         }
-
-    //         unset($inputData['vnp_SecureHash']);
-    //         ksort($inputData);
-    //         $i = 0;
-    //         $hashData = "";
-    //         foreach ($inputData as $key => $value) {
-    //             if ($i == 1) {
-    //                 $hashData = $hashData . '&' . urlencode($key) . "=" . urlencode($value);
-    //             } else {
-    //                 $hashData = $hashData . urlencode($key) . "=" . urlencode($value);
-    //                 $i = 1;
-    //             }
-    //         }
-
-    //         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-    //         if ($secureHash == $vnp_SecureHash) {
-    //             if ($_GET['vnp_ResponseCode'] == '00') {
-    //                 $customer_id = Session::get('customer_id');
-    //                 $package_id = Session::get('package_id');
-    //                 $date = Session::get('package_time');
-    //                 $price = Session::get('package_price');
-    //                 $total = Session::get('total_vnpay');
-    //                 $name_package = Session::get('package_name');
-
-    //                 $order = new Order;
-    //                 $order->customer_id = $customer_id;
-    //                 $order->package_id = $package_id;
-    //                 $order->price = $price;
-    //                 $order->payment = 'vnpay';
-    //                 $order->number_date = $date;
-    //                 $order->expiry = '0';
-    //                 $order->date_start = Carbon::now('Asia/Ho_Chi_Minh');
-    //                 $order->date_end = Carbon::now('Asia/Ho_Chi_Minh')->addDays($date);
-    //                 $order->save();
-
-    //                 //modify status register package movie
-    //                 $customer = Customer::where('id', $customer_id)->first();
-    //                 $customer->status_registration = '1';
-    //                 $customer->save();
-
-
-    //                 //sent data email order
-    //                 $price_format =  number_format($price, 0, '', ',');
-    //                 $total_format =  number_format($total, 0, '', ',');
-    //                 $email = $customer->email;
-    //                 $orderId = $order->id;
-    //                 $payment = "vnpay";
-    //                 //dd($email);
-
-    //                 return $this->sentEmail($email, $price_format, $name_package, $total_format, $date, $orderId, $payment);
-    //                 //end sent email
-
-
-    //                 // return redirect()->route('register-package')->with('success', 'Thanh toán thành công. Cảm ơn bạn đã sử dụng dịch vụ.');
-    //             } else {
-    //                 return redirect()->route('register-package')->with('error', $response['message'] ?? 'Đăng ký gói không thành công. Do bạn đã hủy giao dịch.');
-    //             }
-    //         } else {
-    //             return redirect()->route('register-package')->with('error', $response['message'] ?? 'Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng kiểm tra lại.');
-    //         }
-    //     }
-    //     // check status payment momo
-    //     header('Content-type: text/html; charset=utf-8');
-    //     $secretKey = env('SECRETKEY', ''); //Put your secret key in there
-
-    //     if (!empty($_GET['partnerCode'])) {
-    //         $partnerCode = $_GET["partnerCode"];
-    //         $accessKey = $_GET["accessKey"];
-    //         $orderId = $_GET["orderId"];
-    //         $localMessage = ($_GET["localMessage"]);
-    //         $message = $_GET["message"];
-    //         $transId = $_GET["transId"];
-    //         $orderInfo = ($_GET["orderInfo"]);
-    //         $amount = $_GET["amount"];
-    //         $errorCode = $_GET["errorCode"];
-    //         $responseTime = $_GET["responseTime"];
-    //         $requestId = $_GET["requestId"];
-    //         $extraData = $_GET["extraData"];
-    //         $payType = $_GET["payType"];
-    //         $orderType = $_GET["orderType"];
-    //         $extraData = $_GET["extraData"];
-    //         $m2signature = $_GET["signature"]; //MoMo signature
-
-    //         //Checksum
-    //         $rawHash = "partnerCode=" . $partnerCode . "&accessKey=" . $accessKey . "&requestId=" . $requestId . "&amount=" . $amount . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo .
-    //             "&orderType=" . $orderType . "&transId=" . $transId . "&message=" . $message . "&localMessage=" . $localMessage . "&responseTime=" . $responseTime . "&errorCode=" . $errorCode .
-    //             "&payType=" . $payType . "&extraData=" . $extraData;
-
-    //         $partnerSignature = hash_hmac("sha256", $rawHash, $secretKey);
-
-    //         if ($m2signature == $partnerSignature) {
-    //             if ($errorCode == '0') {
-    //                 try {
-    //                     $customer_id = Session::get('customer_id');
-    //                     $package_id = Session::get('package_id');
-    //                     $date = Session::get('package_time');
-    //                     $price = Session::get('package_price');
-    //                     $name_package = Session::get('package_name');
-    //                     $order = new Order;
-    //                     $order->customer_id = $customer_id;
-    //                     $order->package_id = $package_id;
-    //                     $order->price = $price;
-    //                     $order->payment = 'momo';
-    //                     $order->number_date = $date;
-    //                     $order->expiry = '0';
-    //                     $order->date_start = Carbon::now('Asia/Ho_Chi_Minh');
-    //                     $order->date_end = Carbon::now('Asia/Ho_Chi_Minh')->addDays($date);
-    //                     $order->save();
-
-    //                     //modify status register package movie
-    //                     $customer = Customer::where('id', $customer_id)->first();
-    //                     $customer->status_registration = '1';
-    //                     $customer->save();
-    //                 } catch (ModelNotFoundException $exception) {
-    //                     return redirect()->route('register-package')->with('error', $response['message'] ?? 'Error 500!.');
-    //                 }
-
-    //                 //sent data email order
-    //                 $price_format =  number_format($price, 0, '', ',');
-    //                 $total_format =  number_format($amount, 0, '', ',');
-    //                 $email = $customer->email;
-    //                 $payment = "momo";
-    //                 //dd($email);
-
-    //                 return $this->sentEmail($email, $price_format, $name_package, $total_format, $date, $orderId, $payment);
-    //                 //end sent email
-
-    //                 // return redirect()->route('register-package')->with('success', 'Thanh toán thành công. Cảm ơn bạn đã sử dụng dịch vụ.');
-    //             } else {
-    //                 return redirect()->route('register-package')->with('error', $response['message'] ?? 'Đăng ký gói không thành công. Do bạn đã hủy giao dịch.');
-    //             }
-    //         } else {
-    //             return redirect()->route('register-package')->with('error', $response['message'] ?? 'Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng kiểm tra lại.');
-    //         }
-    //     }
-
-    //     return view('pages.register_package', compact('category', 'genre', 'country', 'list_package'));
-    // }
-    // private function sentEmail($email, $price_format, $name_package, $total_format, $date, $orderId, $payment)
-    // {
-
-    //     $to_name = "no-reply";
-    //     $to_email = $email; //send to this email
-
-    //     $data = array(
-    //         "name" => "FULLHDPHIM", "price" => $price_format, "name_package" => $name_package,
-    //         "total" => $total_format, "date" => $date, "orderId" => $orderId, "payment" => $payment
-    //     );
-
-    //     Mail::send('pages.sent_email', $data, function ($message) use ($to_name, $to_email) {
-    //         $message->to($to_email)->subject('Hóa Đơn Thanh Toán Gói Phim');
-    //         $message->from($to_email, $to_name); //sent from this email
-    //     });
-    //     Session::forget('package_id');
-    //     Session::forget('package_time');
-    //     Session::forget('package_price');
-    //     Session::forget('package_name');
-    //     return redirect()->route('register-package')->with('success', 'Thanh toán thành công. Cảm ơn bạn đã sử dụng dịch vụ.');
-    // }
-    // public function checkout(Request $request)
-    // {
-    //     //dd(Session::get('customer_id'));
-    //     $data = $request->all();
-    //     $validate = Movie_Package::where('status', 1)->find($data['id']);
-    //     if (isset($validate)) {
-    //         Session::put('package_id', $validate->id);
-    //         Session::put('package_time', $validate->time);
-    //         Session::put('package_price', $validate->price);
-    //         Session::put('package_name', $validate->title);
-    //         $user = Customer::where('id', Session::get('customer_id'))->first();
-    //         if ($user->status_registration != 1) {
-    //             return view('pages.checkout', compact('user', 'data', 'validate'));
-    //         } else {
-    //             return redirect()->back()->with('status_registration', 'Gói phim của bạn đang còn hạn sử dụng!');
-    //         }
-    //     } else {
-    //         return redirect()->back()->with('status_registration', 'Bạn đừng nghịch nữa :))');
-    //     }
-    // }
-
-
-    // public function history_order()
-    // {
-    //     if (Auth::guard('customer')->check()) {
-    //         $list_order = Order::with('package:id,title', 'user:id,name,email')->where('customer_id', Session::get('customer_id'))->paginate(8);
-    //         //dd($list_order->toArray());
-    //         return view('pages.history_order', compact('list_order'));
-    //     } else {
-    //         return view('errors.404');
-    //     }
-    // }
+   
     public function policy()
     {
         return view('pages.policy');
