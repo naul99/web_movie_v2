@@ -436,8 +436,6 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
             }
             var old_data = JSON.parse(localStorage.getItem('data'));
 
-
-
             var matches = $.grep(old_data, function(obj) {
                 return obj.id == id;
 
