@@ -212,7 +212,7 @@
     <section class="movieinformation container">
         <div class="">
 
-            <img class="img-mobile"
+            <img id="wishlist_movieimage" class="img-mobile"
                 src="  @php
 $image_check = substr($movie->movie_image->image, 0, 5); $startPos = strpos($movie->movie_image->image, 'movies/');
 $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @endphp
@@ -289,13 +289,9 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                 @endforeach
             </p>
         </div>
-        <div class="actions d-flex flex-start flex-middle">
+        <div class="actions d-flex flex-start flex-middle wishlist">
 
-            <a href="#" class="link-item">
-                <i class="fa fa-plus"></i></br>
-                My List
-            </a>
-            <a href="#" class="link-item">
+            <a href="javacript:void(0)" onclick="showNotification('Thanks.')" class="link-item">
                 <i class="fa fa-thumbs-up"></i></br>
                 Like
             </a>
@@ -317,7 +313,10 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                     </a>
                 @endif
             @endforeach
-
+            <a href="javacript:void(0)" id="{{ $movie->id }}" onclick="add_wishlist(this.id);" class=" link-item">
+                <i class="fa fa-plus"></i></br>
+                My List
+            </a>
         </div>
     </section>
 
@@ -397,15 +396,65 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         </div>
 
     </section>
+    <input type="hidden" id="witshlist_moviename" value="{{ $movie->title }}">
+    <input type="hidden" id="witshlist_movieslug" value="{{ $movie->slug }}">
     <script>
-        function showNotification() {
-            var notification = document.getElementById('notification');
-            notification.classList.remove('hide');
-            notification.classList.add('show');
-            setTimeout(function() {
-                notification.classList.remove('show');
-                notification.classList.add('hide');
-            }, 4000); // Hide the notification after 3 seconds
+        var name = document.getElementById('witshlist_moviename').value;
+        var slug = document.getElementById('witshlist_movieslug').value;
+        var img = document.getElementById('wishlist_movieimage').src;
+        var mylist = document.getElementById({{ $movie->id }});
+        function view() {
+            if (localStorage.getItem('data') != null) {
+                var data = JSON.parse(localStorage.getItem('data'));
+
+                for (i = 0; i < data.length; i++) {
+                    var slugs = data[i].slug;
+
+                    if (slugs === slug) {
+                        
+                        mylist.remove();
+                        $(".wishlist").append(
+                            '<a href="javascript:void(0)" class="link-item"> <i class="fa-regular fa-circle-check"></i></br>Added</a>'
+                        );
+                    }
+                }
+            }
+
+        }
+        view();
+
+        function add_wishlist(clicked_id) {
+            var id = clicked_id;
+            var newItem = {
+                'id': id,
+                'name': name,
+                'slug': slug,
+                'img': img
+            }
+            if (localStorage.getItem('data') == null) {
+                localStorage.setItem('data', '[]');
+            }
+            var old_data = JSON.parse(localStorage.getItem('data'));
+
+
+
+            var matches = $.grep(old_data, function(obj) {
+                return obj.id == id;
+
+            })
+            if (matches.length) {
+                showNotification("Wishlist Created.");
+                return false;
+            } else {
+                old_data.push(newItem);
+            }
+            localStorage.setItem('data', JSON.stringify(old_data));
+            mylist.remove();
+            $(".wishlist").append(
+                '<a href="javascript:void(0)" class="link-item"> <i class="fa-regular fa-circle-check"></i></br>Added</a>'
+            );
+            showNotification("Add Wishlist Successfully.");
+
         }
     </script>
     <script>
@@ -420,7 +469,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     copyTextToClipboard(dataUrl); // Copy the data-url value to the clipboard
 
                     // You can add additional feedback here, like showing a message that the data-url has been copied.
-                    showNotification();
+                    showNotification("Copy link successfully.");
                     console.log('data-url copied:', dataUrl);
                 });
             });
@@ -469,5 +518,6 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         }
         console.log(new DevToolsChecker());
     </script>
+
 
 @endsection

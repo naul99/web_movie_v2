@@ -11,8 +11,8 @@
         @endforeach
        
         
-        <a href="#" class="nav-item latest">Latest</a>
-        <a href="#" class="nav-item">My List</a>
+        <a href="#" class="nav-item latest">Recents</a>
+        <a href="{{ route('my_list') }}" class="nav-item">My List</a>
     </div>
     <div class="righticons d-flex flex-end flex-middle">
         <a href="{{ route('tim-kiem') }}"><img src="/images/icons/search.svg" alt="search icon"></a>

@@ -166,9 +166,10 @@
 </head>
 
 <body>
-    <div id="notification" class="hide">
-        Copy link successfully.
+    <div id="notification" class="notification hide">
+        <span class="message"></span>
     </div>
+
     <main id="mainContainer" class="p-b-40">
 
         @include('nav')
@@ -199,8 +200,42 @@
             Account
         </a>
     </div>
-
     <script src="/js/main-script.js"></script>
+    <script>
+        function showNotification(message) {
+            var notification = document.getElementById('notification');
+            var messageElement = notification.querySelector('.message');
+
+            // Set custom message
+            messageElement.textContent = message;
+
+            notification.classList.remove('hide');
+            notification.classList.add('show');
+
+            setTimeout(function() {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+            }, 4000); // Hide the notification after 4 seconds
+        }
+    </script>
+    <script>
+        function view() {
+            if (localStorage.getItem('data') != null) {
+                var data = JSON.parse(localStorage.getItem('data'));
+
+                for (var i = data.length - 1; i >= 0; i--) {
+                    var name = data[i].name;
+                    var slug = data[i].slug;
+                    var img = data[i].img;
+                    $("#row_wishlist").append('<a href="/movie/' + slug + '" ><img height="200px" width="150px" src="' +
+                        img + '" class="mylist-img p-r-10 p-t-10 image-size item"></a></a>');
+
+                }
+            }
+
+        }
+        view();
+    </script>
 </body>
 
 </html>
