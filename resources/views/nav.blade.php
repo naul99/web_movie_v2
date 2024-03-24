@@ -11,7 +11,7 @@
         @endforeach
        
         
-        <a href="{{ route('my_recent') }}" class="nav-item latest">Recents</a>
+        <a href="{{ route('my_recent') }}" class="nav-item latest">Recently Added</a>
         <a href="{{ route('my_list') }}" class="nav-item">My List</a>
     </div>
     <div class="righticons d-flex flex-end flex-middle">
