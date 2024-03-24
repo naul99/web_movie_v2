@@ -127,6 +127,7 @@ class CategoryController extends Controller
                     'description' => 'required|max:255',
                     'status' => 'required',
                     'position' => 'required',
+                    'nav'=>'',
                 ],
                 [
                     'title.required' => 'The title doesnt empty',
@@ -142,6 +143,7 @@ class CategoryController extends Controller
             $category->description = $data['description'];
             $category->status = $data['status'];
             $category->position = $data['position'];
+            $category->nav = $data['nav'];
             $category->save();
 
             toastr()->success("Category '" . $category->title . "' updated successfully!", 'Update', ['timeOut' => 5000]);

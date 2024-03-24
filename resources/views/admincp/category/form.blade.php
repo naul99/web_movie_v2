@@ -81,6 +81,17 @@
                                 'oninput' => 'this.setCustomValidity("")',
                             ]) !!}
                         </div>
+                        <div class="form-group">
+                            {!! Form::label('nav', 'Nav', []) !!}
+                            {!! Form::number('nav', isset($category) ? $category->nav : 'disabled', [
+                                'style' => 'resize:none',
+                                'class' => 'form-control',
+                                'placeholder' => 'Defaut is (0)',
+                                'id' => 'nav',
+                                'oninvalid' => 'this.setCustomValidity("Enter Position Here")',
+                                'oninput' => 'this.setCustomValidity("")',
+                            ]) !!}
+                        </div>
                         @if (!isset($category))
                             {!! Form::submit('Create ', [
                                 'class' => 'btn btn-success',
