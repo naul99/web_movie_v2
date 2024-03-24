@@ -11,7 +11,7 @@
     <meta content="VN" name="geo.region" />
     <meta name="DC.language" scheme="utf-8" content="vi" />
     <meta name="language" content="Việt Nam, English">
-    <link rel="shortcut icon" href="{{ asset('uploads/logo/icons.ico') }}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('uploads/logo/icos.ico') }}" type="image/x-icon" />
     <meta name="revisit-after" content="1 days" />
     <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
     <!-- CSRF Token -->
