@@ -38,4 +38,6 @@
     <div class="text-right">
         {!! $movie->links('vendor.pagination.custom') !!}
     </div>
+
+
 @endsection

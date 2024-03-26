@@ -26,7 +26,7 @@
             @endif
         @endforeach
         @if ($paginator->currentPage() < $paginator->lastPage() - 3)
-        <li class="page-item"><span class="page-link">...</span></li>
+            <li class="page-item"><span class="page-link">...</span></li>
         @endif
         @if ($paginator->currentPage() < $paginator->lastPage() - 2)
             <li class="page-item"><a class="page-link"
