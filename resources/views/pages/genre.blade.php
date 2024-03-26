@@ -10,6 +10,7 @@
                 widows: 200px;
             }
         </style>
+        
         <article class="">
             @foreach ($movie as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
