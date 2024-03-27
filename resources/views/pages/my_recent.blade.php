@@ -19,7 +19,7 @@
             if (localStorage.getItem('data_recent') != null) {
                 var data = JSON.parse(localStorage.getItem('data_recent'));
 
-                for (var i = data.length - 1; i >= 0; i--) {
+                for (var i = 0 ; i <= data.length ; i++) {
                     var name = data[i].name;
                     var slug = data[i].slug;
                     var img = data[i].img;

@@ -404,6 +404,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         var slug = document.getElementById('witshlist_movieslug').value;
         var img = document.getElementById('wishlist_movieimage').src;
         var mylist = document.getElementById({{ $movie->id }});
+
         function view() {
             if (localStorage.getItem('data') != null) {
                 var data = JSON.parse(localStorage.getItem('data'));
@@ -412,7 +413,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     var slugs = data[i].slug;
 
                     if (slugs === slug) {
-                        
+
                         mylist.remove();
                         $(".wishlist").append(
                             '<a href="javascript:void(0)" class="link-item"> <i class="fa-regular fa-circle-check"></i></br>Added</a>'
@@ -458,12 +459,14 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
 
         function add_recent() {
             var id = {{ $movie->id }};
-          
+            var currentTime = new Date().getTime();
+
             var newItems = {
                 'id': id,
                 'name': name,
                 'slug': slug,
-                'img': img
+                'img': img,
+                'time': currentTime
             }
             if (localStorage.getItem('data_recent') == null) {
                 localStorage.setItem('data_recent', '[]');
@@ -475,10 +478,13 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
 
             })
             if (matchess.length) {
-                return false;
+                matchess[0].time = currentTime;
             } else {
                 old_datas.push(newItems);
             }
+            old_datas.sort(function(a, b) {
+                return b.time - a.time;
+            });
             localStorage.setItem('data_recent', JSON.stringify(old_datas));
 
         }
