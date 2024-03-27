@@ -38,7 +38,9 @@
             box-sizing: border-box;
             font-size: 62.5%;
         }
-
+        .jw-rightclick{
+            display: none !important;
+        }
 
         /* Skin Netflix CSS */
         .jwplayer.jw-skin-netflix .jw-title-primary {
@@ -782,7 +784,32 @@ Animações do botão.
 
         var tag;
 
+        // Function to set cookie
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
 
+        // Function to get cookie
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        var videoId = link;
         if (sub != '') {
             var playerInstance = jwplayer('jwplayer');
             function setupVideo() {
@@ -865,6 +892,20 @@ Animações do botão.
         }
 
         this.setUpVideoEvent = function () {
+
+            
+            playerInstance.on('time', function (event) {
+                // Lưu thời gian hiện tại vào cookie với tên là 'currentTime'
+                setCookie('currentTime_' + videoId, event.position, 365); // Cookie sẽ tồn tại trong 1 ngày
+            });
+
+            // Kiểm tra xem có cookie nào chứa thông tin thời gian đã lưu không
+            var savedTime = getCookie('currentTime_' + videoId);
+            if (savedTime !== "") {
+                playerInstance.seek(parseFloat(savedTime)); // Chuyển đổi savedTime thành số thực trước khi sử dụng
+                playerInstance.play(); // Bắt đầu phát video
+            }
+
             playerInstance.on("ready", function () {
 
                 playerInstance.on('time', function (event) {
