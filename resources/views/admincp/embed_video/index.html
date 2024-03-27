@@ -896,7 +896,7 @@ Animações do botão.
             
             playerInstance.on('time', function (event) {
                 // Lưu thời gian hiện tại vào cookie với tên là 'currentTime'
-                setCookie('currentTime_' + videoId, event.position, 365); // Cookie sẽ tồn tại trong 1 ngày
+                setCookie('currentTime_' + videoId, event.position, 7); // Cookie sẽ tồn tại trong 1 ngày
             });
 
             // Kiểm tra xem có cookie nào chứa thông tin thời gian đã lưu không
