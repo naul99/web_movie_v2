@@ -404,7 +404,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         var slug = document.getElementById('witshlist_movieslug').value;
         var img = document.getElementById('wishlist_movieimage').src;
         var mylist = document.getElementById({{ $movie->id }});
-
+        var url = window.location;
         function view() {
             if (localStorage.getItem('data') != null) {
                 var data = JSON.parse(localStorage.getItem('data'));
@@ -431,6 +431,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                 'id': id,
                 'name': name,
                 'slug': slug,
+                'url': url,
                 'img': img
             }
             if (localStorage.getItem('data') == null) {
@@ -466,6 +467,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                 'name': name,
                 'slug': slug,
                 'img': img,
+                'url':url,
                 'time': currentTime
             }
             if (localStorage.getItem('data_recent') == null) {
@@ -479,6 +481,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
             })
             if (matchess.length) {
                 matchess[0].time = currentTime;
+                matchess[0].url = url;
             } else {
                 old_datas.push(newItems);
             }

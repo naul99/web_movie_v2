@@ -23,8 +23,9 @@
                     var name = data[i].name;
                     var slug = data[i].slug;
                     var img = data[i].img;
-                    $("#row_wishlist").append('<a href="/movie/' + slug + '" ><img height="200px" width="150px" src="' +
-                        img + '" class="mylist-img p-r-10 p-t-10 image-size item" alt="'+name+'"></a>');
+                    var url= data[i].url;
+                    $("#row_wishlist").append('<a href="javascript:void(0)" onclick=location.href="'+url['href']+'" ><img height="200px" width="150px" src="' +
+                        img + '" class="mylist-img p-r-10 p-t-10 image-size item" alt="'+name+'" ></a>');
 
                 }
             }
