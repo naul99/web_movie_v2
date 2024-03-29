@@ -160,37 +160,49 @@
         @foreach ($server as $key => $ser)
             @foreach ($episode_movie as $key => $ser_mov)
                 @if ($ser_mov->server_id == $ser->id)
-                    <div id="server-{{ $ser->id }}"
-                        class="server{{ $server_active == 'server-' . $ser->id ? ' server-active' : '' }}"
-                        onclick="showEpisodes('server{{ $ser->id }}')">
-                        {{ $ser->title }}</div>
+                    @if ($movie->type_movie == 0)
+                        @foreach ($episode_list as $key => $ep)
+                            @if ($ep->server_id == $ser->id)
+                                <div class="server{{ $server_active == 'server-' . $ser->id ? ' server-active' : '' }}"
+                                    onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                    Server: {{ $ser->title }}</div>
+                            @endif
+                        @endforeach
+                    @else
+                        <div id="server-{{ $ser->id }}"
+                            class="server{{ $server_active == 'server-' . $ser->id ? ' server-active' : '' }}"
+                            onclick="showEpisodes('server{{ $ser->id }}')">
+                            Server: {{ $ser->title }}</div>
+                    @endif
                 @endif
             @endforeach
         @endforeach
+        @if ($movie->type_movie == 1)
+            @foreach ($server as $key => $ser)
+                @foreach ($episode_movie as $key => $ser_mov)
+                    @if ($ser_mov->server_id == $ser->id)
+                        <div id="episodeList{{ $ser->id }}" class="episode-list"
+                            style="padding-left: 2%;padding-bottom: 1%">
+                            @foreach ($episode_list as $key => $ep)
+                                @if ($ep->server_id == $ser->id)
+                                    <button
+                                        class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} "
+                                        {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
+                                        onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                        EP
+                                        [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
+                                            End
+                                        @endif
 
-        @foreach ($server as $key => $ser)
-            @foreach ($episode_movie as $key => $ser_mov)
-                @if ($ser_mov->server_id == $ser->id)
-                    <div id="episodeList{{ $ser->id }}" class="episode-list"
-                        style="padding-left: 2%;padding-bottom: 1%">
-                        @foreach ($episode_list as $key => $ep)
-                            @if ($ep->server_id == $ser->id)
-                                <button
-                                    class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} "
-                                    {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
-                                    onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                    EP
-                                    [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
-                                        End
-                                    @endif
-
-                                </button>
-                            @endif
-                        @endforeach
-                @endif
+                                    </button>
+                                @endif
+                            @endforeach
+                    @endif
     </div>
     @endforeach
     @endforeach
+    @endif
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var server_active = "{{ $server_active }}";
@@ -405,6 +417,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         var img = document.getElementById('wishlist_movieimage').src;
         var mylist = document.getElementById({{ $movie->id }});
         var url = window.location;
+
         function view() {
             if (localStorage.getItem('data') != null) {
                 var data = JSON.parse(localStorage.getItem('data'));
@@ -467,7 +480,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                 'name': name,
                 'slug': slug,
                 'img': img,
-                'url':url,
+                'url': url,
                 'time': currentTime
             }
             if (localStorage.getItem('data_recent') == null) {
