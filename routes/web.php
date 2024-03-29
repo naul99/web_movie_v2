@@ -150,3 +150,4 @@ Route::get('/clear-cache', function() {
      return redirect()->back();
 });
 
+Route::get('api/watch/{slug}/{tap}/{server_active}', [IndexController::class, 'ajax_episode']);

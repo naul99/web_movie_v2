@@ -21,7 +21,7 @@
     </style>
     <!-- hero section video-->
     <div class="videocontainer">
-        <iframe id="mainiframe" style="border-radius: 1.25rem;" class="video" src="{!! $episode->linkphim !!}" frameborder="0"
+        <iframe id="mainiframe" style="border-radius: 1.25rem;" class="video" src="{{ $episode->linkphim }}" frameborder="0"
             allow="accelerometer; autoplay=0; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
     </div>
@@ -186,9 +186,9 @@
                             @foreach ($episode_list as $key => $ep)
                                 @if ($ep->server_id == $ser->id)
                                     <button
-                                        class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} "
-                                        {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'disabled' : '' }}
-                                        onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                        data-url="{{ url('api/watch/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}"
+                                        class="button-31 {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? 'active-ep' : '' }} episode"
+                                        {{ $tapphim == $ep->episode && $server_active == 'server-' . $ser->id ? '' : '' }}>
                                         EP
                                         [ {{ $ep->episode }} ] @if ($movie->type_movie == 1 && $movie->sotap == $ep->episode)
                                             End
@@ -567,6 +567,41 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         }
         console.log(new DevToolsChecker());
     </script>
-
+    <script>
+        var buttons = document.querySelectorAll('.episode');
+        var activeButton = document.querySelector('.episode.active-ep');
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var url = button.dataset.url;
+                if (activeButton !== null) {
+                    activeButton.classList.remove('active-ep');
+                }
+                button.classList.add('active-ep');
+                activeButton = button;
+                fetch(url)
+                    .then(response => {
+                        // Kiểm tra xem có phản hồi thành công không (status code 200)
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // Nếu có, parse response body dưới dạng JSON
+                        return response.json();
+                    })
+                    .then(data => {
+                        var divElement = document.getElementById("mainiframe");
+                        divElement.src = data.data;
+                        var index = url.indexOf("watch/");
+                        var result = url.slice(index + 6);
+                        var newUrl = '/xem-phim/' + result;
+                        history.replaceState({}, null, newUrl);
+                        history.pushState({}, null, newUrl);
+                    })
+                    .catch(error => {
+                        // Xử lý lỗi nếu có
+                        console.error('There was a problem with your fetch operation:', error);
+                    });
+            });
+        });
+    </script>
 
 @endsection

@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+
 class IndexController extends Controller
 {
     public function search()
@@ -72,7 +73,7 @@ class IndexController extends Controller
             //     $query->select(DB::raw('count(distinct(episode))'));
             // }])->orderBy('updated_at', 'DESC')->paginate(12);
 
-            return view('pages.timkiem', compact('category', 'genre', 'country', 'search', 'movie','url_update'));
+            return view('pages.timkiem', compact('category', 'genre', 'country', 'search', 'movie', 'url_update'));
         } else {
             $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
             return view('pages.search', compact('category'));
@@ -80,7 +81,7 @@ class IndexController extends Controller
     }
     public function home()
     {
-        $category = Category::orderBy('id', 'ASC')->where('status', 1)->where('nav',1)->get();
+        $category = Category::orderBy('id', 'ASC')->where('status', 1)->where('nav', 1)->get();
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         //qua ba
@@ -113,7 +114,7 @@ class IndexController extends Controller
         $topview = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
         $topview_tvseries = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.type_movie',1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.type_movie', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
         $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
             ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
@@ -206,7 +207,7 @@ class IndexController extends Controller
         }])->orderBy('updated_at', 'DESC')->get();
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
-        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror','topview_tvseries','url_update'));
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror', 'topview_tvseries', 'url_update'));
     }
     public function category($slug)
     {
@@ -273,19 +274,19 @@ class IndexController extends Controller
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
 
-         //movie asia
-         
-        
+        //movie asia
+
+
         $country__korea_slug = Country::where('title', 'LIKE', '%han quoc%')->first();
- 
-         $movie_korea = Movie::where('country_id', $country__korea_slug->id)->where('category_id', $cate_movie->id)->where('status', 1)->with(['episode' => function ($query) {
-             $query->orderBy('episode', 'ASC');
-         }])->with(['movie_image' => function ($thumb) {
-             $thumb->where('is_thumbnail', 1);
-         }])->orderBy('updated_at', 'DESC')->get();
-         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
-         $url_update = $api_ophim['pathImage'];
-        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix','movie_korea','url_update'));
+
+        $movie_korea = Movie::where('country_id', $country__korea_slug->id)->where('category_id', $cate_movie->id)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->get();
+        $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
+        $url_update = $api_ophim['pathImage'];
+        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix', 'movie_korea', 'url_update'));
     }
     public function year($year)
     {
@@ -309,7 +310,7 @@ class IndexController extends Controller
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         //dd($movie);
-        return view('pages.year', compact('category', 'genre', 'country', 'year', 'movie','url_update'));
+        return view('pages.year', compact('category', 'genre', 'country', 'year', 'movie', 'url_update'));
     }
 
     public function tag($tag)
@@ -320,13 +321,13 @@ class IndexController extends Controller
         $tag = $tag;
         $movie = Movie::join('movie_tags', 'movies.id', '=', 'movie_tags.movie_id')->where('tags', 'LIKE', '%' . $tag . '%')->where('status', 1)->with(['episode' => function ($query) {
             $query->orderBy('episode', 'ASC');
-            }])->with(['movie_image' => function ($thumb) {
-                $thumb->where('is_thumbnail', 1);
-            }])->orderBy('updated_at', 'DESC')->paginate(20);
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->paginate(20);
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         //dd($movie);
-        return view('pages.tag', compact('category', 'genre', 'country', 'tag', 'movie','url_update'));
+        return view('pages.tag', compact('category', 'genre', 'country', 'tag', 'movie', 'url_update'));
     }
     public function genre($slug)
     {
@@ -350,7 +351,7 @@ class IndexController extends Controller
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         //dd($many_genre);
-        return view('pages.genre', compact('category', 'genre', 'country', 'gen_slug', 'movie','url_update'));
+        return view('pages.genre', compact('category', 'genre', 'country', 'gen_slug', 'movie', 'url_update'));
     }
     public function country($slug)
     {
@@ -366,7 +367,7 @@ class IndexController extends Controller
         }])->orderBy('updated_at', 'DESC')->paginate(20);
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
-        return view('pages.country', compact('category', 'genre', 'country', 'count_slug', 'movie','url_update'));
+        return view('pages.country', compact('category', 'genre', 'country', 'count_slug', 'movie', 'url_update'));
     }
     public function all_movies()
     {
@@ -400,7 +401,7 @@ class IndexController extends Controller
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         //dd($many_genre);
-        return view('pages.directors', compact('category', 'genre', 'country', 'directors_slug', 'movie','url_update'));
+        return view('pages.directors', compact('category', 'genre', 'country', 'directors_slug', 'movie', 'url_update'));
     }
     public function cast($slug)
     {
@@ -423,7 +424,7 @@ class IndexController extends Controller
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         //dd($many_genre);
-        return view('pages.cast', compact('category', 'genre', 'country', 'cast_slug', 'movie','url_update'));
+        return view('pages.cast', compact('category', 'genre', 'country', 'cast_slug', 'movie', 'url_update'));
     }
     public function movie(Request $request, $slug)
     {
@@ -477,19 +478,19 @@ class IndexController extends Controller
         // foreach ($data->movie_rating as $value) {
 
         // if ($is_conn == true) {
-            $api_imdb = Http::get('https://www.omdbapi.com/?i=' . $movie->imdb . '&apikey=6c2f1ca1');
+        $api_imdb = Http::get('https://www.omdbapi.com/?i=' . $movie->imdb . '&apikey=6c2f1ca1');
 
 
-            if ($api_imdb->status() == 200) {
-                if ($api_imdb['Response'] == "True" && $api_imdb['imdbRating'] != "N/A") {
-                    $values = $api_imdb['imdbRating'] . ' /10';
-                } elseif ($api_imdb['Response'] == "False") {
-                    $values = "N/A";
-                } elseif ($api_imdb['Response'] == "True") {
-                    $values = $api_imdb['imdbRating'];
-                }
-            } else
-                return $values = "N/A";
+        if ($api_imdb->status() == 200) {
+            if ($api_imdb['Response'] == "True" && $api_imdb['imdbRating'] != "N/A") {
+                $values = $api_imdb['imdbRating'] . ' /10';
+            } elseif ($api_imdb['Response'] == "False") {
+                $values = "N/A";
+            } elseif ($api_imdb['Response'] == "True") {
+                $values = $api_imdb['imdbRating'];
+            }
+        } else
+            return $values = "N/A";
         // } else
         //     return $values = "Connection false!";
 
@@ -547,7 +548,7 @@ class IndexController extends Controller
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
 
-        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'episode_first', 'episode_current_list_count', 'times', 'values', 'link_imdb', 'count_total', 'rating','movie_thumbnail','url_update'));
+        return view('pages.movie', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'episode_first', 'episode_current_list_count', 'times', 'values', 'link_imdb', 'count_total', 'rating', 'movie_thumbnail', 'url_update'));
     }
     public function add_rating(Request $request)
     {
@@ -659,7 +660,7 @@ class IndexController extends Controller
             $episode_current_list_count = $episode_current_list->count();
             $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
-            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count','url_update'));
+            return view('pages.watch', compact('category', 'genre', 'country', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count', 'url_update'));
         } catch (ModelNotFoundException $th) {
             return redirect()->back();
         }
@@ -736,7 +737,7 @@ class IndexController extends Controller
             $movie = $movie_array->paginate(20);
             $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
-            return view('pages.locphim', compact('category', 'genre', 'country', 'movie','url_update'));
+            return view('pages.locphim', compact('category', 'genre', 'country', 'movie', 'url_update'));
         }
     }
     public function my_list()
@@ -757,7 +758,7 @@ class IndexController extends Controller
 
         return view('pages.my_recent', compact('category'));
     }
-   
+
     public function policy()
     {
         return view('pages.policy');
@@ -765,5 +766,42 @@ class IndexController extends Controller
     public function watches($slug)
     {
         return redirect()->back();
+    }
+
+    public function ajax_episode($slug, $tap, $server_active)
+    {
+        $movie = Movie::with('episode')->where('slug', $slug)->where('status', 1)->first();
+        if (!isset($movie)) {
+            return response()->json([
+                'success' => false,
+            ]);
+        }
+        $ser = substr($server_active, 7, 10);
+
+        try {
+            if (isset($tap)) {
+                $tapphim = $tap;
+                $tapphim = substr($tap, 4, 10);
+                $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
+                if (!isset($episode)) {
+                    return response()->json([
+                        'success' => false,
+                    ]);
+                }
+            } else {
+                $tapphim = 1;
+                $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
+            }
+
+
+            return response()->json([
+                'success' => true,
+                'data'=>$episode->linkphim
+            ]);
+        } catch (ModelNotFoundException $th) {
+            return response()->json([
+                'success' => false,
+            ]);
+        }
     }
 }
