@@ -557,11 +557,13 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     .then(data => {
                         var divElement = document.getElementById("mainiframe");
                         divElement.src = data.data;
+                       
                         var index = url.indexOf("watch/");
                         var result = url.slice(index + 6);
                         var newUrl = '/xem-phim/' + result;
                         history.replaceState({}, null, newUrl);
                         history.pushState({}, null, newUrl);
+                        add_recent();
                     })
                     .catch(error => {
                         // Xử lý lỗi nếu có
