@@ -163,8 +163,8 @@
                     @if ($movie->type_movie == 0)
                         @foreach ($episode_list as $key => $ep)
                             @if ($ep->server_id == $ser->id)
-                                <div class="server{{ $server_active == 'server-' . $ser->id ? ' server-active' : '' }}"
-                                    onclick="location.href='{{ url('xem-phim/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
+                                <div class="server{{ $server_active == 'server-' . $ser->id ? ' active-ep' : '' }} episode"
+                                    data-url="{{ url('api/watch/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}">
                                     Server: {{ $ser->title }}</div>
                             @endif
                         @endforeach
@@ -533,40 +533,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
             }
         });
     </script>
-    <script>
-        // Thay đổi URL hiện tại bằng URL mới
-        // var newUrl = '/movie/{{ $movie->slug }}';
-        // history.replaceState({}, null, newUrl);
 
-        // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
-
-        //history.pushState({}, null, '/watch/{{ $movie->slug }}');
-
-        function onDevToolsOpen() {
-
-            // Lấy đối tượng div bằng cách sử dụng id
-            var divElement = document.getElementById("mainiframe");
-            divElement.src = "";
-
-            setTimeout(console.clear.bind(console))
-            setTimeout(() => {
-                console.log(
-                    'open devtool.',
-                )
-            }, 10);
-            const script = document.querySelector('script');
-            script.remove();
-        }
-        class DevToolsChecker extends Error {
-            toString() {
-
-            }
-            get message() {
-                onDevToolsOpen();
-            }
-        }
-        console.log(new DevToolsChecker());
-    </script>
     <script>
         var buttons = document.querySelectorAll('.episode');
         var activeButton = document.querySelector('.episode.active-ep');
@@ -602,6 +569,44 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     });
             });
         });
+    </script>
+    <script>
+        // Thay đổi URL hiện tại bằng URL mới
+        // var newUrl = '/movie/{{ $movie->slug }}';
+        // history.replaceState({}, null, newUrl);
+
+        // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
+
+        //history.pushState({}, null, '/watch/{{ $movie->slug }}');
+
+        function onDevToolsOpen() {
+
+            // Lấy đối tượng div bằng cách sử dụng id
+            var divElement = document.getElementById("mainiframe");
+            divElement.src = "";
+            var buttons = document.querySelectorAll('.episode');
+            buttons.forEach(function(button) {
+                button.style.display = 'none';
+            });
+
+            setTimeout(console.clear.bind(console))
+            setTimeout(() => {
+                console.log(
+                    'open devtool.',
+                )
+            }, 10);
+            const script = document.querySelector('script');
+            script.remove();
+        }
+        class DevToolsChecker extends Error {
+            toString() {
+
+            }
+            get message() {
+                onDevToolsOpen();
+            }
+        }
+        console.log(new DevToolsChecker());
     </script>
 
 @endsection
