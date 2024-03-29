@@ -81,7 +81,7 @@ class IndexController extends Controller
     }
     public function home()
     {
-        $category = Category::orderBy('id', 'ASC')->where('status', 1)->where('nav', 1)->get();
+        $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         //qua ba
