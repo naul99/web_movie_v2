@@ -31,11 +31,13 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th>Image</th>
+                                <th scope="col">Thumbnail</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Name En</th>
-                                <th scope="col">Slug</th>
                                 <th scope="col">Year</th>
                                 <th scope="col">Manages</th>
+                                <th scope="col" style="width: 90px">Notice</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -55,9 +57,11 @@
                                 <tr>
                                     <td>{{ $key }}</td>
                                     <td><img width="90%" data-original="{{ $link_image }}{{ $mov['thumb_url'] }}"></td>
+                                    <td><img width="90%" data-original="{{ $link_image }}{{ $mov['poster_url'] }}">
+                                    </td>
                                     <td>{{ $mov['name'] }}</td>
                                     <td>{{ $mov['origin_name'] }}</td>
-                                    <td>{{ $mov['slug'] }}</td>
+
                                     <td>{{ $mov['year'] }}</td>
                                     <td>
                                         @if ($found)
@@ -76,6 +80,13 @@
                                                 <input type="submit" value="Create">
 
                                             </form>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($found)
+                                            Đã Có
+                                        @else
+                                            Chưa Có
                                         @endif
                                     </td>
                                 </tr>
