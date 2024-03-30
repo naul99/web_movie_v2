@@ -1007,10 +1007,7 @@ class MovieController extends Controller
                     $ep->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
                     $ep->save();
                 }
-                else{
-                    toastr()->info('Các tập phim đã là mới nhất nhé.', 'Thông báo');
-                    return redirect()->back();
-                }
+               
             }
         }
         toastr()->success('Mình đã thêm các tập mới nhất', 'Cập nhật thành công');
