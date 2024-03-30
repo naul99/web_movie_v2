@@ -1006,6 +1006,8 @@ class MovieController extends Controller
                     $ep->created_at = Carbon::now('Asia/Ho_Chi_Minh');
                     $ep->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
                     $ep->save();
+                    $movie->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                    $movie->save();
                 }
                
             }
