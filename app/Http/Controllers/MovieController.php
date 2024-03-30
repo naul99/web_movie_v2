@@ -669,9 +669,12 @@ class MovieController extends Controller
     }
     public function get_api_ophim()
     {
+        $movies = Movie::pluck('title');
+
         $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
         $api_ophim = Http::get($path_ophim)->json();
         $link_image = $api_ophim['pathImage'];
+
         if (isset($_GET['next_page'])) {
             $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
             $api_ophim = Http::get($path_ophim)->json();
@@ -679,13 +682,13 @@ class MovieController extends Controller
         }
         if (isset($_GET['search_ophim'])) {
 
-            $path_ophim_search = "https://ophim11.cc/_next/data/s4OlXy8jONoHVWAT5vg7b/tim-kiem.json?keyword=" . $_GET['search_ophim'];
+            $path_ophim_search = "https://ophim14.cc/_next/data/t1xATi4DT1y8meOFbKaEf/tim-kiem.json?keyword=" . $_GET['search_ophim'];
             $api_ophims = Http::get($path_ophim_search)->json();
             $api_ophim = $api_ophims['pageProps']['data'];
             return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
         }
 
-        return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
+        return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
     }
     public function auto_create(Request $request)
     {
@@ -971,5 +974,47 @@ class MovieController extends Controller
         $str = preg_replace('/\s+/', '-', $str);
         // Đổi ký tự có dấu thành không dấu
         return $str;
+    }
+    public function auto_update_episode(Request $request)
+    {
+        $data = $request->all();
+        $movie = Movie::with('episode')->select('id')->where('title', $data['title'])->first();
+
+        $path_ophim = "https://ophim1.com/phim/" . $data['slug'];
+        $api_ophim = Http::get($path_ophim)->json();
+
+        foreach ($api_ophim['episodes'] as $episodes) {
+            foreach ($episodes['server_data'] as $episode) {
+                $existingEpisodeNames = $movie->episode->pluck('episode')->toArray();
+                if (!in_array($episode['name'], $existingEpisodeNames)) {
+                    $ep = new Episode();
+                    $ep->movie_id = $movie->id;
+                    $ep->linkphim = "/api/embed_vip?link=" . $episode['link_m3u8'];
+                    $ep->episode = $episode['name'];
+                    $check_server = Server::where('title', 'LIKE', '%' . $episodes['server_name'] . '%')->first();
+        
+                    if (!isset($check_server)) {
+                        $server = new Server();
+                        $server->title = $episodes['server_name'];
+                        $server->description = $episodes['server_name'];
+                        $server->status = 1;
+                        $server->save();
+                        $ep->server_id = $server->id;
+                    } else {
+                        $ep->server_id = $check_server->id;
+                    }
+                    $ep->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+                    $ep->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                    $ep->save();
+                }
+                else{
+                    toastr()->info('Các tập phim đã là mới nhất nhé.', 'Thông báo');
+                    return redirect()->back();
+                }
+            }
+        }
+        toastr()->success('Mình đã thêm các tập mới nhất', 'Cập nhật thành công');
+        return redirect()->back();
+
     }
 }

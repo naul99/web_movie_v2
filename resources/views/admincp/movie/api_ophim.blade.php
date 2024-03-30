@@ -40,29 +40,47 @@
                         </thead>
                         <tbody>
                             @foreach ($api_ophim['items'] as $key => $mov)
+                                @php
+                                    $found = false;
+                                @endphp
+                                @foreach ($movies as $mo)
+                                    @if ($mov['name'] == $mo)
+                                        @php
+                                            $found = true;
+                                            break;
+                                        @endphp
+                                    @endif
+                                @endforeach
+
                                 <tr>
                                     <td>{{ $key }}</td>
-                                    <td><img width="90%"
-                                            data-original="{{ $link_image }}{{ $mov['thumb_url'] }}">
-                                    </td>
+                                    <td><img width="90%" data-original="{{ $link_image }}{{ $mov['thumb_url'] }}"></td>
                                     <td>{{ $mov['name'] }}</td>
                                     <td>{{ $mov['origin_name'] }}</td>
                                     <td>{{ $mov['slug'] }}</td>
                                     <td>{{ $mov['year'] }}</td>
                                     <td>
+                                        @if ($found)
+                                            <form action="{{ route('auto_update_episode') }}" method="post">
+                                                @csrf
+                                                <input name='slug' value="{{ $mov['slug'] }}" hidden>
+                                                <input name='title' value="{{ $mov['name'] }}" hidden>
+                                                <input type="submit" value="Update Episode">
 
-                                        <form action="{{ route('auto_create') }}" method="post">
-                                            @csrf
-                                            <input name='slug' value="{{ $mov['slug'] }}" hidden>
-                                            <input name='title' value="{{ $mov['name'] }}" hidden>
-                                            <input type="submit" value="Create">
-                                        </form>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('auto_create') }}" method="post">
+                                                @csrf
+                                                <input name='slug' value="{{ $mov['slug'] }}" hidden>
+                                                <input name='title' value="{{ $mov['name'] }}" hidden>
+                                                <input type="submit" value="Create">
 
-
-
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>

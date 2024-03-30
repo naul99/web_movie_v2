@@ -118,36 +118,38 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('customers-status', [UserController::class, 'customer_status'])->name('customersstatus');
     Route::delete('delete-resume/{id}', [ResumeController::class, 'delete'])->name('delete_resume');
 
+    Route::post('auto_create', [MovieController::class, 'auto_create'])->name('auto_create');
+    Route::post('auto_update', [MovieController::class, 'auto_update_episode'])->name('auto_update_episode');
 });
 //route api
 Route::get('get_api_ophim', [MovieController::class, 'get_api_ophim'])->name('get_api_ophim');
-Route::post('auto_create', [MovieController::class, 'auto_create'])->name('auto_create');
+
 //route ajax
 
 Route::get('select-role', [AssignController::class, 'select_role'])->name('select-role');
 Route::get('select-movie', [EpisodeController::class, 'select_movie'])->name('select-movie');
 Route::post('/update-season-phim', [MovieController::class, 'update_season']);
 Route::get('/update-year-phim', [MovieController::class, 'update_year']);
-Route::get('movie-hot',[MovieController::class,'movie_hot'])->name('movie-hot-change');
-Route::get('movie-status',[MovieController::class,'movie_status'])->name('movie-status-change');
-Route::get('comment-status',[ManageCommentController::class,'comment_status'])->name('comment-status-change');
-Route::get('reply-status',[ManageCommentController::class,'reply_status'])->name('reply-status-change');
-Route::post('/delete-comment',[CommentsController::class,'destroy'])->name('delete-comment');
-Route::post('/edit-comment',[CommentsController::class,'edit'])->name('edit-comment');
-Route::post('/update-imdb',[MovieController::class,'update_imdb'])->name('update-imdb');
-Route::get('/api/embed_vip',[EmbedController::class,'embed_vip']);
-Route::get('/api/embed_ads',[EmbedController::class,'embed_ads']);
-Route::get('/api/embed_m3u8',[EmbedController::class,'embed_m3u8']);
-Route::get('/site-map',function(){
+Route::get('movie-hot', [MovieController::class, 'movie_hot'])->name('movie-hot-change');
+Route::get('movie-status', [MovieController::class, 'movie_status'])->name('movie-status-change');
+Route::get('comment-status', [ManageCommentController::class, 'comment_status'])->name('comment-status-change');
+Route::get('reply-status', [ManageCommentController::class, 'reply_status'])->name('reply-status-change');
+Route::post('/delete-comment', [CommentsController::class, 'destroy'])->name('delete-comment');
+Route::post('/edit-comment', [CommentsController::class, 'edit'])->name('edit-comment');
+Route::post('/update-imdb', [MovieController::class, 'update_imdb'])->name('update-imdb');
+Route::get('/api/embed_vip', [EmbedController::class, 'embed_vip']);
+Route::get('/api/embed_ads', [EmbedController::class, 'embed_ads']);
+Route::get('/api/embed_m3u8', [EmbedController::class, 'embed_m3u8']);
+Route::get('/site-map', function () {
     return Artisan::call('sitemap:create');
 });
 Route::get('/watch/{slug}', [IndexController::class, 'watches']);
 // Clear application cache:
 
-Route::get('/clear-cache', function() {
-     Artisan::call('optimize:clear');
-     toastr()->success("Clear cache success.", 'Success');
-     return redirect()->back();
+Route::get('/clear-cache', function () {
+    Artisan::call('optimize:clear');
+    toastr()->success("Clear cache success.", 'Success');
+    return redirect()->back();
 });
 
 Route::get('api/watch/{slug}/{tap}/{server_active}', [IndexController::class, 'ajax_episode']);
