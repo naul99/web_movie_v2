@@ -678,14 +678,14 @@ class MovieController extends Controller
         if (isset($_GET['next_page'])) {
             $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
             $api_ophim = Http::get($path_ophim)->json();
-            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
+            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image','movies'));
         }
         if (isset($_GET['search_ophim'])) {
 
             $path_ophim_search = "https://ophim14.cc/_next/data/t1xATi4DT1y8meOFbKaEf/tim-kiem.json?keyword=" . $_GET['search_ophim'];
             $api_ophims = Http::get($path_ophim_search)->json();
             $api_ophim = $api_ophims['pageProps']['data'];
-            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image'));
+            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image','movies'));
         }
 
         return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
