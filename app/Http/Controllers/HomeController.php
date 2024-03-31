@@ -39,7 +39,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-       
+
         $range = new Minutes();
 
         $range->setStart(Carbon::now()->subDays(365));
@@ -52,6 +52,10 @@ class HomeController extends Controller
         // foreach ($pageViews as $key => $value) {
         //     $totalView = $value->total;
         // }
+        $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $week = Carbon::today('Asia/Ho_Chi_Minh')->subDays(7)->startOfDay();
 
         $total_movie_home = Movie::count();
         $total_category_home = Category::count();
@@ -59,15 +63,22 @@ class HomeController extends Controller
         $total_country_home = Country::count();
         $total_user_home = Customer::count();
 
-        $top_browser = Browser::join('tracker_agents','tracker_sessions.agent_id','=','tracker_agents.id')
-        ->select('browser', DB::raw('count(*) as total'))->groupBy('browser')->orderBy('total', 'DESC')->take(5)->get();
-        
-        return view('home', compact('total_movie_home', 'total_category_home', 'total_genre_home', 'total_country_home', 'total_user_home', 'pageViews','top_browser'));
+        $top_browser = Browser::join('tracker_agents', 'tracker_sessions.agent_id', '=', 'tracker_agents.id')
+            ->select('browser', DB::raw('count(*) as total'))->groupBy('browser')->orderBy('total', 'DESC')->take(5)->get();
+
+
+        $topview_week = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')->whereBetween('date_views', [$week, $day])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(20)->unique('title');
+
+        $topview_month = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')->whereBetween('date_views', [$startOfMonth, $endOfMonth])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(20)->unique('title');
+
+        $topview = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')->where('status', 1)->orderBy('count_views', 'DESC')->paginate(20)->unique('title');
+
+
+        return view('home', compact('total_movie_home', 'total_category_home', 'total_genre_home', 'total_country_home', 'total_user_home', 'pageViews', 'top_browser', 'topview_week', 'topview_month', 'topview'));
     }
     public function online()
     {
         $onlineUsers = Tracker::onlineUsers()->count();
         echo $onlineUsers;
     }
-
 }

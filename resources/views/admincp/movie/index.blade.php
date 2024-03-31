@@ -59,7 +59,7 @@
                                 <th scope="col">Created_at</th>
                                 {{-- <th scope="col">Ngay cap nhat</th> --}}
                                 <th scope="col">Year</th>
-                                <th scope="col">Paid</th>
+                               
                                 <th scope="col">Status</th>
                                 <th scope="col">Manages</th>
                             </tr>
@@ -183,14 +183,6 @@
                                                 'disabled',
                                                 'placeholder' => '-Year-',
                                             ]) !!}
-                                        @endif
-
-                                    </td>
-                                    <td>
-                                        @if ($mov->paid_movie == 1)
-                                            Có
-                                        @else
-                                            Không
                                         @endif
 
                                     </td>

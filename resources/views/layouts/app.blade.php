@@ -445,7 +445,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 {{-- <script src="{{ asset('backend/js/index1.js') }}"></script> --}}
 
                 @yield('content')
+                @yield('content2')
+                @yield('content3')
+                @yield('content4')
                 @yield('content1')
+               
             </div>
             @yield('chart')
             <div class="clearfix"></div>

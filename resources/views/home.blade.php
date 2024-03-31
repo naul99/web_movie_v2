@@ -50,6 +50,78 @@
     </div>
 @endsection
 
+@section('content2')
+<div class="charts">
+    <div class="col-md-4 charts-grids widget">
+        <div class="card-header">
+            <h3>Top Film Weekly</h3>
+        </div>
+        <div id="container" style="width: 100%; height: 270px; overflow: auto; ">
+            <table class="table">
+                <thead>
+                    @foreach ($topview_week as $key => $movie)
+                        <tr>
+                            <th>{{ $movie->title }}</th>
+                            <th>Views-({{ $movie->count_views }})</th>
+                        </tr>
+                    @endforeach
+                </thead>
+            </table>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+    
+@endsection
+@section('content3')
+<div class="charts">
+    <div class="col-md-4 charts-grids widget">
+        <div class="card-header">
+            <h3>Top Film Monthly</h3>
+        </div>
+        <div id="container" style="width: 100%; height: 270px; overflow: auto; ">
+            <table class="table">
+                <thead>
+                    @foreach ($topview_month as $key => $movie)
+                        <tr>
+                            <th>{{ $movie->title }}</th>
+                            <th>Views-({{ $movie->count_views }})</th>
+                        </tr>
+                    @endforeach
+                </thead>
+            </table>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+    
+@endsection
+@section('content4')
+<div class="charts">
+    <div class="col-md-4 charts-grids widget">
+        <div class="card-header">
+            <h3>Top Film</h3>
+        </div>
+        <div id="container" style="width: 100%; height: 270px; overflow: auto; ">
+            <table class="table">
+                <thead>
+                    @foreach ($topview as $key => $movie)
+                        <tr>
+                            <th>{{ $movie->title }}</th>
+                            <th>Views-({{ $movie->count_views }})</th>
+                        </tr>
+                    @endforeach
+                </thead>
+            </table>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+    
+@endsection
 @section('content1')
     @can('statist')
         <div class="col-md-3 stat">
@@ -110,6 +182,8 @@
         </div> --}}
         <div class="clearfix"></div>
     </div>
+   
+
     <!-- for amcharts js -->
     <script src="{{ asset('backend/js/amcharts.js') }}"></script>
     <script src="{{ asset('backend/js/serial.js') }}"></script>
