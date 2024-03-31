@@ -673,6 +673,7 @@ class MovieController extends Controller
 
         $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
         $api_ophim = Http::get($path_ophim)->json();
+       
         $link_image = $api_ophim['pathImage'];
 
         if (isset($_GET['next_page'])) {

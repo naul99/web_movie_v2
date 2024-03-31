@@ -34,6 +34,8 @@
                                 <th scope="col">Thumbnail</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Name En</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Episode</th>
                                 <th scope="col">Year</th>
                                 <th scope="col">Manages</th>
                                 <th scope="col" style="width: 90px">Notice</th>
@@ -42,6 +44,10 @@
                         </thead>
                         <tbody>
                             @foreach ($api_ophim['items'] as $key => $mov)
+                                @php
+                                    $api_detail = Http::get('Https://ophim1.com/phim/' . $mov['slug'])->json();
+
+                                @endphp
                                 @php
                                     $found = false;
                                 @endphp
@@ -61,8 +67,11 @@
                                     </td>
                                     <td>{{ $mov['name'] }}</td>
                                     <td>{{ $mov['origin_name'] }}</td>
-
+                                    <td>{{ $api_detail['movie']['type'] }}</td>
+                                    <td>{{ $api_detail['movie']['episode_current'] }}/{{ $api_detail['movie']['episode_total'] }}
+                                    </td>
                                     <td>{{ $mov['year'] }}</td>
+
                                     <td>
                                         @if ($found)
                                             <form action="{{ route('auto_update_episode') }}" method="post">
