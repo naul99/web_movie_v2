@@ -112,13 +112,14 @@ class IndexController extends Controller
 
         //dd($hot);
         $topview = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->first();
         $topview_tvseries = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.type_movie', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
+            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.type_movie', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->first();
+            // dd($topview_tvseries);
         $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
             ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
-            ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->paginate(1);
-
+            ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->first();
+      
         // $topview_week = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
         //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
         //     ->whereBetween('date_views', [$week, $day])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
@@ -126,10 +127,6 @@ class IndexController extends Controller
         // $topview_month = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
         //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
         //     ->whereBetween('date_views', [$startOfMonth, $endOfMonth])->where('status', 1)->orderBy('count_views', 'DESC')->paginate(5);
-
-        // $movie_new = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-        //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
-        //     ->where('status', 1)->orderBy('created_at', 'DESC')->paginate(10)->unique();
 
         $gen_slug = Genre::where('title', 'LIKE', '%hoat hinh%')->first();
 
