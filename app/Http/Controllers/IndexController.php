@@ -59,11 +59,10 @@ class IndexController extends Controller
                     $many_cast = [];
                 }
 
-                $querys->where('title', 'LIKE', '%' . $search . '%')
-                    ->orWhere('name_english', 'LIKE', '%' . $search . '%')->orWhereIn('id', $many_cast);
+                $querys->orWhere('name_english', 'LIKE', '%' . $search . '%')->orWhereIn('id', $many_cast)->orwhereRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE)",[$search]);
             })->where('status', 1)->with(['episode' => function ($ep) {
                 $ep->orderBy('episode', 'ASC');
-            }])->paginate(20);
+            }])->orderBy('id','DESC')->paginate(20);
             $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
             //dd($movie);
