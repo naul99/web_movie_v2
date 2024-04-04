@@ -140,6 +140,21 @@ class IndexController extends Controller
             $thumb->where('is_thumbnail', 1);
         }])->orderBy('updated_at', 'DESC')->get();
 
+        //movie oscar
+
+        $oscar = Genre::where('title', 'LIKE', '%Oscar%')->first();
+
+        $movie_oscar = Movie_Genre::where('genre_id', $oscar->id)->get();
+        $many_oscar = [];
+        foreach ($movie_oscar as $key => $mov) {
+            $many_oscar[] = $mov->movie_id;
+        }
+        $movies_oscar = Movie::whereIn('id', $many_oscar)->where('status', 1)->with(['episode' => function ($query) {
+            $query->orderBy('episode', 'ASC');
+        }])->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->orderBy('updated_at', 'DESC')->get();
+
 
         //movie us
         $list_country = ['Au My', 'Phap', 'Anh', 'Y', 'Duc'];
@@ -282,7 +297,7 @@ class IndexController extends Controller
         }])->orderBy('updated_at', 'DESC')->get();
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
-        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix', 'movie_korea', 'url_update'));
+        return view('pages.category', compact('category', 'genre', 'country', 'category_page', 'hot', 'movie_animation', 'gen_slug', 'cate_movie', 'movie_asia', 'movie_netlix', 'movie_korea', 'url_update','movies_oscar'));
     }
     public function year($year)
     {

@@ -28,4 +28,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
         </article>
 
     </section>
+    <div class="text-right">
+        {{ $movie->appends($_GET)->links('vendor.pagination.custom') }}
+    </div>
 @endsection

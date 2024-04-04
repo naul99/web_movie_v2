@@ -3,6 +3,8 @@
 /public/storage
 /public/json/
 /public/uploads/movie/*
+/public/hls/
+/public/hls/*
 /public/assets/
 #/public/uploads/logo/
 /storage/*.key
