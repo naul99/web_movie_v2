@@ -3,7 +3,8 @@
     <script>
         var player_aaaa = {
             "vod_data": {
-                "vod_name": "{{ $movie->title }}"
+                "vod_name": "{{ $movie->title }}",
+                "vod_position": "{{ $movie->slug }}_{{ $tapphim }}"
             },
         }
     </script>
@@ -561,11 +562,18 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                         return response.json();
                     })
                     .then(data => {
+                        var index = url.indexOf("watch/");
+                        var result = url.slice(index + 6);
+
+                        var parts = result.split("/");
+                        var tapPart = parts[1];
+                        var tapParts = tapPart.split("tap-");
+                        var episode = tapParts[1];
+
+                        player_aaaa.vod_data.vod_position = "{{ $movie->slug }}_" + episode;
                         var divElement = document.getElementById("mainiframe");
                         divElement.src = data.data;
 
-                        var index = url.indexOf("watch/");
-                        var result = url.slice(index + 6);
                         var newUrl = '/xem-phim/' + result;
                         history.replaceState({}, null, newUrl);
                         history.pushState({}, null, newUrl);
