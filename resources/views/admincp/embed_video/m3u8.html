@@ -766,6 +766,7 @@ Animações do botão.
 <body>
     <div id="jwplayer"></div>
     <script>
+        var title = parent.player_aaaa.vod_data.vod_name;
         function getQuery(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&]*)');
@@ -825,6 +826,8 @@ Animações do botão.
                     "playlist": [
                         {
                             "file": link,
+                            "title": title,
+                            "description": "Bạn đang xem",
                             "tracks": [{
                                 "kind": "captions",
                                 "file": "/assets/" + sub,
@@ -873,6 +876,8 @@ Animações do botão.
                     "playlist": [
                         {
                             "file": link,
+                            "title": title,
+                            "description": "Bạn đang xem",
                         }
                     ],
                     playbackRateControls: true,

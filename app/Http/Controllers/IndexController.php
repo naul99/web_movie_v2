@@ -632,7 +632,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->take(35)->get();
+        }])->take(30)->get();
 
         $ser = substr($server_active, 7, 10);
 

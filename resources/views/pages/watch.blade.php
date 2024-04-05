@@ -1,6 +1,12 @@
 @extends('layout')
 @section('content')
-
+    <script>
+        var player_aaaa = {
+            "vod_data": {
+                "vod_name": "{{ $movie->title }}"
+            },
+        }
+    </script>
     <style>
         .video {
             position: relative;
@@ -557,7 +563,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     .then(data => {
                         var divElement = document.getElementById("mainiframe");
                         divElement.src = data.data;
-                       
+
                         var index = url.indexOf("watch/");
                         var result = url.slice(index + 6);
                         var newUrl = '/xem-phim/' + result;

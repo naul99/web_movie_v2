@@ -16,7 +16,7 @@
             overflow: hidden;
         }
     </style>
-     <style>
+    <style>
         @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&display=swap");
 
         :root {
@@ -38,7 +38,8 @@
             box-sizing: border-box;
             font-size: 62.5%;
         }
-        .jw-rightclick{
+
+        .jw-rightclick {
             display: none !important;
         }
 
@@ -765,6 +766,10 @@ Animações do botão.
 <body>
     <div id="jwplayer"></div>
     <script>
+
+
+        var title = parent.player_aaaa.vod_data.vod_name;
+
         function getQuery(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&]*)');
@@ -782,7 +787,6 @@ Animações do botão.
         var link = getQuery('link');
         var sub = getSub('sub');
 
-        var tag;
 
         // Function to set cookie
         function setCookie(cname, cvalue, exdays) {
@@ -824,6 +828,8 @@ Animações do botão.
                     "playlist": [
                         {
                             "file": link,
+                            "title":title,
+                            "description": "Bạn đang xem",
                             "tracks": [{
                                 "kind": "captions",
                                 "file": "/assets/" + sub,
@@ -870,7 +876,13 @@ Animações do botão.
 
                     "playlist": [
                         {
-                            "file": link,
+                            title: title,
+                            description: "Bạn đang xem",
+                            sources: [{
+                                file: link,
+                                type: 'hls',
+                                default: true
+                            }],
                         }
                     ],
                     playbackRateControls: true,
@@ -893,7 +905,7 @@ Animações do botão.
 
         this.setUpVideoEvent = function () {
 
-            
+
             playerInstance.on('time', function (event) {
                 // Lưu thời gian hiện tại vào cookie với tên là 'currentTime'
                 setCookie('currentTime_' + videoId, event.position, 7); // Cookie sẽ tồn tại trong 1 ngày
@@ -986,14 +998,7 @@ Animações do botão.
             playerInstance.addButton("https://rapidvid.net/ifr/vod/img/rw-10.svg", "back 10s", function () {
                 playerInstance.seek(playerInstance.getPosition() - 10);
             }, "back10s");
-            // var autoNextButton = document.getElementById('auto-next-button');
-            // autoNextButton.addEventListener('click', function () {
-            //     playerInstance.on('complete', function () {
-            //         console.log('Video đã phát hoàn thành.');
 
-            //     });
-
-            // });
         }
         setupVideo();
 
