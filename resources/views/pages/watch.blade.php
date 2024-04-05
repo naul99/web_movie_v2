@@ -342,7 +342,7 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
             More LIke This
         </h4>
         <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-            @foreach ($related->take(20) as $key => $rel)
+            @foreach ($related as $key => $rel)
                 @foreach ($rel->episode->take(1) as $ep)
                     <div class="video">
                         <a href="javascript:void(0)"
