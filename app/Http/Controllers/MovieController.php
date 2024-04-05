@@ -991,13 +991,7 @@ class MovieController extends Controller
                     $ep = new Episode();
                     $ep->movie_id = $movie->id;
                     $ep->linkphim = "/api/embed_vip?link=" . $episode['link_m3u8'];
-                    if($episode['name']=="Full"){
-                        $ep->episode = "FHD";
-                    }
-                    else{
-                        $ep->episode = $episode['name'];
-                    }
-                    
+                    $ep->episode = $episode['name'];
                     $check_server = Server::where('title', 'LIKE', '%' . $episodes['server_name'] . '%')->first();
         
                     if (!isset($check_server)) {

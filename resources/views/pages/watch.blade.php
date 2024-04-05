@@ -1,13 +1,25 @@
 @extends('layout')
 @section('content')
-    <script>
-        var player_aaaa = {
-            "vod_data": {
-                "vod_name": "{{ $movie->title }}",
-                "vod_position": "{{ $movie->slug }}_{{ $tapphim }}"
-            },
-        }
-    </script>
+    @if ($movie->type_movie == 1)
+        <script>
+            var player_aaaa = {
+                "vod_data": {
+                    "vod_name": "{{ $movie->title }}",
+                    "vod_position": "{{ $movie->slug }}_{{ $tapphim }}"
+                },
+            }
+        </script>
+    @else
+        <script>
+            var player_aaaa = {
+                "vod_data": {
+                    "vod_name": "{{ $movie->title }}",
+                    "vod_position": "{{ $movie->slug }}"
+                },
+            }
+        </script>
+    @endif
+
     <style>
         .video {
             position: relative;
@@ -565,12 +577,15 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                         var index = url.indexOf("watch/");
                         var result = url.slice(index + 6);
 
-                        var parts = result.split("/");
-                        var tapPart = parts[1];
-                        var tapParts = tapPart.split("tap-");
-                        var episode = tapParts[1];
+                        @if ($movie->type_movie == 1)
+                            var parts = result.split("/");
+                            var tapPart = parts[1];
+                            var tapParts = tapPart.split("tap-");
+                            var episode = tapParts[1];
 
-                        player_aaaa.vod_data.vod_position = "{{ $movie->slug }}_" + episode;
+                            player_aaaa.vod_data.vod_position = "{{ $movie->slug }}_" + episode;
+                        @endif
+
                         var divElement = document.getElementById("mainiframe");
                         divElement.src = data.data;
 
