@@ -71,7 +71,7 @@
     <meta property="og:image:height" content="300" />
     @if (!isset($movie->slug))
         <meta name="keywords"
-            content="Phim, xem phim, xem phim online, phim online, xem phim hd, phim vietsub, phim thuyet minh, fullhdphim" />
+            content="Phim, xem phim, xem phim online, phim online, xem phim hd, phim vietsub, phim thuyet minh, fullhdphim, fullhdphim.click" />
     @else
         <meta name="keywords"
             content="xem phim {{ $movie->title }},xem phim {{ $movie->title }} vietsub,xem phim {{ $movie->title }} online,xem phim {{ $movie->title }} bluray,xem phim {{ $movie->title }} hd,xem phim {{ $movie->title }} full hd,xem phim {{ $movie->title }} 1080p,xem phim {{ $movie->title }} vietsub online,xem phim {{ $movie->title }} free,xem phim {{ $movie->title }} miễn ph&#237;,xem online, phim chất lượng, si&#234;u n&#233;t, bluray,fullhd, xem phim {{ $movie->name_english }}" />
@@ -200,25 +200,26 @@
         @yield('content')
 
         @include('footer')
-        </div>
-
 
     </main>
 
     <div class="footer-navigation d-flex space-between">
-        <a href="/" class="nav-item active">
+        @php
+            $segment = Request::segment(1);
+        @endphp
+        <a href="/" class="nav-item @if ($segment == '') active @endif ">
             <i class="fa fa-home" aria-hidden="true"></i> </br>
             Home
         </a>
-        <a href="{{ route('tim-kiem') }}" class="nav-item">
+        <a href="{{ route('tim-kiem') }}" class="nav-item @if ($segment == 'tim-kiem') active @endif">
             <i class="fa fa-search" aria-hidden="true"></i></br>
             Search
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('my_recent') }} " class="nav-item @if ($segment == 'my-recent') active @endif">
             <i class="fa fa-film" aria-hidden="true"></i></br>
-            Latest
+            Recently Added
         </a>
-        <a href="#" class="nav-item">
+        <a href="#" onclick="return alert('I love You myself')" class="nav-item">
             <i class="fa fa-user" aria-hidden="true"></i></br>
             Account
         </a>

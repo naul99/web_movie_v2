@@ -77,7 +77,7 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
 
                                 $description = $h->movie_description->description;
 
-                                $trimmedDescription = substr($description, 0, 255);
+                                $trimmedDescription = substr($description, 0, 155);
 
                                 echo $trimmedDescription . '...';
                             @endphp
