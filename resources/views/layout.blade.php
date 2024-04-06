@@ -17,7 +17,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @if (isset($tapphim) && $movie->thuocphim == 1)
+    @if (isset($tapphim) && $movie->type_movie == 1)
         <title>
             Tập {{ $tapphim }} - {{ $movie->title }} | FullHDPhim
         </title>
@@ -33,7 +33,7 @@
             content="Fullhdphim, Phim hay - Xem phim hay nhất, xem phim online miễn phí, phim nhanh, Xem Phim Online, Phim Vietsub, Xem Phim Hay, phim HD , phim hot ,phim mới, phim bom tấn" />
     @else
         <meta name="description"
-            content="Xem Phim {{ $movie->title }} - {{ $movie->name_english }} ({{ $movie->year }})" />
+            content="Xem Phim {{ $movie->title }} - {{ $movie->name_english }} ({!! $movie->movie_description->description !!})" />
     @endif
     @if (!isset($movie->slug))
         <meta name="title" content="FullHDPhim | Xem Phim Chất Lượng Tốt Nhất" />
