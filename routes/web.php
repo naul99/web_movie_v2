@@ -153,3 +153,7 @@ Route::get('/clear-cache', function () {
 });
 
 Route::get('api/watch/{slug}/{tap}/{server_active}', [IndexController::class, 'ajax_episode']);
+// Route test link hls
+Route::get('/hls', function () {
+    return view('admincp.embed_video.hls');
+});
