@@ -165,9 +165,9 @@
     </style>
     <style>
         @media (max-width: 601px) {
-            h3 {
+            .title_mobile {
                 position: absolute;
-                bottom: -10px;
+                bottom: -21px;
                 left: 0;
                 right: 0;
                 background: rgba(0, 0, 0, .6);
@@ -181,7 +181,8 @@
                 z-index: 5;
             }
         }
-        h3 {
+
+        .title_mobile {
             position: absolute;
         }
     </style>

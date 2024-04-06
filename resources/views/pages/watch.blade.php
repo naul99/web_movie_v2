@@ -366,8 +366,8 @@ $image = substr($movie->movie_image->image, $startPos + strlen('movies/')); @end
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $rel->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
-                                poster="
+                            <img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                src="
                             @php
 $image_check = substr($rel->movie_image->image, 0, 5);
  $startPos = strpos($rel->movie_image->image, 'movies/');
@@ -375,12 +375,9 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $rel->movie_image->image) }} @endif
-                            ">
-                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
-                                type="video/mp4">
-                            Your browser does not support the video tag. --}}
-                            </video>
-                            <h3>{{ $rel->title }}</h3>
+                            " loading="lazy">
+                               
+                            <h3 class="title_mobile">{{ $rel->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 

@@ -2,15 +2,21 @@
 @section('content')
     <!-- hero section -->
     <style>
-         @media (max-width: 601px) {
-            .m-t-20{
+        @media (max-width: 601px) {
+            .m-t-20 {
                 margin-bottom: 20px;
+            }
+            .btn_filter {
+                font-size: 15px;
+            }
+            .stylish_filter {
+                font-size: 15px;
             }
         }
     </style>
     <div>
         <div class="">
-            @foreach ($hot->take(1) as $key => $h)
+            @foreach ($hot->skip(1) as $key => $h)
                 <section id="browse-dashboard" class=" d-flex direction-column flex-start middle-align">
                     <div>
                         <!--trailer video-->
@@ -87,7 +93,8 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                             @endforeach
 
 
-                            <button onclick="location.href='{{ route('movie', $h->slug) }}'" class="more-info-button m-t-20"><span>
+                            <button onclick="location.href='{{ route('movie', $h->slug) }}'"
+                                class="more-info-button m-t-20"><span>
                                     <svg viewBox="0 0 24 24">
                                         <path
                                             d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10zm-2 0a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8zm-9 6v-7h2v7h-2zm1-8.75a1.21 1.21 0 0 1-.877-.364A1.188 1.188 0 0 1 10.75 8c0-.348.123-.644.372-.886.247-.242.54-.364.878-.364.337 0 .63.122.877.364.248.242.373.538.373.886s-.124.644-.373.886A1.21 1.21 0 0 1 12 9.25z"
@@ -118,9 +125,9 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                             <div class="video">
                                 <a href="javascript:void(0)"
                                     onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                                   
-                                    <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
-                                        poster="
+
+                                    <img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                        src="
                                     @php
 $image_check = substr($mov->movie_image->image, 0, 5);
  $startPos = strpos($mov->movie_image->image, 'movies/');
@@ -128,11 +135,9 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                                    ">
-                                    {{-- <source src="https://live-par-2-cdn-alt.livepush.io/live/bigbuckbunnyclip/index.m3u8" type="application/x-mpegURL">
-                                        Your browser does not support the video tag. --}}
-                                    </video>
-                                    <h3>{{ $mov->title }}</h3>
+                                    " loading="lazy">
+
+                                    <h3 class="title_mobile">{{ $mov->title }}</h3>
                                 </a>
                                 <div class="video-description d-flex flex-end direction-column">
 
@@ -149,14 +154,14 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
 
                         <div>
                             <h4 class="heading f-w-8 text-shadow">
-                                 <?php
-                                    $originalTitle = $mov->title;
-                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
-                                        $shortenedTitle .= '...';
-                                    }
-                                    echo $shortenedTitle;
-                                    ?>
+                                <?php
+                                $originalTitle = $mov->title;
+                                $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                                if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                    $shortenedTitle .= '...';
+                                }
+                                echo $shortenedTitle;
+                                ?>
                             </h4>
                         </div>
                         <div class="info d-flex flex-middle flex-no-wrap">
@@ -182,8 +187,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                     @endif
                                 </p>
                             @endforeach
-                            <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
-                                style="color: #ffffff;"></i></i></a>
+                            <a class="button" href="{{ route('movie', $mov->slug) }}"><i
+                                    class="fa-solid fa-chevron-down fa-xl" style="color: #ffffff;"></i></i></a>
                         </div>
                 </div>
         </div>
@@ -204,8 +209,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
-                                poster="
+                            <img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                src="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5);
  $startPos = strpos($mov->movie_image->image, 'movies/');
@@ -213,12 +218,9 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                            ">
-                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
-                                type="video/mp4">
-                            Your browser does not support the video tag. --}}
-                            </video>
-                            <h3>{{ $mov->title }}</h3>
+                            " loading="lazy"> 
+
+                            <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -234,14 +236,14 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                         <?php
-                                    $originalTitle = $mov->title;
-                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
-                                        $shortenedTitle .= '...';
-                                    }
-                                    echo $shortenedTitle;
-                                    ?>
+                        <?php
+                        $originalTitle = $mov->title;
+                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                            $shortenedTitle .= '...';
+                        }
+                        echo $shortenedTitle;
+                        ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -258,7 +260,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         </p>
                     @endforeach
                     <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
-                        style="color: #ffffff;"></i></i></a>
+                            style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>
@@ -278,8 +280,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
-                                poster="
+                            <img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                src="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5);
  $startPos = strpos($mov->movie_image->image, 'movies/');
@@ -287,12 +289,9 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                            ">
-                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
-                                type="video/mp4">
-                            Your browser does not support the video tag. --}}
-                            </video>
-                            <h3>{{ $mov->title }}</h3>
+                            " loading="lazy">
+
+                            <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -308,14 +307,14 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                         <?php
-                                    $originalTitle = $mov->title;
-                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
-                                        $shortenedTitle .= '...';
-                                    }
-                                    echo $shortenedTitle;
-                                    ?>
+                        <?php
+                        $originalTitle = $mov->title;
+                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                            $shortenedTitle .= '...';
+                        }
+                        echo $shortenedTitle;
+                        ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -332,7 +331,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         </p>
                     @endforeach
                     <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
-                        style="color: #ffffff;"></i></i></a>
+                            style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>
@@ -352,8 +351,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
-                                poster="
+                            <img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                src="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5);
 $startPos = strpos($mov->movie_image->image, 'movies/');
@@ -361,12 +360,9 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                            ">
-                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
-                                type="video/mp4">
-                            Your browser does not support the video tag. --}}
-                            </video>
-                            <h3>{{ $mov->title }}</h3>
+                            " loading="lazy">
+
+                            <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -382,14 +378,14 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                         <?php
-                                    $originalTitle = $mov->title;
-                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
-                                        $shortenedTitle .= '...';
-                                    }
-                                    echo $shortenedTitle;
-                                    ?>
+                        <?php
+                        $originalTitle = $mov->title;
+                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                            $shortenedTitle .= '...';
+                        }
+                        echo $shortenedTitle;
+                        ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -406,7 +402,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         </p>
                     @endforeach
                     <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
-                        style="color: #ffffff;"></i></i></a>
+                            style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>
@@ -426,8 +422,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <div class="video">
                         <a href="javascript:void(0)"
                             onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
-                            <video class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
-                                poster="
+                            <img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone"
+                                src="
                             @php
 $image_check = substr($mov->movie_image->image, 0, 5);
 $startPos = strpos($mov->movie_image->image, 'movies/');
@@ -435,12 +431,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                            ">
-                                {{-- <source src="../images/tv-show/videos/Never Have I Ever - Official Trailer - Netflix_2.mp4"
-                                type="video/mp4">
-                            Your browser does not support the video tag. --}}
-                            </video>
-                            <h3>{{ $mov->title }}</h3>
+                            " loading="lazy">
+                            <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
 
@@ -456,14 +448,14 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 @endforeach
                 <div>
                     <h4 class="heading f-w-8 text-shadow">
-                         <?php
-                                    $originalTitle = $mov->title;
-                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
-                                        $shortenedTitle .= '...';
-                                    }
-                                    echo $shortenedTitle;
-                                    ?>
+                        <?php
+                        $originalTitle = $mov->title;
+                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                            $shortenedTitle .= '...';
+                        }
+                        echo $shortenedTitle;
+                        ?>
                     </h4>
                 </div>
                 <div class="info d-flex flex-middle flex-no-wrap">
@@ -480,7 +472,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         </p>
                     @endforeach
                     <a class="button" href="{{ route('movie', $mov->slug) }}"><i class="fa-solid fa-chevron-down fa-xl"
-                        style="color: #ffffff;"></i></i></a>
+                            style="color: #ffffff;"></i></i></a>
                 </div>
         </div>
         </div>
