@@ -3,9 +3,9 @@ header{
     background-color: black;
 }
 .videocontainer{
-    max-width: 95%;
+    max-width: 100%;
     margin: auto !important;
-    height: 670px;
+    height: 600px;
 }
 video{
     object-fit: fill;

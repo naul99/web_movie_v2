@@ -16,7 +16,7 @@
     </style>
     <div>
         <div class="">
-            @foreach ($hot->skip(1) as $key => $h)
+            @foreach ($hot->skip(1)->take(1) as $key => $h)
                 <section id="browse-dashboard" class=" d-flex direction-column flex-start middle-align">
                     <div>
                         <!--trailer video-->
