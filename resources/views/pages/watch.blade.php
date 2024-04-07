@@ -30,10 +30,14 @@
             overflow: hidden;
         }
 
+        .videocontainer {
+            max-width: 100%;
+            margin: auto !important;
+            height: 580px;
+        }
+
         @media (max-width: 601px) {
             .videocontainer {
-                max-width: 100%;
-                margin: auto !important;
                 height: 215px;
             }
         }
@@ -184,14 +188,14 @@
                             @if ($ep->server_id == $ser->id)
                                 <div class="server{{ $server_active == 'server-' . $ser->id ? ' active-ep' : '' }} episode"
                                     data-url="{{ url('api/watch/' . $movie->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}">
-                                    Server: {{ $ser->title }}</div>
+                                    {{ $ser->title }}</div>
                             @endif
                         @endforeach
                     @else
                         <div id="server-{{ $ser->id }}"
                             class="server{{ $server_active == 'server-' . $ser->id ? ' server-active' : '' }}"
                             onclick="showEpisodes('server{{ $ser->id }}')">
-                            Server: {{ $ser->title }}</div>
+                            {{ $ser->title }}</div>
                     @endif
                 @endif
             @endforeach
@@ -375,8 +379,9 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $rel->movie_image->image) }} @endif
-                            " loading="lazy">
-                               
+                            "
+                                loading="lazy">
+
                             <h3 class="title_mobile">{{ $rel->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
