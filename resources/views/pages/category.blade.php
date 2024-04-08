@@ -156,8 +156,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                             <h4 class="heading f-w-8 text-shadow">
                                 <?php
                                 $originalTitle = $mov->title;
-                                $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                                if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                                     $shortenedTitle .= '...';
                                 }
                                 echo $shortenedTitle;
@@ -180,7 +180,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         </div>
                         <div class="genere d-flex flex-no-wrap text-shadow">
 
-                            @foreach ($mov->movie_genre->take(3) as $gen)
+                            @foreach ($mov->movie_genre->take(2) as $gen)
                                 <p> {{ $gen->title }}
                                     @if (!$loop->last)
                                         ,
@@ -238,8 +238,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -252,7 +252,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -309,8 +309,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -323,7 +323,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -380,8 +380,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -394,7 +394,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -450,8 +450,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -464,7 +464,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,

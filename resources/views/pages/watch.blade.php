@@ -400,8 +400,8 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $rel->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -414,7 +414,7 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($rel->movie_genre->take(3) as $gen)
+                    @foreach ($rel->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -430,14 +430,34 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
         </div>
 
     </section>
-    <input type="hidden" id="witshlist_moviename" value="{{ $movie->title }}">
+
+    <input type="hidden" id="witshlist_moviename" value="<?php
+    $originalTitle = $movie->title;
+    $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+    if (mb_strlen($originalTitle, 'UTF-8') > 21) {
+        $shortenedTitle .= '...';
+    }
+    echo $shortenedTitle;
+    ?>">
     <input type="hidden" id="witshlist_movieslug" value="{{ $movie->slug }}">
+    <input type="hidden"
+        id="witshlist_moviethumbnail"value="@php
+$image_check = substr($thumbnail->movie_image->image, 0, 5);
+            $startPos = strpos($thumbnail->movie_image->image, 'movies/');
+            $image = substr($thumbnail->movie_image->image, $startPos + strlen('movies/')); @endphp
+
+                    @if ($image_check == 'https') {{ $url_update . $image }}
+            @else
+            {{ asset('uploads/movie/' . $thumbnail->movie_image->image) }} @endif">
+
     <script>
         var name = document.getElementById('witshlist_moviename').value;
         var slug = document.getElementById('witshlist_movieslug').value;
         var img = document.getElementById('wishlist_movieimage').src;
         var mylist = document.getElementById({{ $movie->id }});
         var url = window.location;
+        var genres = <?php echo json_encode($genre); ?>;
+        var thumbnail = document.getElementById('witshlist_moviethumbnail').value;
 
         function view() {
             if (localStorage.getItem('data') != null) {
@@ -466,7 +486,8 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                 'name': name,
                 'slug': slug,
                 'url': url,
-                'img': img
+                'img': img,
+                'thumbnail': thumbnail
             }
             if (localStorage.getItem('data') == null) {
                 localStorage.setItem('data', '[]');
@@ -502,8 +523,11 @@ $image = substr($rel->movie_image->image, $startPos + strlen('movies/')); @endph
                 'slug': slug,
                 'img': img,
                 'url': url,
-                'time': currentTime
+                'genres': genres,
+                'time': currentTime,
+                'thumbnail': thumbnail
             }
+
             if (localStorage.getItem('data_recent') == null) {
                 localStorage.setItem('data_recent', '[]');
             }

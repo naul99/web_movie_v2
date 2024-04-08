@@ -16,7 +16,8 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $h->movie_image->image) }} @endif
-                        ">
+                        "
+                            loading="lazy">
                             {{-- <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"
                             > --}}
 
@@ -140,8 +141,9 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
                                    {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                                    " loading="lazy">
-                                        
+                                    "
+                                            loading="lazy">
+
                                         <h3 class="title_mobile">{{ $mov->title }}</h3>
                                     </a>
                                     <div class="video-description d-flex flex-end direction-column">
@@ -162,8 +164,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
 
                                     <?php
                                     $originalTitle = $mov->title;
-                                    $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                                    if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                                    $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                                    if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                                         $shortenedTitle .= '...';
                                     }
                                     echo $shortenedTitle;
@@ -190,7 +192,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
 
 
                                 </style>
-                                @foreach ($mov->movie_genre->take(3) as $gen)
+                                @foreach ($mov->movie_genre->take(2) as $gen)
                                     <p> {{ $gen->title }}
                                         @if (!$loop->last)
                                             ,
@@ -207,6 +209,18 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
     </div>
     </section>
     @endforeach
+    <!-- Countinue Watch -->
+
+
+    <section id="mylist" class="container hidden">
+        <h4 class="mylist-heading">
+            Continue Watch
+        </h4>
+        <div class="mylist-container d-flex flex-start flex-middle flex-no-wrap owl-carousel mylist-container1">
+
+        </div>
+    </section>
+
     <!--Netflix Movies-->
     <section id="mylist" class="container">
 
@@ -228,7 +242,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         @if ($image_check == 'https') {{ $url_update . $image }}
                                                     @else
                                                        {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                    " loading="lazy">
+                    "
+                                loading="lazy">
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -247,8 +262,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -261,7 +276,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -442,8 +457,9 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                         @if ($image_check == 'https') {{ $url_update . $image }}
                                                     @else
                                                        {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                    " loading="lazy">
-                              
+                    "
+                                loading="lazy">
+
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -462,8 +478,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -476,7 +492,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -513,7 +529,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                             @else
                                                                {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                            " loading="lazy">
+                            "
+                                loading="lazy">
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -532,8 +549,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -546,7 +563,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -583,7 +600,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                       @else
                                                          {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                      " loading="lazy">
+                      "
+                                loading="lazy">
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -602,8 +620,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -616,7 +634,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -654,7 +672,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                       @else
                                                          {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                      " loading="lazy">
+                      "
+                                loading="lazy">
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -673,8 +692,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -687,7 +706,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -791,7 +810,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                   @else
                                                      {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                  " loading="lazy">
+                  "
+                                loading="lazy">
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -810,8 +830,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -824,7 +844,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -861,7 +881,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                                   @else
                                                      {{ asset('uploads/movie/' . $mov->movie_image->image) }} @endif
-                  " loading="lazy">
+                  "
+                                loading="lazy">
                             <h3 class="title_mobile">{{ $mov->title }}</h3>
                         </a>
                         <div class="video-description d-flex flex-end direction-column">
@@ -880,8 +901,8 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                     <h4 class="heading f-w-8 text-shadow">
                         <?php
                         $originalTitle = $mov->title;
-                        $shortenedTitle = mb_substr($originalTitle, 0, 25, 'UTF-8');
-                        if (mb_strlen($originalTitle, 'UTF-8') > 25) {
+                        $shortenedTitle = mb_substr($originalTitle, 0, 21, 'UTF-8');
+                        if (mb_strlen($originalTitle, 'UTF-8') > 21) {
                             $shortenedTitle .= '...';
                         }
                         echo $shortenedTitle;
@@ -894,7 +915,7 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
                 </div>
                 <div class="genere d-flex flex-no-wrap text-shadow">
 
-                    @foreach ($mov->movie_genre->take(3) as $gen)
+                    @foreach ($mov->movie_genre->take(2) as $gen)
                         <p>{{ $gen->title }}
                             @if (!$loop->last)
                                 ,
@@ -913,4 +934,51 @@ $image = substr($mov->movie_image->image, $startPos + strlen('movies/')); @endph
 
     </div>
     </div>
+    <script>
+        function view() {
+
+            if (localStorage.getItem('data_recent') != null) {
+                var data = JSON.parse(localStorage.getItem('data_recent'));
+                if (data.length < 1) {
+                    $('.hidden').css('display', 'none');
+                    return false;
+                }
+                for (var i = 0; i <= data.length; i++) {
+                    var name = data[i].name;
+                    var slug = data[i].slug;
+                    var img = data[i].thumbnail;
+                    var url = data[i].url;
+                    var genres = data[i].genres;
+
+
+                    // alert(url['href']);
+
+                    var htmlContent = '<div class="video">' +
+                        '<a href="javascript:void(0)" onclick=location.href="' + url['href'] + '">' +
+                        '<img class="mylist-img p-r-10 p-t-10 video-item thumbnail-respone" src="' + img +
+                        '" loading="lazy">' +
+                        '<h3 class="title_mobile">' + name + '</h3></a>' +
+                        '<div class="video-description d-flex flex-end direction-column">' +
+                        '<div class="play-button"><button style="background: none; border:none" onclick=location.href="' +
+                        url['href'] + '">' +
+                        '<svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z" fill="black"></path></svg></button></div>' +
+                        '<div><h4 class="heading f-w-8 text-shadow">' + name + '</h4></div>' +
+                        '<div class="info d-flex flex-middle flex-no-wrap">' +
+                        '<p class="rated text-shadow"><strong>13+</strong></p>' +
+                        '<p class="season-count text-shadow"></p></div>' +
+                        '<div class="genere d-flex flex-no-wrap text-shadow">' +
+                        '<p>' + genres + '</p>' +
+                        '<a class="button" href="/movie/' + slug +
+                        '"><i class="fa-solid fa-chevron-down fa-xl" style="color: #ffffff;"></i></i></a></div></div></div>';
+
+                    $(htmlContent).appendTo('.mylist-container1');
+                }
+            } else {
+                $('.hidden').css('display', 'none');
+                return false;
+            }
+
+        }
+        view();
+    </script>
 @endsection

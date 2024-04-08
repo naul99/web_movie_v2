@@ -602,13 +602,21 @@ class IndexController extends Controller
         //$genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         //$country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         $movie = Movie::with('category', 'genre', 'country', 'episode')->where('slug', $slug)->where('status', 1)->first();
-        $minutes = Movie::select('time')->where('slug', $slug)->first();
-        if (floor($minutes->time / 60) == 0) {
-            $times = ($minutes->time - floor($minutes->time / 60) * 60) . 'm';
-        } elseif (($minutes->time - floor($minutes->time / 60) * 60) == 0) {
-            $times = floor($minutes->time / 60) . 'h';
+        
+        foreach($movie->movie_genre->take(2) as $gen){
+            $genre[]=$gen->title;
+        }
+        $thumbnail = Movie::select('id')->with(['movie_image' => function ($thumb) {
+            $thumb->where('is_thumbnail', 1);
+        }])->where('slug', $slug)->first();
+        
+        $minutes = $movie->time;
+        if (floor($minutes / 60) == 0) {
+            $times = ($minutes - floor($minutes / 60) * 60) . 'm';
+        } elseif (($minutes - floor($minutes / 60) * 60) == 0) {
+            $times = floor($minutes / 60) . 'h';
         } else
-            $times = floor($minutes->time / 60) . 'h ' . ($minutes->time - floor($minutes->time / 60) * 60) . 'm';
+            $times = floor($minutes / 60) . 'h ' . ($minutes - floor($minutes / 60) * 60) . 'm';
         //save views movie for day
         $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
 
@@ -672,7 +680,7 @@ class IndexController extends Controller
             $episode_current_list_count = $episode_current_list->count();
             $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
-            return view('pages.watch', compact('category', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count', 'url_update'));
+            return view('pages.watch', compact('category', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count', 'url_update','genre','thumbnail'));
         } catch (ModelNotFoundException $th) {
             return redirect()->back();
         }
