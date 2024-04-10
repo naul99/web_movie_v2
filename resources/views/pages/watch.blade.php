@@ -44,7 +44,7 @@
     </style>
     <!-- hero section video-->
     <div class="videocontainer">
-        <iframe id="mainiframe" style="border-radius: 1.25rem;" class="video" src="{{ $episode->linkphim }}" frameborder="0"
+        <iframe id="mainiframe" style="border-radius: 1.25rem;" class="video" frameborder="0"
             allow="accelerometer; autoplay=0; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
     </div>
@@ -446,10 +446,28 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
             $startPos = strpos($thumbnail->movie_image->image, 'movies/');
             $image = substr($thumbnail->movie_image->image, $startPos + strlen('movies/')); @endphp
 
-                    @if ($image_check == 'https') {{ $url_update . $image }}
+                                            @if ($image_check == 'https') {{ $url_update . $image }}
             @else
             {{ asset('uploads/movie/' . $thumbnail->movie_image->image) }} @endif">
-
+    <script>
+        var url = window.location.href;
+        var index = url.indexOf("xem-phim/");
+        var result = url.slice(index + 9);
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        document.addEventListener("DOMContentLoaded", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/watch/" + result, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var responseData = JSON.parse(xhr.responseText);
+                    document.getElementById("mainiframe").src = responseData.data;
+                }
+            };
+            xhr.send();
+        });
+    </script>
     <script>
         var name = document.getElementById('witshlist_moviename').value;
         var slug = document.getElementById('witshlist_movieslug').value;
@@ -582,6 +600,7 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
     <script>
         var buttons = document.querySelectorAll('.episode');
         var activeButton = document.querySelector('.episode.active-ep');
+
         buttons.forEach(function(button) {
             button.addEventListener('click', function() {
                 var url = button.dataset.url;
@@ -590,51 +609,47 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
                 }
                 button.classList.add('active-ep');
                 activeButton = button;
-                fetch(url)
-                    .then(response => {
-                        // Kiểm tra xem có phản hồi thành công không (status code 200)
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        // Nếu có, parse response body dưới dạng JSON
-                        return response.json();
-                    })
-                    .then(data => {
-                        var index = url.indexOf("watch/");
-                        var result = url.slice(index + 6);
 
-                        @if ($movie->type_movie == 1)
-                            var parts = result.split("/");
-                            var tapPart = parts[1];
-                            var tapParts = tapPart.split("tap-");
-                            var episode = tapParts[1];
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var responseData = JSON.parse(xhr.responseText);
 
-                            player_aaaa.vod_data.vod_position = "{{ $movie->slug }}_" + episode;
-                        @endif
+                        document.getElementById("mainiframe").src = responseData.data;
+                    }
+                };
+                xhr.send();
+                var index = url.indexOf("watch/");
+                var result = url.slice(index + 6);
 
-                        var divElement = document.getElementById("mainiframe");
-                        divElement.src = data.data;
+                @if ($movie->type_movie == 1)
+                    var parts = result.split("/");
+                    var tapPart = parts[1];
+                    var tapParts = tapPart.split("tap-");
+                    var episode = tapParts[1];
 
-                        var newUrl = '/xem-phim/' + result;
-                        history.replaceState({}, null, newUrl);
-                        history.pushState({}, null, newUrl);
-                        add_recent();
-                    })
-                    .catch(error => {
-                        // Xử lý lỗi nếu có
-                        console.error('There was a problem with your fetch operation:', error);
-                    });
+                    player_aaaa.vod_data.vod_position = "{{ $movie->slug }}_" + episode;
+                @endif
+
+                var newUrl = '/xem-phim/' + result;
+                history.replaceState({}, null, newUrl);
+                history.pushState({}, null, newUrl);
+                add_recent();
             });
         });
     </script>
+
     <script>
         // Thay đổi URL hiện tại bằng URL mới
-        // var newUrl = '/movie/{{ $movie->slug }}';
+        // var newUrl = '/movie/';
         // history.replaceState({}, null, newUrl);
 
         // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
 
-        //history.pushState({}, null, '/watch/{{ $movie->slug }}');
+        //history.pushState({}, null, '/watch/');
 
         function onDevToolsOpen() {
 

@@ -789,7 +789,7 @@ class IndexController extends Controller
     }
 
     public function ajax_episode($slug, $tap, $server_active)
-    {
+    {      
         $movie = Movie::with('episode')->where('slug', $slug)->where('status', 1)->first();
         if (!isset($movie)) {
             return response()->json([
@@ -812,7 +812,7 @@ class IndexController extends Controller
                 $tapphim = 1;
                 $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
             }
-
+            
 
             return response()->json([
                 'success' => true,
