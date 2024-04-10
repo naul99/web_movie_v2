@@ -59,7 +59,10 @@ class IndexController extends Controller
                 $querys->orWhere('name_english', 'LIKE', '%' . $search . '%')->orWhereIn('id', $many_cast)->orwhereRaw("MATCH(title) AGAINST(? IN BOOLEAN MODE)", [$search]);
             })->where('status', 1)->with(['episode' => function ($ep) {
                 $ep->orderBy('episode', 'ASC');
+            }])->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
             }])->orderBy('id', 'DESC')->paginate(20);
+            
             $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
             //dd($movie);

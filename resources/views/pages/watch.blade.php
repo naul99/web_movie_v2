@@ -36,6 +36,11 @@
             height: 580px;
         }
 
+        .actions a {
+            margin-right: 50px;
+
+        }
+
         @media (max-width: 601px) {
             .videocontainer {
                 height: 215px;
@@ -44,7 +49,7 @@
     </style>
     <!-- hero section video-->
     <div class="videocontainer">
-        <iframe id="mainiframe" style="border-radius: 1.25rem;" class="video" frameborder="0"
+        <iframe id="mainiframe" class="video" frameborder="0"
             allow="accelerometer; autoplay=0; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
     </div>
@@ -159,8 +164,8 @@
                 }
 
                 .img-mobile {
-                    height: 290px;
-                    width: 200px
+                    height: 210px;
+                    width: 150px;
                 }
 
             }
@@ -446,7 +451,7 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
             $startPos = strpos($thumbnail->movie_image->image, 'movies/');
             $image = substr($thumbnail->movie_image->image, $startPos + strlen('movies/')); @endphp
 
-                                            @if ($image_check == 'https') {{ $url_update . $image }}
+                                                @if ($image_check == 'https') {{ $url_update . $image }}
             @else
             {{ asset('uploads/movie/' . $thumbnail->movie_image->image) }} @endif">
     <script>
