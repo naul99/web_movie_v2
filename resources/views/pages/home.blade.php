@@ -3,19 +3,18 @@
     <!-- hero section -->
     <div>
         <div class="">
-            @foreach ($hot->take(1) as $key => $h)
                 <section id="browse-dashboard" class=" d-flex direction-column flex-start middle-align">
                     <div>
                         <!--trailer video-->
                         <video class="hero-background-image" id="hero-video"
                             poster="
                         @php
-$image_check = substr($h->movie_image->image, 0, 5);
-$startPos = strpos($h->movie_image->image, 'movies/');
-$image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
+$image_check = substr($hot->movie_image->image, 0, 5);
+$startPos = strpos($hot->movie_image->image, 'movies/');
+$image = substr($hot->movie_image->image, $startPos + strlen('movies/')); @endphp
                                 @if ($image_check == 'https') {{ $url_update . $image }}
                                 @else
-                                   {{ asset('uploads/movie/' . $h->movie_image->image) }} @endif
+                                   {{ asset('uploads/movie/' . $hot->movie_image->image) }} @endif
                         "
                             loading="lazy">
                             {{-- <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"
@@ -42,11 +41,16 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                                 .synopsis {
                                     width: 95%;
                                 }
+
+                                #browse-dashboard .show-logo {
+                                    max-width: 90%;
+                                }
                             }
                         </style>
                         <div class="contentlogo">
-                            {{-- <img src="" alt="content logo" class="show-logo" /> --}}
-                            {{ $h->title }}
+                            <img src="{{ $hot->movie_logo->image }}"
+                                alt="content logo" class="show-logo" />
+                            {{-- {{ $hot->title }} --}}
                         </div>
                         <!--top 10 ranking badge svg-->
                         <div class="ranking d-flex m-t-20 flex-middle">
@@ -76,7 +80,7 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
 
                             @php
 
-                                $description = $h->movie_description->description;
+                                $description = $hot->movie_description->description;
 
                                 $trimmedDescription = substr($description, 0, 155);
 
@@ -86,9 +90,9 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
 
                         </div>
                         <div class="buttons-container m-t-20">
-                            @foreach ($h->episode->take(1) as $epi)
+                            @foreach ($hot->episode->take(1) as $epi)
                                 <button class="play-button"
-                                    onclick="location.href='{{ url('xem-phim/' . $h->slug . '/tap-' . $epi->episode . '/server-' . $epi->server_id) }}'"><span>
+                                    onclick="location.href='{{ url('xem-phim/' . $hot->slug . '/tap-' . $epi->episode . '/server-' . $epi->server_id) }}'"><span>
                                         <svg viewBox="0 0 24 24">
                                             <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
                                         </svg>
@@ -96,7 +100,7 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                             @endforeach
 
 
-                            <button onclick="location.href='{{ route('movie', $h->slug) }}'"
+                            <button onclick="location.href='{{ route('movie', $hot->slug) }}'"
                                 class="more-info-button m-t-20"><span>
                                     <svg viewBox="0 0 24 24">
                                         <path
@@ -107,7 +111,7 @@ $image = substr($h->movie_image->image, $startPos + strlen('movies/')); @endphp
                         </div>
                     </div>
                 </section>
-            @endforeach
+            
         </div>
 
         <!--paretn div with black bg after main hero section-->

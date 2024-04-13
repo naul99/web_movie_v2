@@ -361,6 +361,25 @@
                                 @endif
                             @endif
                         </div>
+                        <div class="form-group">
+                            @if (isset($movie))
+                                {!! Form::label('logo', 'Logo', []) !!}
+                                {!! Form::text('logo', isset($movie->movie_logo) ? $movie_logo->image : '', [
+                                    'style' => 'resize:none',
+                                    'class' => 'form-control',
+                                    '',
+                                    'placeholder' => 'Enter url logo',
+                                ]) !!}
+                            @else
+                                {!! Form::label('logo', 'Logo', []) !!}
+                                {!! Form::text('trailer', '', [
+                                    'style' => 'resize:none',
+                                    'class' => 'form-control',
+                                    '',
+                                    'placeholder' => 'Enter url logo',
+                                ]) !!}
+                            @endif
+                        </div>
 
                         @if (!isset($movie))
                             {!! Form::submit('Create ', ['class' => 'btn btn-success', 'onclick' => 'displayRadioValue()']) !!}

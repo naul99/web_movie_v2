@@ -303,6 +303,13 @@ class MovieController extends Controller
                 $tags->movie_id = $movie->id;
                 $tags->save();
             }
+            if ($request->logo != null && !is_null($movie)) {
+                $logo = new Movie_Image();
+                $logo->image = $request->logo;
+                $logo->movie_id = $movie->id;
+                $logo->is_logo = 1;
+                $logo->save();
+            }
 
 
 
@@ -368,11 +375,12 @@ class MovieController extends Controller
         $movie_description = $movie->movie_description;
         $movie_trailer = $movie->movie_trailer;
         $movie_tags = $movie->movie_tags;
+        $movie_logo = $movie->movie_logo;
         $api_ophim = Http::get('https://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
 
         //return json_encode($movie_rating);
-        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail', 'url_update'));
+        return view('admincp.movie.form', compact('list', 'genre', 'category', 'country', 'movie', 'list_genre', 'movie_genre', 'list_cast', 'movie_cast', 'list_directors', 'movie_directors', 'movie_thumbnail', 'url_update', 'movie_logo'));
     }
 
     /**
@@ -551,6 +559,18 @@ class MovieController extends Controller
             $tags->tags = $request->tags;
             $tags->save();
 
+            if ($request->logo != null) {
+                $logo = Movie_Image::where('movie_id', $movie->id)->where('is_logo', 1)->first();
+
+                if (!$logo) {
+                    $logo = new Movie_Image();
+                    $logo->movie_id = $movie->id;
+                    $logo->is_logo = 1;
+                }
+                $logo->image = $request->logo;
+                $logo->save();
+            }
+
 
             $movie->movie_genre()->sync($data['genre']);
             if (!isset($data['cast'])) {
@@ -604,6 +624,19 @@ class MovieController extends Controller
                 }
             }
             $movie_image->delete();
+
+            $movie_thumbnail = Movie_Image::where('movie_id', $movie->id)->where('is_thumbnail', 1)->first();
+            //delete image
+
+            if (!empty($movie_thumbnail->image)) {
+                try {
+                    unlink('uploads/movie/' . $movie_image->image);
+                } catch (Exception $e) {
+                }
+            }
+            $movie_thumbnail->delete();
+
+            Movie_Image::where('is_logo', 1)->where('movie_id',$movie->id)->delete();
             //delete genre
             Movie_Genre::whereIn('movie_id', [$movie->id])->delete();
             Episode::whereIn('movie_id', [$movie->id])->delete();
@@ -673,20 +706,20 @@ class MovieController extends Controller
 
         $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
         $api_ophim = Http::get($path_ophim)->json();
-       
+
         $link_image = $api_ophim['pathImage'];
 
         if (isset($_GET['next_page'])) {
             $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
             $api_ophim = Http::get($path_ophim)->json();
-            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image','movies'));
+            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
         }
         if (isset($_GET['search_ophim'])) {
 
             $path_ophim_search = "https://ophim14.cc/_next/data/t1xATi4DT1y8meOFbKaEf/tim-kiem.json?keyword=" . $_GET['search_ophim'];
             $api_ophims = Http::get($path_ophim_search)->json();
             $api_ophim = $api_ophims['pageProps']['data'];
-            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image','movies'));
+            return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
         }
 
         return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
@@ -993,7 +1026,7 @@ class MovieController extends Controller
                     $ep->linkphim = "/api/embed_vip?link=" . $episode['link_m3u8'];
                     $ep->episode = $episode['name'];
                     $check_server = Server::where('title', 'LIKE', '%' . $episodes['server_name'] . '%')->first();
-        
+
                     if (!isset($check_server)) {
                         $server = new Server();
                         $server->title = $episodes['server_name'];
@@ -1010,11 +1043,9 @@ class MovieController extends Controller
                     $movie->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
                     $movie->save();
                 }
-               
             }
         }
         toastr()->success('Mình đã thêm các tập mới nhất', 'Cập nhật thành công');
         return redirect()->back();
-
     }
 }

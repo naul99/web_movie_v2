@@ -102,7 +102,8 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->where('hot', 1)->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        }])->with('movie_logo')->where('status', 1)->orderBy('updated_at', 'DESC')->first();
+       
 
         $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
         // $startOfMonth = Carbon::now()->startOfMonth();

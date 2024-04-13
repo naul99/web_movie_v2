@@ -77,6 +77,10 @@ class Movie extends Model
     {
         return $this->hasOne(Movie_Image::class);
     }
+    public function movie_logo()
+    {
+        return $this->hasOne(Movie_Image::class)->where('is_logo', 1);
+    }
     public function movie_views()
     {
         return $this->hasMany(Movie_Views::class);
@@ -86,4 +90,5 @@ class Movie extends Model
     {
         return $this->hasMany(Comment::class)->whereNull('parent_id')->orderBy('id','DESC')->where('status',1);
     }
+
 }
