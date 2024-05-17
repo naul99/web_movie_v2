@@ -48,7 +48,7 @@ $image = substr($hot->movie_image->image, $startPos + strlen('movies/')); @endph
                             }
                         </style>
                         <div class="contentlogo">
-                            <img src="{{ $hot->movie_image->image }}"
+                            <img src="{{ $hot->movie_logo->image }}"
                                 alt="content logo" class="show-logo" />
                             {{-- {{ $hot->title }} --}}
                         </div>
