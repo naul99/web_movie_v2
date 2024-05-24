@@ -704,21 +704,22 @@ class MovieController extends Controller
     {
         $movies = Movie::pluck('title');
 
-        $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
+        $path_ophim = "http://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
         $api_ophim = Http::get($path_ophim)->json();
 
         $link_image = $api_ophim['pathImage'];
 
         if (isset($_GET['next_page'])) {
-            $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
+            $path_ophim = "http://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
             $api_ophim = Http::get($path_ophim)->json();
             return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
         }
         if (isset($_GET['search_ophim'])) {
 
-            $path_ophim_search = "https://ophim14.cc/_next/data/t1xATi4DT1y8meOFbKaEf/tim-kiem.json?keyword=" . $_GET['search_ophim'];
+            $path_ophim_search = "https://ophim1.com/v1/api/tim-kiem?keyword=" . $_GET['search_ophim'];
             $api_ophims = Http::get($path_ophim_search)->json();
-            $api_ophim = $api_ophims['pageProps']['data'];
+            
+            $api_ophim = $api_ophims['data'];
             return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
         }
 
