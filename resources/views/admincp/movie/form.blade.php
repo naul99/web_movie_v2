@@ -312,7 +312,7 @@
                         </div>
                         <div class="form-group" style="width:22%">
                             {!! Form::label('fee', 'Fee', []) !!}
-                            {!! Form::select('paid_movie', ['0' => 'Không', '1' => 'Có'], isset($movie) ? $movie->paid_movie : '', [
+                            {!! Form::text('paid_movie', isset($movie) ? $movie->paid_movie : '', [
                                 'class' => 'form-control',
                             ]) !!}
                         </div>

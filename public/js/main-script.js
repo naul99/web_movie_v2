@@ -39,16 +39,17 @@ $(document).ready(function () {
     });
 
     //autoplay video on hover over an video item
-    var figure = $(".video").hover(hoverVideo, hideVideo);
+    
+    // var figure = $(".video").hover(hoverVideo, hideVideo);
 
-    function hoverVideo(e) {
-        $('video', this).get(0).play();
-    }
+    // function hoverVideo(e) {
+    //     $('video', this).get(0).play();
+    // }
 
-    function hideVideo(e) {
-        $('video', this).get(0).pause();
-        $('video', this).get(0).load();
-    } 
+    // function hideVideo(e) {
+    //     $('video', this).get(0).pause();
+    //     $('video', this).get(0).load();
+    // } 
     
 
 });

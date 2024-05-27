@@ -89,15 +89,10 @@ class IndexController extends Controller
                 $thumb->where('is_thumbnail', 1);
             }])->with(['episode' => function ($ep) {
                 $ep->orderBy('episode', 'ASC');
-            }]);
+            }])->orderBy('updated_at','DESC');
         }])->orderBy('position', 'ASC')->where('status', 1)->get();
-        // foreach($category_home as $mov){
-        //     foreach($mov->movie as $mo){
-        //         dd($mo);
-        //     }
-        // }
-        // dd($category_home);
-        //$hot = Movie::with()->get();
+
+      
         $hot = Movie::with(['episode' => function ($query) {
             $query->orderBy('episode', 'ASC');
         }])->where('hot', 1)->with(['movie_image' => function ($thumb) {
@@ -139,7 +134,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(40)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
 
         //netflix
         
@@ -154,7 +149,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(30)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
 
         //movie oscar
 
@@ -169,7 +164,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(40)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
 
 
 
@@ -188,7 +183,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(40)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
 
         //movie viet nam
         $country_vi_slug = Country::where('title', 'LIKE', '%Viet Nam%')->first();
@@ -197,7 +192,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(40)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
        
         //tv series thailan
         $country_thai_slug = Country::where('title', 'LIKE', '%Thai Lan%')->first();
@@ -207,7 +202,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(40)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
 
         $gen_horror_slug = Genre::where('title', 'LIKE', '%kinh di%')->first();
 
@@ -220,7 +215,7 @@ class IndexController extends Controller
             $query->orderBy('episode', 'ASC');
         }])->with(['movie_image' => function ($thumb) {
             $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(35)->get();
+        }])->orderBy('updated_at', 'DESC')->take(20)->get();
         $api_ophim = Http::get('http://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         return view('pages.home', compact('category', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror', 'topview_tvseries', 'url_update','movies_oscar','movie_netflix'));
