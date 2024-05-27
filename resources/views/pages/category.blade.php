@@ -1,19 +1,6 @@
 @extends('layout')
 @section('content')
     <!-- hero section -->
-    <style>
-        @media (max-width: 601px) {
-            .m-t-20 {
-                margin-bottom: 20px;
-            }
-            .btn_filter {
-                font-size: 15px;
-            }
-            .stylish_filter {
-                font-size: 15px;
-            }
-        }
-    </style>
     <div>
         <div class="">
             @foreach ($hot->skip(1)->take(1) as $key => $h)

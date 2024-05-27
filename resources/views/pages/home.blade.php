@@ -120,6 +120,7 @@ $image = substr($hot->movie_image->image, $startPos + strlen('movies/')); @endph
             }
         </style>
         <div class="black-background">
+            @include('pages.include.fillter_movie')
             <!--continure watching-->
             @foreach ($category_home as $key => $cate_home)
                 <section id="continue-watching" class="container p-t-40">

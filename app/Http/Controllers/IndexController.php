@@ -81,6 +81,8 @@ class IndexController extends Controller
     public function home()
     {
         $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
+        $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
+        $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         // $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         // $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         //qua ba
@@ -218,7 +220,7 @@ class IndexController extends Controller
         }])->orderBy('updated_at', 'DESC')->take(20)->get();
         $api_ophim = Http::get('http://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
-        return view('pages.home', compact('category', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror', 'topview_tvseries', 'url_update','movies_oscar','movie_netflix'));
+        return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror', 'topview_tvseries', 'url_update','movies_oscar','movie_netflix'));
     }
     public function category($slug)
     {
@@ -711,6 +713,8 @@ class IndexController extends Controller
             $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
             $movie_array = Movie::withCount(['episode' => function ($query) {
                 $query->select(DB::raw('count(distinct(episode))'));
+            }])->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
             }])->where('status', 1);
 
             if ($category_get) {

@@ -24,10 +24,12 @@
         }
 
         @media (max-width: 601px) {
+            .m-t-20 {
+                margin-bottom: 20px;
+            }
             .btn_filter {
                 font-size: 15px;
             }
-
             .stylish_filter {
                 font-size: 15px;
             }
