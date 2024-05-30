@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Cache;
 class IndexController extends Controller
 {
     public function search()
@@ -80,24 +80,53 @@ class IndexController extends Controller
     }
     public function home()
     {
-        $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
-        $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
-        $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
+
+        $category = Cache::remember('categories', 1800, function () {
+                return Category::orderBy('id', 'ASC')->where('status', 1)->get();
+        });
+        $genre = Cache::remember('genres', 1800, function () {
+                return Genre::where('status', 1)->orderBy('id', 'DESC')->get();
+        });
+        
+        $country = Cache::remember('countries', 1800, function () {
+                return Country::where('status', 1)->orderBy('id', 'DESC')->get();
+        });
         //qua ba
-        $category_home = Category::with(['movie' => function ($m) {
-            $m->where('status', 1)->with(['movie_image' => function ($thumb) {
-                $thumb->where('is_thumbnail', 1);
-            }])->with(['episode' => function ($ep) {
-                $ep->orderBy('episode', 'ASC');
-            }])->orderBy('updated_at','DESC');
-        }])->orderBy('position', 'ASC')->where('status', 1)->get();
+        $category_home = Cache::remember('category_home', 1800, function () {
+            return Category::with(['movie' => function ($m) {
+                $m->where('status', 1)
+                  ->with([
+                      'movie_image' => function ($thumb) {
+                          $thumb->where('is_thumbnail', 1);
+                      },
+                      'episode' => function ($ep) {
+                          $ep->orderBy('episode', 'ASC');
+                      }
+                  ])
+                  ->orderBy('updated_at', 'DESC');
+            }])
+            ->orderBy('position', 'ASC')
+            ->where('status', 1)
+            ->get();
+        });
 
       
-        $hot = Movie::with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->where('hot', 1)->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->with('movie_logo')->where('status', 1)->orderBy('updated_at', 'DESC')->first();
+        $hot = Cache::remember('hot_movie', 1800, function () {
+            return Movie::with([
+                'episode' => function ($query) {
+                    $query->orderBy('episode', 'ASC');
+                },
+                'movie_image' => function ($thumb) {
+                    $thumb->where('is_thumbnail', 1);
+                },
+                'movie_logo'
+            ])
+            ->where('hot', 1)
+            ->where('status', 1)
+            ->orderBy('updated_at', 'DESC')
+            ->first();
+        });
+    
        
 
         $day = Carbon::today('Asia/Ho_Chi_Minh')->subDays(0)->startOfDay();
@@ -106,14 +135,45 @@ class IndexController extends Controller
         // $week = Carbon::today('Asia/Ho_Chi_Minh')->subDays(7)->startOfDay();
 
         //dd($hot);
-        $topview = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->first();
-        $topview_tvseries = Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')->where('is_thumbnail', 1)->where('movies.type_movie', 1)->where('movies.status', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->first();
-        // dd($topview_tvseries);
-        $topview_day = Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-            ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
-            ->where('date_views', $day)->where('movies.status', 1)->where('is_thumbnail', 1)->orderBy('count_views', 'DESC')->join('episodes', 'movies.id', '=', 'episodes.movie_id')->orderBy('episode', 'ASC')->first();
+        $topview = Cache::remember('topview_movie', 1800, function () use ($day) {
+            return Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))
+                ->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')
+                ->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+                ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
+                ->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
+                ->where('is_thumbnail', 1)
+                ->where('movies.status', 1)
+                ->orderBy('count_views', 'DESC')
+                ->join('episodes', 'movies.id', '=', 'episodes.movie_id')
+                ->orderBy('episode', 'ASC')
+                ->first();
+        });
+        $topview_tvseries = Cache::remember('topview_tvseries', 1800, function () {
+            return Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))
+                ->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')
+                ->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+                ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
+                ->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
+                ->where('is_thumbnail', 1)
+                ->where('movies.type_movie', 1)
+                ->where('movies.status', 1)
+                ->orderBy('count_views', 'DESC')
+                ->join('episodes', 'movies.id', '=', 'episodes.movie_id')
+                ->orderBy('episode', 'ASC')
+                ->first();
+        });
+        $topview_day = Cache::remember('topview_day', 1800, function () use ($day) {
+            return Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+                ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
+                ->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
+                ->where('date_views', $day)
+                ->where('movies.status', 1)
+                ->where('is_thumbnail', 1)
+                ->orderBy('count_views', 'DESC')
+                ->join('episodes', 'movies.id', '=', 'episodes.movie_id')
+                ->orderBy('episode', 'ASC')
+                ->first();
+        });
 
         // $topview_week = Movie::select('title', 'slug', 'image', 'season', DB::raw('SUM(count_views) as count_views'))->groupBy('title', 'slug', 'image', 'season')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
         //     ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
@@ -125,97 +185,138 @@ class IndexController extends Controller
         // hoat hinh
         $gen_slug = Genre::where('title', 'LIKE', '%hoat hinh%')->first();
 
-        $movie_genre = Movie_Genre::where('genre_id', $gen_slug->id)->get();
-        $many_genre = [];
-        foreach ($movie_genre as $key => $movi) {
-            $many_genre[] = $movi->movie_id;
-        }
-        $movie_animation = Movie::whereIn('id', $many_genre)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        $movie_animation = Cache::remember('movie_animation', 1800, function () {
+        $gen_slugs = Genre::where('title', 'LIKE', '%hoat hinh%')->first();
+        $movie_ids = Movie_Genre::where('genre_id', $gen_slugs->id)->pluck('movie_id');
+
+        return Movie::whereIn('id', $movie_ids)
+            ->where('status', 1)
+            ->with(['episode' => function ($query) {
+                $query->orderBy('episode', 'ASC');
+            }])
+            ->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])
+            ->orderBy('updated_at', 'DESC')
+            ->take(20)
+            ->get();
+        });
 
         //netflix
         
-        $gen_netflix_slug = Genre::where('title', 'LIKE', '%netflix%')->first();
-       
-        $movie_netflix_genre = Movie_Genre::where('genre_id', $gen_netflix_slug->id)->get();
-        $many_netflix_genre = [];
-        foreach ($movie_netflix_genre as $key => $movi_net) {
-            $many_netflix_genre[] = $movi_net->movie_id;
-        }
-        $movie_netflix = Movie::whereIn('id', $many_netflix_genre)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        $movie_netflix = Cache::remember('movie_netflix', 1800, function () {
+            $gen_netflix_slug = Genre::where('title', 'LIKE', '%netflix%')->first();
+            $movie_ids = Movie_Genre::where('genre_id', $gen_netflix_slug->id)->pluck('movie_id');
+    
+            return Movie::whereIn('id', $movie_ids)
+                ->where('status', 1)
+                ->with(['episode' => function ($query) {
+                    $query->orderBy('episode', 'ASC');
+                }])
+                ->with(['movie_image' => function ($thumb) {
+                    $thumb->where('is_thumbnail', 1);
+                }])
+                ->orderBy('updated_at', 'DESC')
+                ->take(20)
+                ->get();
+        });
 
         //movie oscar
 
-        $oscar = Genre::where('title', 'LIKE', '%Oscar%')->first();
-        
-        $movie_oscar = Movie_Genre::where('genre_id', $oscar->id)->get();
-        $many_oscar = [];
-        foreach ($movie_oscar as $key => $mov) {
-            $many_oscar[] = $mov->movie_id;
-        }
-        $movies_oscar = Movie::whereIn('id', $many_oscar)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        $movies_oscar = Cache::remember('movies_oscar', 1800, function () {
+            $oscar_slug = Genre::where('title', 'LIKE', '%Oscar%')->first();
+            $movie_ids = Movie_Genre::where('genre_id', $oscar_slug->id)->pluck('movie_id');
+    
+            return Movie::whereIn('id', $movie_ids)
+                ->where('status', 1)
+                ->with(['episode' => function ($query) {
+                    $query->orderBy('episode', 'ASC');
+                }])
+                ->with(['movie_image' => function ($thumb) {
+                    $thumb->where('is_thumbnail', 1);
+                }])
+                ->orderBy('updated_at', 'DESC')
+                ->take(20)
+                ->get();
+        });
 
 
 
 
         //movie us
-        $list_country = ['Au My', 'Phap', 'Anh', 'Y', 'Duc'];
-        $many_country = [];
-        foreach ($list_country as $countr) {
-            $country_slug = Country::where('title', 'LIKE', '%' . $countr . '%')->get();
-            foreach ($country_slug as $coun) {
-                $many_country[] = $coun->id;
-            }
-        }
-
-        $movie_us = Movie::whereIn('country_id', $many_country)->where('type_movie', 0)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        $movie_us = Cache::remember('movie_us', 1800, function () {
+            $list_country = ['Au My', 'Phap', 'Anh', 'Y', 'Duc'];
+            $country_ids = Country::whereIn('title', $list_country)->pluck('id');
+    
+            return Movie::whereIn('country_id', $country_ids)
+                ->where('type_movie', 0)
+                ->where('status', 1)
+                ->with(['episode' => function ($query) {
+                    $query->orderBy('episode', 'ASC');
+                }])
+                ->with(['movie_image' => function ($thumb) {
+                    $thumb->where('is_thumbnail', 1);
+                }])
+                ->orderBy('updated_at', 'DESC')
+                ->take(20)
+                ->get();
+        });
 
         //movie viet nam
-        $country_vi_slug = Country::where('title', 'LIKE', '%Viet Nam%')->first();
-        $id_vi[]=$country_vi_slug->id;
-        $movie_vietnam = Movie::whereIn('country_id', $id_vi)->where('type_movie', 0)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        $movie_vietnam = Cache::remember('movie_vietnam', 1800, function () {
+            $country_vi_slug = Country::where('title', 'LIKE', '%Viet Nam%')->first();
+    
+            return Movie::where('country_id', $country_vi_slug->id)
+                ->where('type_movie', 0)
+                ->where('status', 1)
+                ->with(['episode' => function ($query) {
+                    $query->orderBy('episode', 'ASC');
+                }])
+                ->with(['movie_image' => function ($thumb) {
+                    $thumb->where('is_thumbnail', 1);
+                }])
+                ->orderBy('updated_at', 'DESC')
+                ->take(20)
+                ->get();
+        });
        
         //tv series thailan
+      
+    $tv_thailan = Cache::remember('tv_thailan', 1800, function () {
         $country_thai_slug = Country::where('title', 'LIKE', '%Thai Lan%')->first();
-        $id_thai[]=$country_thai_slug->id;
 
-        $tv_thailan = Movie::whereIn('country_id', $id_thai)->where('type_movie', 1)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        return Movie::where('country_id', $country_thai_slug->id)
+            ->where('type_movie', 1)
+            ->where('status', 1)
+            ->with(['episode' => function ($query) {
+                $query->orderBy('episode', 'ASC');
+            }])
+            ->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])
+            ->orderBy('updated_at', 'DESC')
+            ->take(20)
+            ->get();
+    });
 
+    $movie_horror = Cache::remember('movie_horror', 1800, function () {
         $gen_horror_slug = Genre::where('title', 'LIKE', '%kinh di%')->first();
+        $movie_ids = Movie_Genre::where('genre_id', $gen_horror_slug->id)->pluck('movie_id');
 
-        $movie_genre = Movie_Genre::where('genre_id', $gen_horror_slug->id)->get();
-        $many_genre = [];
-        foreach ($movie_genre as $key => $movi) {
-            $many_genre[] = $movi->movie_id;
-        }
-        $movie_horror = Movie::whereIn('id', $many_genre)->where('type_movie', 0)->where('status', 1)->with(['episode' => function ($query) {
-            $query->orderBy('episode', 'ASC');
-        }])->with(['movie_image' => function ($thumb) {
-            $thumb->where('is_thumbnail', 1);
-        }])->orderBy('updated_at', 'DESC')->take(20)->get();
+        return Movie::whereIn('id', $movie_ids)
+            ->where('type_movie', 0)
+            ->where('status', 1)
+            ->with(['episode' => function ($query) {
+                $query->orderBy('episode', 'ASC');
+            }])
+            ->with(['movie_image' => function ($thumb) {
+                $thumb->where('is_thumbnail', 1);
+            }])
+            ->orderBy('updated_at', 'DESC')
+            ->take(20)
+            ->get();
+    });
+    
         $api_ophim = Http::get('http://ophim1.com/danh-sach/phim-moi-cap-nhat');
         $url_update = $api_ophim['pathImage'];
         return view('pages.home', compact('category', 'genre', 'country', 'category_home', 'hot', 'topview', 'topview_day', 'movie_animation', 'gen_slug', 'movie_us', 'movie_vietnam', 'tv_thailan', 'movie_horror', 'topview_tvseries', 'url_update','movies_oscar','movie_netflix'));
