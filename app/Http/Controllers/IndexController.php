@@ -83,8 +83,6 @@ class IndexController extends Controller
         $category = Category::orderBy('id', 'ASC')->where('status', 1)->get();
         $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
-        // $genre = Genre::where('status', 1)->orderBy('id', 'DESC')->get();
-        // $country = Country::where('status', 1)->orderBy('id', 'DESC')->get();
         //qua ba
         $category_home = Category::with(['movie' => function ($m) {
             $m->where('status', 1)->with(['movie_image' => function ($thumb) {
@@ -649,18 +647,15 @@ class IndexController extends Controller
             if (isset($tap)) {
                 $tapphim = $tap;
                 $tapphim = substr($tap, 4, 10);
-                $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
-                if (!isset($episode)) {
-                    return redirect()->back();
-                }
+                
             } else {
                 $tapphim = 1;
-                $episode = Episode::where('movie_id', $movie->id)->where('episode', $tapphim)->where('server_id', $ser)->first();
+                
             }
 
             $server = Server::orderby('id', 'DESC')->get();
-            $views = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
-                ->where('movies.id', $movie->id)->orderBy('count_views', 'DESC')->first();
+            // $views = Movie::select('title', DB::raw('SUM(count_views) as count_views'))->groupBy('title')->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
+            //     ->where('movies.id', $movie->id)->orderBy('count_views', 'DESC')->first();
 
             $episode_movie = Episode::where('movie_id', $movie->id)->get()->unique('server_id');
             $query = "CAST(episode AS SIGNED INTEGER) ASC";
@@ -681,7 +676,7 @@ class IndexController extends Controller
             $episode_current_list_count = $episode_current_list->count();
             $api_ophim = Http::get('http://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
-            return view('pages.watch', compact('category', 'movie', 'related', 'episode', 'tapphim', 'views', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count', 'url_update','genre','thumbnail'));
+            return view('pages.watch', compact('category', 'movie', 'related', 'tapphim', 'server', 'episode_movie', 'episode_list', 'server_active', 'times', 'values', 'episode_current_list_count', 'url_update','genre','thumbnail'));
         } catch (ModelNotFoundException $th) {
             return redirect()->back();
         }

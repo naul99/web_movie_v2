@@ -454,25 +454,7 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
                                                 @if ($image_check == 'https') {{ $url_update . $image }}
             @else
             {{ asset('uploads/movie/' . $thumbnail->movie_image->image) }} @endif">
-    <script>
-        var url = window.location.href;
-        var index = url.indexOf("xem-phim/");
-        var result = url.slice(index + 9);
-        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        document.addEventListener("DOMContentLoaded", function() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/api/watch/" + result, true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var responseData = JSON.parse(xhr.responseText);
-                    document.getElementById("mainiframe").src = responseData.data;
-                }
-            };
-            xhr.send();
-        });
-    </script>
+   
     <script>
         var name = document.getElementById('witshlist_moviename').value;
         var slug = document.getElementById('witshlist_movieslug').value;
@@ -605,10 +587,11 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
     <script>
         var buttons = document.querySelectorAll('.episode');
         var activeButton = document.querySelector('.episode.active-ep');
-
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         buttons.forEach(function(button) {
             button.addEventListener('click', function() {
                 var url = button.dataset.url;
+                
                 if (activeButton !== null) {
                     activeButton.classList.remove('active-ep');
                 }
@@ -622,8 +605,9 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         var responseData = JSON.parse(xhr.responseText);
-
+            
                         document.getElementById("mainiframe").src = responseData.data;
+                       
                     }
                 };
                 xhr.send();
@@ -647,15 +631,7 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
         });
     </script>
 
-    <script>
-        // Thay đổi URL hiện tại bằng URL mới
-        // var newUrl = '/movie/';
-        // history.replaceState({}, null, newUrl);
-
-        // Thực hiện chuyển đổi URL mới vào lịch sử trình duyệt
-
-        //history.pushState({}, null, '/watch/');
-
+    <script id="devtools-detection">
         function onDevToolsOpen() {
 
             // Lấy đối tượng div bằng cách sử dụng id
@@ -665,14 +641,14 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
             buttons.forEach(function(button) {
                 button.style.display = 'none';
             });
-
+            window.devToolsOpen = true;
             setTimeout(console.clear.bind(console))
             setTimeout(() => {
                 console.log(
                     'open devtool.',
                 )
             }, 10);
-            const script = document.querySelector('script');
+            const script = document.getElementById('devtools-detection');
             script.remove();
         }
         class DevToolsChecker extends Error {
@@ -685,5 +661,26 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
         }
         console.log(new DevToolsChecker());
     </script>
-
+    <script>
+        var url = window.location.href;
+        var index = url.indexOf("xem-phim/");
+        var result = url.slice(index + 9);
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.devToolsOpen) {
+            return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/watch/" + result, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("X-CSRF-TOKEN", csrfToken);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var responseData = JSON.parse(xhr.responseText);
+                    document.getElementById("mainiframe").src = responseData.data;
+                }
+            };
+            xhr.send();
+        });
+    </script>
 @endsection
