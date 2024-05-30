@@ -19,14 +19,13 @@
 
     @if (isset($tapphim) && $movie->type_movie == 1)
         <title>
-            Tập {{ $tapphim }} - {{ $movie->title }} | FullHDPhim
         </title>
     @elseif (isset($movie->slug))
         <title>
-            {{ $movie->title }} - Phim Chất Lượng Cao | FullHDPhim
+            {{ $movie->title }} - Xem Phim Chill | FullHDPhim
         </title>
     @else
-        <title>FullHDPhim | Xem Phim Chất Lượng Tốt Nhất</title>
+        <title>ChillFullHDPhim | Xem Phim Chill</title>
     @endif
     @if (!isset($movie->slug))
         <meta name="description"

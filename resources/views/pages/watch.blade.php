@@ -2,6 +2,7 @@
 @section('content')
     @if ($movie->type_movie == 1)
         <script>
+           var episode={{ $tapphim }};
             var player_aaaa = {
                 "vod_data": {
                     "vod_name": "{{ $movie->title }}",
@@ -454,7 +455,7 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
                                                 @if ($image_check == 'https') {{ $url_update . $image }}
             @else
             {{ asset('uploads/movie/' . $thumbnail->movie_image->image) }} @endif">
-   
+    
     <script>
         var name = document.getElementById('witshlist_moviename').value;
         var slug = document.getElementById('witshlist_movieslug').value;
@@ -621,12 +622,14 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
                     var episode = tapParts[1];
 
                     player_aaaa.vod_data.vod_position = "{{ $movie->slug }}_" + episode;
+                    document.title= "Tập " + episode + " - " + name;
                 @endif
 
                 var newUrl = '/xem-phim/' + result;
                 history.replaceState({}, null, newUrl);
                 history.pushState({}, null, newUrl);
                 add_recent();
+               
             });
         });
     </script>
@@ -678,9 +681,11 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     var responseData = JSON.parse(xhr.responseText);
                     document.getElementById("mainiframe").src = responseData.data;
+                    document.title= "Tập " + episode + " - " + name;
                 }
             };
             xhr.send();
+           
         });
     </script>
 @endsection
