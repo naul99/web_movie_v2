@@ -80,19 +80,18 @@ class IndexController extends Controller
     }
     public function home()
     {
-
-        $category = Cache::remember('categories', 1800, function () {
+        $category = Cache::remember('categories', 300, function () {
                 return Category::orderBy('id', 'ASC')->where('status', 1)->get();
         });
-        $genre = Cache::remember('genres', 1800, function () {
+        $genre = Cache::remember('genres', 300, function () {
                 return Genre::where('status', 1)->orderBy('id', 'DESC')->get();
         });
         
-        $country = Cache::remember('countries', 1800, function () {
+        $country = Cache::remember('countries', 300, function () {
                 return Country::where('status', 1)->orderBy('id', 'DESC')->get();
         });
         //qua ba
-        $category_home = Cache::remember('category_home', 1800, function () {
+        $category_home = Cache::remember('category_home', 300, function () {
             return Category::with(['movie' => function ($m) {
                 $m->where('status', 1)
                   ->with([
@@ -111,7 +110,7 @@ class IndexController extends Controller
         });
 
       
-        $hot = Cache::remember('hot_movie', 1800, function () {
+        $hot = Cache::remember('hot_movie', 300, function () {
             return Movie::with([
                 'episode' => function ($query) {
                     $query->orderBy('episode', 'ASC');
@@ -135,7 +134,7 @@ class IndexController extends Controller
         // $week = Carbon::today('Asia/Ho_Chi_Minh')->subDays(7)->startOfDay();
 
         //dd($hot);
-        $topview = Cache::remember('topview_movie', 1800, function () use ($day) {
+        $topview = Cache::remember('topview_movie', 300, function () use ($day) {
             return Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))
                 ->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')
                 ->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
@@ -148,7 +147,7 @@ class IndexController extends Controller
                 ->orderBy('episode', 'ASC')
                 ->first();
         });
-        $topview_tvseries = Cache::remember('topview_tvseries', 1800, function () {
+        $topview_tvseries = Cache::remember('topview_tvseries', 300, function () {
             return Movie::select('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description', DB::raw('SUM(count_views) as count_views'))
                 ->groupBy('title', 'slug', 'image', 'season', 'episode', 'server_id', 'description')
                 ->join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
@@ -162,7 +161,7 @@ class IndexController extends Controller
                 ->orderBy('episode', 'ASC')
                 ->first();
         });
-        $topview_day = Cache::remember('topview_day', 1800, function () use ($day) {
+        $topview_day = Cache::remember('topview_day', 300, function () use ($day) {
             return Movie::join('movie_views', 'movies.id', '=', 'movie_views.movie_id')
                 ->join('movie_image', 'movie_views.movie_id', '=', 'movie_image.movie_id')
                 ->join('movie_description', 'movie_image.movie_id', '=', 'movie_description.movie_id')
@@ -185,7 +184,7 @@ class IndexController extends Controller
         // hoat hinh
         $gen_slug = Genre::where('title', 'LIKE', '%hoat hinh%')->first();
 
-        $movie_animation = Cache::remember('movie_animation', 1800, function () {
+        $movie_animation = Cache::remember('movie_animation', 300, function () {
         $gen_slugs = Genre::where('title', 'LIKE', '%hoat hinh%')->first();
         $movie_ids = Movie_Genre::where('genre_id', $gen_slugs->id)->pluck('movie_id');
 
@@ -204,7 +203,7 @@ class IndexController extends Controller
 
         //netflix
         
-        $movie_netflix = Cache::remember('movie_netflix', 1800, function () {
+        $movie_netflix = Cache::remember('movie_netflix', 300, function () {
             $gen_netflix_slug = Genre::where('title', 'LIKE', '%netflix%')->first();
             $movie_ids = Movie_Genre::where('genre_id', $gen_netflix_slug->id)->pluck('movie_id');
     
@@ -223,7 +222,7 @@ class IndexController extends Controller
 
         //movie oscar
 
-        $movies_oscar = Cache::remember('movies_oscar', 1800, function () {
+        $movies_oscar = Cache::remember('movies_oscar', 300, function () {
             $oscar_slug = Genre::where('title', 'LIKE', '%Oscar%')->first();
             $movie_ids = Movie_Genre::where('genre_id', $oscar_slug->id)->pluck('movie_id');
     
@@ -244,7 +243,7 @@ class IndexController extends Controller
 
 
         //movie us
-        $movie_us = Cache::remember('movie_us', 1800, function () {
+        $movie_us = Cache::remember('movie_us', 300, function () {
             $list_country = ['Au My', 'Phap', 'Anh', 'Y', 'Duc'];
             $country_ids = Country::whereIn('title', $list_country)->pluck('id');
     
@@ -263,7 +262,7 @@ class IndexController extends Controller
         });
 
         //movie viet nam
-        $movie_vietnam = Cache::remember('movie_vietnam', 1800, function () {
+        $movie_vietnam = Cache::remember('movie_vietnam', 300, function () {
             $country_vi_slug = Country::where('title', 'LIKE', '%Viet Nam%')->first();
     
             return Movie::where('country_id', $country_vi_slug->id)
@@ -282,7 +281,7 @@ class IndexController extends Controller
        
         //tv series thailan
       
-    $tv_thailan = Cache::remember('tv_thailan', 1800, function () {
+    $tv_thailan = Cache::remember('tv_thailan', 300, function () {
         $country_thai_slug = Country::where('title', 'LIKE', '%Thai Lan%')->first();
 
         return Movie::where('country_id', $country_thai_slug->id)
@@ -299,7 +298,7 @@ class IndexController extends Controller
             ->get();
     });
 
-    $movie_horror = Cache::remember('movie_horror', 1800, function () {
+    $movie_horror = Cache::remember('movie_horror', 300, function () {
         $gen_horror_slug = Genre::where('title', 'LIKE', '%kinh di%')->first();
         $movie_ids = Movie_Genre::where('genre_id', $gen_horror_slug->id)->pluck('movie_id');
 

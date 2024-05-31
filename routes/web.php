@@ -46,25 +46,26 @@ use PhpParser\Node\Expr\Assign;
 Route::middleware('web')->get('/auth/login', [AuthSocialLoginController::class, 'index'])->name('user-login');
 
 //******************* */
-Route::get('/', [IndexController::class, 'home'])->name('homepage');
-Route::get('/category/{slug}', [IndexController::class, 'category'])->name('category');
-Route::get('/genre/{slug}', [IndexController::class, 'genre'])->name('genre');
-Route::get('/directors/{slug}', [IndexController::class, 'directors'])->name('directors');
-Route::get('/cast/{slug}', [IndexController::class, 'cast'])->name('cast');
-Route::get('/directors/{slug}', [IndexController::class, 'directors'])->name('directors');
-Route::get('/country/{slug}', [IndexController::class, 'country'])->name('country');
-Route::get('/movie/{slug}', [IndexController::class, 'movie'])->name('movie');
-Route::get('/xem-phim/{slug}/{tap}/{server_active}', [IndexController::class, 'watch']);
-Route::get('/episode', [IndexController::class, 'episode'])->name('episode');
-Route::get('/tim-kiem', [IndexController::class, 'timkiem'])->name('tim-kiem');
-Route::get('/nam/{year}', [IndexController::class, 'year']);
-Route::get('/tag/{tag}', [IndexController::class, 'tag']);
-Route::get('/loc-phim', [IndexController::class, 'locphim'])->name('locphim');
-Route::get('/my-list', [IndexController::class, 'my_list'])->name('my_list');
-Route::get('/my-recent', [IndexController::class, 'recent'])->name('my_recent');
-Route::post('/add-rating', [IndexController::class, 'add_rating'])->name('add-rating');
-Route::get('/all-movies', [IndexController::class, 'all_movies'])->name('all-movies');
-
+Route::middleware('throttle:30,1')->group(function () {
+    Route::get('/', [IndexController::class, 'home'])->name('homepage');
+    Route::get('/category/{slug}', [IndexController::class, 'category'])->name('category');
+    Route::get('/genre/{slug}', [IndexController::class, 'genre'])->name('genre');
+    Route::get('/directors/{slug}', [IndexController::class, 'directors'])->name('directors');
+    Route::get('/cast/{slug}', [IndexController::class, 'cast'])->name('cast');
+    Route::get('/directors/{slug}', [IndexController::class, 'directors'])->name('directors');
+    Route::get('/country/{slug}', [IndexController::class, 'country'])->name('country');
+    Route::get('/movie/{slug}', [IndexController::class, 'movie'])->name('movie');
+    Route::get('/xem-phim/{slug}/{tap}/{server_active}', [IndexController::class, 'watch']);
+    Route::get('/episode', [IndexController::class, 'episode'])->name('episode');
+    Route::get('/tim-kiem', [IndexController::class, 'timkiem'])->name('tim-kiem');
+    Route::get('/nam/{year}', [IndexController::class, 'year']);
+    Route::get('/tag/{tag}', [IndexController::class, 'tag']);
+    Route::get('/loc-phim', [IndexController::class, 'locphim'])->name('locphim');
+    Route::get('/my-list', [IndexController::class, 'my_list'])->name('my_list');
+    Route::get('/my-recent', [IndexController::class, 'recent'])->name('my_recent');
+    Route::post('/add-rating', [IndexController::class, 'add_rating'])->name('add-rating');
+    Route::get('/all-movies', [IndexController::class, 'all_movies'])->name('all-movies');
+});
 Route::get('/policy', [IndexController::class, 'policy'])->name('policy');
 //Route::get('/search', [IndexController::class, 'search'])->name('search');
 
