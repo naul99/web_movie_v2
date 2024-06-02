@@ -272,7 +272,7 @@
                     var slug = data[i].slug;
                     var img = data[i].thumbnail;
                     var url= data[i].url;
-                        $("#row_wishlist").append('<li class="item small"><a style="height: 133.875px;" href="javascript:void(0)" onclick=location.href="'+url['href']+'" ><img src="' +
+                        $("#row_wishlist").append('<li class="item small"><a style="height: 150px;" href="javascript:void(0)" onclick=location.href="'+url['href']+'" ><img src="' +
                         img + '" alt="'+name+'" loading="lazy"> <i class="icon-play"></i></a> </li>');
 
                 }

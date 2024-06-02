@@ -274,7 +274,7 @@
                     var url = data[i].url;
                     //alert(img);
                     
-                    $("#row_recent").append('<li class="item small"><a style="height: 133.875px;" href="javascript:void(0)" onclick=location.href="'+url['href']+'" ><img src="' +
+                    $("#row_recent").append('<li class="item small"><a style="height: 150px;" href="javascript:void(0)" onclick=location.href="'+url['href']+'" ><img src="' +
                         img + '" alt="'+name+'" loading="lazy"> <i class="icon-play"></i></a> </li>');
 
                 }

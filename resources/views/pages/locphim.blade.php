@@ -263,7 +263,7 @@
                     {{-- <span class="label">
                         <div class="status">HD-Vietsub</div>
                     </span>  --}}
-                    <a title="{{ $mov->title }}" href="javascript:void()" style="height: 133.875px;"
+                    <a title="{{ $mov->title }}" href="javascript:void()" style="height: 150px;"
                         onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
                         <img alt="{{ $mov->title }}" src="@php
                             $image_check = substr($mov->movie_image->image, 0, 5); $startPos = strpos($mov->movie_image->image, 'movies/');
