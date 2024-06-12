@@ -555,11 +555,11 @@ $image_check = substr($thumbnail->movie_image->image, 0, 5);
       const shareButton = document.getElementById('shareButton');
      
       shareButton.addEventListener('click', () => {
-        var data = shareButton.getAttribute('data-url');
+        var data_share = shareButton.getAttribute('data-url');
         navigator.share({
           title: 'Share Movie',
           text: 'From fullhdphim.click',
-          url: data,
+          url: data_share,
         })
           .catch((error) => console.error('Sharing failed:', error));
       });
