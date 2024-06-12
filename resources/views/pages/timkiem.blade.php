@@ -263,9 +263,11 @@
 
                 @foreach ($movie as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
-                <li class="item small"> <span class="label">
-                        {{-- <div class="status">HD-Vietsub</div> --}}
-                    </span> <a title="{{ $mov->title }}" href="javascript:void()"
+                <li class="item small"> 
+                    {{-- <span class="label">
+                        <div class="status">HD-Vietsub</div>
+                    </span>  --}}
+                    <a title="{{ $mov->title }}" href="javascript:void()"
                         style="height: 150px;"
                         onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
                         <img alt="{{ $mov->title }}" src="@php
@@ -281,12 +283,28 @@
                 </li>
                 @endforeach
                 @endforeach
+                    {!! $movie->appends($_GET)->links() !!}
             </ul>
         </div>
     </article>
 
 </section>
-<div class="text-right">
-    {{ $movie->appends($_GET)->links('vendor.pagination.custom') }}
-</div>
+
+<script src="/js/jquery.jscroll.min.js"></script>
+<script type="text/javascript">
+    $('ul.pagination').hide();
+    $(function() {
+        $('.link-container').jscroll({
+            debug:true,
+            autoTrigger: true,
+            padding: 0,
+            nextSelector: '.pagination li.active + li a',
+            contentSelector: 'div.link-container',
+            callback: function() {
+                $('ul.pagination').remove();
+            }
+        });
+    });
+    
+</script>
 @endsection

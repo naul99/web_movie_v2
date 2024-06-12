@@ -61,7 +61,7 @@ class IndexController extends Controller
                 $ep->orderBy('episode', 'ASC');
             }])->with(['movie_image' => function ($thumb) {
                 $thumb->where('is_thumbnail', 1);
-            }])->orderBy('id', 'DESC')->paginate(20);
+            }])->orderBy('id', 'DESC')->paginate(10);
             
             $api_ophim = Http::get('http://ophim1.com/danh-sach/phim-moi-cap-nhat');
             $url_update = $api_ophim['pathImage'];
