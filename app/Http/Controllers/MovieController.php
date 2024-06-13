@@ -704,13 +704,13 @@ class MovieController extends Controller
     {
         $movies = Movie::pluck('title');
 
-        $path_ophim = "http://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
+        $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=1";
         $api_ophim = Http::get($path_ophim)->json();
-
+        
         $link_image = $api_ophim['pathImage'];
 
         if (isset($_GET['next_page'])) {
-            $path_ophim = "http://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
+            $path_ophim = "https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=" . $_GET['next_page'];
             $api_ophim = Http::get($path_ophim)->json();
             return view('admincp.movie.api_ophim', compact('api_ophim', 'link_image', 'movies'));
         }
@@ -1013,7 +1013,7 @@ class MovieController extends Controller
     public function auto_update_episode(Request $request)
     {
         $data = $request->all();
-        $movie = Movie::with('episode')->select('id')->where('title', $data['title'])->first();
+        $movie = Movie::with('episode')->select('id','updated_at')->where('title', $data['title'])->first();
 
         $path_ophim = "https://ophim1.com/phim/" . $data['slug'];
         $api_ophim = Http::get($path_ophim)->json();

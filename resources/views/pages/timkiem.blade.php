@@ -263,12 +263,11 @@
 
                 @foreach ($movie as $key => $mov)
                 @foreach ($mov->episode->take(1) as $ep)
-                <li class="item small"> 
+                <li class="item small">
                     {{-- <span class="label">
                         <div class="status">HD-Vietsub</div>
-                    </span>  --}}
-                    <a title="{{ $mov->title }}" href="javascript:void()"
-                        style="height: 150px;"
+                    </span> --}}
+                    <a title="{{ $mov->title }}" href="javascript:void()" style="height: 150px;"
                         onclick="location.href='{{ url('xem-phim/' . $mov->slug . '/tap-' . $ep->episode . '/server-' . $ep->server_id) }}'">
                         <img alt="{{ $mov->title }}" src="@php
                         $image_check = substr($mov->movie_image->image, 0, 5); $startPos = strpos($mov->movie_image->image, 'movies/');
@@ -283,8 +282,13 @@
                 </li>
                 @endforeach
                 @endforeach
-                    {!! $movie->appends($_GET)->links() !!}
+                {{-- {!! $movie->appends($_GET)->links() !!} --}}
             </ul>
+            @if ($movie->hasMorePages())
+            <ul class="pagination">
+                <li class="next"><a href="{{ $movie->appends(request()->input())->nextPageUrl() }}">Next</a></li>
+            </ul>
+            @endif
         </div>
     </article>
 
@@ -298,7 +302,7 @@
             debug:true,
             autoTrigger: true,
             padding: 0,
-            nextSelector: '.pagination li.active + li a',
+            nextSelector: '.pagination li.next a',
             contentSelector: 'div.link-container',
             callback: function() {
                 $('ul.pagination').remove();
