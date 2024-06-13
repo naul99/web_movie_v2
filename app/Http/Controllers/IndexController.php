@@ -101,8 +101,7 @@ class IndexController extends Controller
                       'episode' => function ($ep) {
                           $ep->orderBy('episode', 'ASC');
                       }
-                  ])
-                  ->orderBy('updated_at', 'DESC');
+                  ]);
             }])
             ->orderBy('position', 'ASC')
             ->where('status', 1)

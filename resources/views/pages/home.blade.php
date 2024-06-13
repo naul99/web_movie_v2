@@ -129,7 +129,7 @@ $image = substr($hot->movie_image->image, $startPos + strlen('movies/')); @endph
                     </h4>
 
                     <div class="continue-watching-container d-flex flex-start flex-middle flex-no-wrap owl-carousel">
-                        @foreach ($cate_home->movie->take(20) as $key => $mov)
+                        @foreach ($cate_home->movie->take(20)->sortByDesc('updated_at') as $key => $mov)
                             @foreach ($mov->episode->take(1) as $ep)
                                 <div class="video">
                                     <a href="javascript:void(0)"
