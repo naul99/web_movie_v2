@@ -47,6 +47,11 @@
             height: 215px;
         }
     }
+    @media (min-width: 1920px) {
+        .videocontainer {
+            height: 920px;
+        }
+    }
 </style>
 <!-- hero section video-->
 <div class="videocontainer">
